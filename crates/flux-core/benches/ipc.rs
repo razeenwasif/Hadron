@@ -37,6 +37,7 @@ fn sample_tabs() -> Vec<TabMeta> {
             custom_title: None,
             workspace: 1,
             private: false,
+            tor: false,
             container: 0,
         })
         .collect()
