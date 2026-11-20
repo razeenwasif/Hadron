@@ -180,7 +180,10 @@ mod mac {
 /// on, nothing once off (or off macOS).
 #[tauri::command]
 pub async fn window_notch(
-    window: tauri::WebviewWindow,
+    // The window, not a `WebviewWindow`: Tauri only resolves that while the
+    // window holds no webview but the shell's, so once a web page had opened
+    // in a tab the command was refused before it ran.
+    window: tauri::Window,
     on: bool,
     keep_menu_bar: Option<bool>,
 ) -> Result<Option<NotchGeometry>, String> {

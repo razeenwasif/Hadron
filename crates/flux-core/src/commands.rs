@@ -35,7 +35,9 @@ pub struct ShellSnapshot {
 /// The titlebar ✕ calls this instead of a raw `destroy()`, which skips the plugin's
 /// save-on-close and lost the restore-on-next-launch geometry.
 #[tauri::command]
-pub fn close_main_window(app: AppHandle, window: tauri::WebviewWindow) {
+// `Window`, not `WebviewWindow`: the latter isn't resolved once a tab's webview
+// is in the window, which would refuse the call (see notch.rs).
+pub fn close_main_window(app: AppHandle, window: tauri::Window) {
     // Persist window geometry on close — desktop only (no window-state plugin on
     // mobile, and nothing to persist there — ADR 0012).
     #[cfg(desktop)]

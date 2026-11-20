@@ -5,7 +5,7 @@
  *
  *  - a backdrop of grain gradient and dither behind the whole pane
  *    (silkBackdrop.ts), calmer at rest, livelier while the agent works;
- *  - a still field of dots across the bottom third that swells under the pointer;
+ *  - a still field of dots across the middle third that swells under the pointer;
  *  - a voice glow along the bottom edge: lobes of colour that rise with a
  *    voice and gather into one sweeping beam while the agent works;
  *  - a dot-matrix symbol beside the agent's name whose pattern says what it is
