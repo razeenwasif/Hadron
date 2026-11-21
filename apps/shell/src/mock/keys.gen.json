@@ -371,6 +371,21 @@
       "fixed": null
     },
     {
+      "id": "hard-reload",
+      "title": "Hard reload page",
+      "detail": "Reload bypassing the cache and refresh the site icon",
+      "group": "Navigation",
+      "keys": [
+        "Alt+Cmd+R",
+        "Shift+F5"
+      ],
+      "defaults": [
+        "Alt+Cmd+R",
+        "Shift+F5"
+      ],
+      "fixed": null
+    },
+    {
       "id": "find",
       "title": "Find in page",
       "detail": "Search this page's text",

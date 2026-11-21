@@ -20,6 +20,7 @@ import {
   webviewBack,
   webviewForward,
   webviewReload,
+  webviewHardReload,
   webviewStop,
   type OmniAnswerSource,
   type TabGroup,
@@ -72,6 +73,7 @@ import {
   readerOpen,
   recolorGroup,
   recolorWorkspace,
+  refreshFavicon,
   renameFolder,
   renameGroup,
   renameTab,
@@ -1121,8 +1123,24 @@ const Sidebar: Component<SidebarProps> = (props) => {
             fallback={
               <button
                 class="icon-btn"
-                title={withKey("Reload", "reload")}
-                onClick={() => navActive(webviewReload)}
+                title={`${withKey("Reload", "reload")} (Shift-click for hard reload)`}
+                onClick={(e) => {
+                  if (e.shiftKey || e.altKey) {
+                    const t = activeTab();
+                    if (t?.kind === "browser") {
+                      void webviewHardReload(t.id).catch(() => {});
+                      if (!t.private && !t.tor) {
+                        try {
+                          refreshFavicon(new URL(t.url).hostname);
+                        } catch {
+                          // ignore non-URL tabs
+                        }
+                      }
+                    }
+                  } else {
+                    navActive(webviewReload);
+                  }
+                }}
               >
                 ⟳
               </button>

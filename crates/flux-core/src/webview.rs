@@ -1393,6 +1393,31 @@ mod real {
         eval(&app, tab_id, "location.reload()")
     }
 
+    /// Reload bypassing the HTTP cache (`WKWebView.reloadFromOrigin` on macOS).
+    #[tauri::command]
+    pub async fn webview_hard_reload(app: AppHandle, tab_id: TabId) -> Result<(), String> {
+        #[cfg(target_os = "macos")]
+        {
+            if let Some(wv) = app.get_webview(&label(tab_id)) {
+                return wv
+                    .with_webview(|platform| unsafe {
+                        use objc::runtime::Object;
+                        use objc::{msg_send, sel, sel_impl};
+                        let view = platform.inner() as *mut Object;
+                        if !view.is_null() {
+                            let _: *mut Object = msg_send![view, reloadFromOrigin];
+                        }
+                    })
+                    .map_err(|e| e.to_string());
+            }
+            Ok(())
+        }
+        #[cfg(not(target_os = "macos"))]
+        {
+            eval(&app, tab_id, "location.reload()")
+        }
+    }
+
     /// Inject the reader-mode extractor (#41); it posts blocks back via `reader_publish`.
     #[tauri::command]
     pub async fn webview_extract_reader(app: AppHandle, tab_id: TabId) -> Result<(), String> {
@@ -2523,6 +2548,7 @@ mod stub {
     id_cmd!(webview_back => back);
     id_cmd!(webview_forward => forward);
     id_cmd!(webview_reload => reload);
+    id_cmd!(webview_hard_reload => reload);
     id_cmd!(webview_stop => stop);
     id_cmd!(webview_hibernate => hibernate);
 

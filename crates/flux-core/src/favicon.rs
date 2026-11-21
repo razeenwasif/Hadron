@@ -77,6 +77,23 @@ pub async fn site_icon(
     Ok(lookup(&cache.tiles, dir, &proxy, host, try_fetch_tile).await)
 }
 
+/// Drop a host's cached tab and tile favicons (memory + disk) so the next
+/// lookup fetches a fresh copy from the site (used by hard reload).
+#[tauri::command]
+pub fn favicon_invalidate(cache: State<'_, FaviconCache>, host: String) {
+    let host = host.trim().trim_start_matches("www.").to_ascii_lowercase();
+    if host.is_empty() || host.contains('/') || !host.contains('.') {
+        return;
+    }
+    cache.mem.invalidate(&host);
+    cache.tiles.invalidate(&host);
+    if let Some(dir) = &cache.dir {
+        let name = format!("{}.txt", sanitize(&host));
+        let _ = std::fs::remove_file(dir.join(&name));
+        let _ = std::fs::remove_file(dir.join("tiles").join(&name));
+    }
+}
+
 /// Memory, then disk, then the site.
 async fn lookup(
     mem: &TtlCache<String, Option<String>>,

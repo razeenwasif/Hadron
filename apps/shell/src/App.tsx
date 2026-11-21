@@ -94,6 +94,7 @@ import {
   webviewHide,
   webviewNavigate,
   webviewReload,
+  webviewHardReload,
   webviewZoom,
   webviewExtractReader,
   bootMark,
@@ -158,6 +159,7 @@ import {
   activeId,
   activeTab,
   activeWorkspace,
+  refreshFavicon,
   aiAnswersOn,
   applyDarkMode,
   applyNav,
@@ -1010,6 +1012,13 @@ const App: Component = () => {
     if (t?.kind === "browser") void fn(t.id).catch(() => {});
   };
 
+  const hardReloadActive = () => {
+    const t = activeTab();
+    if (t?.kind !== "browser") return;
+    void webviewHardReload(t.id).catch(() => {});
+    if (!t.private && !t.tor) refreshFavicon(hostOfUrl(t.url));
+  };
+
   // #79: drop the GPU-heavy glass blur while dragging a split seam or panel
   // divider (continuous repaints). `body.busy` overrides --glass-blur to none.
   createEffect(() => {
@@ -1603,6 +1612,9 @@ const App: Component = () => {
         return true;
       case "reload":
         navActive(webviewReload);
+        return true;
+      case "hard-reload":
+        hardReloadActive();
         return true;
       case "back":
         navActive(webviewBack);

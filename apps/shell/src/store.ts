@@ -25,6 +25,7 @@ import {
   agentSetModel,
   agentModel,
   faviconFetch,
+  faviconInvalidate,
   isStartUrl,
   START_URL,
   tabSetUrl,
@@ -1336,6 +1337,18 @@ export function ensureFavicon(host: string | null): void {
   if (!host || host in favicons || faviconInflight.has(host)) return;
   faviconInflight.add(host);
   void faviconFetch(host)
+    .then((d) => setFavicons(host, d ?? null))
+    .catch(() => setFavicons(host, null))
+    .finally(() => faviconInflight.delete(host));
+}
+
+/** Invalidate a host's cached favicon (Rust mem + disk + shell store) and re-fetch. */
+export function refreshFavicon(host: string | null): void {
+  if (!host) return;
+  faviconInflight.add(host);
+  void faviconInvalidate(host)
+    .catch(() => {})
+    .then(() => faviconFetch(host))
     .then((d) => setFavicons(host, d ?? null))
     .catch(() => setFavicons(host, null))
     .finally(() => faviconInflight.delete(host));

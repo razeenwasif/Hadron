@@ -1372,6 +1372,7 @@ export const onReader = (
 export const webviewBack = (tabId: number) => invoke<void>("webview_back", { tabId });
 export const webviewForward = (tabId: number) => invoke<void>("webview_forward", { tabId });
 export const webviewReload = (tabId: number) => invoke<void>("webview_reload", { tabId });
+export const webviewHardReload = (tabId: number) => invoke<void>("webview_hard_reload", { tabId });
 export const webviewStop = (tabId: number) => invoke<void>("webview_stop", { tabId });
 /** Hibernate a tab: destroy its webview to free RAM (no clear-on-close). #45 */
 export const webviewHibernate = (tabId: number) => invoke<void>("webview_hibernate", { tabId });
@@ -1518,6 +1519,8 @@ export const mdNoteDelete = (name: string) => invoke<void>("md_note_delete", { n
 
 /** A host's favicon as a data: URL (fetched cookielessly + cached), or null. #21 */
 export const faviconFetch = (host: string) => invoke<string | null>("favicon", { host });
+/** Drop a host's cached tab/tile favicons (memory + disk) so the next fetch is fresh. */
+export const faviconInvalidate = (host: string) => invoke<void>("favicon_invalidate", { host });
 
 // ─── Browsing history (BACKLOG #39) ──────────────────────────────────────────
 /** Sentinel url for the full-page history view (DOM-rendered, no webview). */

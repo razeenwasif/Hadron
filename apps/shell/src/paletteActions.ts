@@ -400,6 +400,7 @@ export function paletteActions(ctx: PaletteContext): PaletteAction[] {
     { id: "zoom-out", label: "Zoom out", icon: "➖", run: () => dispatch("zoom-out") },
     { id: "zoom-reset", label: "Reset zoom", icon: "🔍", run: () => dispatch("zoom-reset") },
     { id: "reload", label: "Reload page", icon: "⟳", run: () => navActive(webviewReload) },
+    { id: "hard-reload", label: "Hard reload page (bypass cache)", icon: "⟳", run: () => dispatch("hard-reload") },
     { id: "toggle-terminal", label: "Toggle terminal", icon: "⌨", run: () => setTerminalOpen((v) => !v) },
     { id: "toggle-agent", label: "Toggle agent", icon: "✦", run: () => setAgentOpen((v) => !v) },
     {
