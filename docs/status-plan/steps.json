@@ -1,0 +1,172 @@
+{
+  "meta": {
+    "migratedFrom": "https://claude.ai/artifact/8W7gV7pJXSk9jn5Bo12cjR",
+    "migratedAt": "2026-11-21T06:38:02Z",
+    "schemaVersion": 1
+  },
+  "steps": {
+    "manual-checks": {
+      "status": "doing",
+      "note": "Mission Control showed Flux's content in a short test on 13 Oct (under two minutes after launch). The 5–10 minute covered test and the other checks are still to do.",
+      "updated": "2026-10-14T08:48:18Z"
+    },
+    "ci-green": {
+      "status": "done",
+      "note": "2cc787c: CI run 38556768509 passed all six jobs, Windows included. Main is green again.",
+      "updated": "2026-10-14T11:36:52Z"
+    },
+    "confirm": {
+      "status": "done",
+      "note": "17a3eb5. Checked in the real app on 14 Oct: Trail Forget and deleting a workspace over a web page both ask, in front of the page, and run.",
+      "updated": "2026-10-14T11:57:04Z"
+    },
+    "crash-reload": {
+      "status": "done",
+      "note": "801f235, bc29085, efaac0b. Kill tests on 15 Oct: the first showed the reload being dropped (fixed), the second showed a page crash aborting all of Flux through the title handler (an older bug, fixed). Third test: Flux stayed up and the page relaunched and loaded in ~1 s. The background-tab path (reload when shown) wasn't exercised live.",
+      "updated": "2026-10-14T22:01:20Z"
+    },
+    "tmux-path": {
+      "status": "done",
+      "note": "06ab613. Checked 15 Oct: Flux opened from the Dock runs /opt/homebrew/bin/tmux; top started 09:26:15 in session flux-1498 was still running after Flux restarted at 09:26:35 and re-attached.",
+      "updated": "2026-10-14T22:27:40Z"
+    },
+    "clear-data": {
+      "status": "done",
+      "note": "a25b706. Checked 15 Oct: Settings measured real sizes; clearing Cache took WebKit's NetworkCache from 65,256 KB to 4 KB, and WebKit logged removeData finishing for the default store and the container store.",
+      "updated": "2026-10-15T00:50:01Z"
+    },
+    "next-tabbar": {
+      "status": "done",
+      "note": "c2df1ee: Tabs/Calendar/Mail switch with the favicon morph, address tray with Shields, find in the address field, workspace chips, two-line rows. 2edec50: Notes mode (Markdown notes in the vault's \"Flux Notes\" + the to-do list), Context mode (your notes, System, Trail), Column toggles. Follow-ups from your checks: 8b9f825, 59996f8 (bookmark bar in the tabs pane, with folders), a520d93 (labels not cut off; page card to the top), 0bb8d40. Signed off in the installed app on 25 Oct.",
+      "updated": "2026-10-25T03:40:00Z"
+    },
+    "next-shields": {
+      "status": "done",
+      "note": "cb765d2 (with fe7156f, 46a0520). macOS counts blocks through WebKit's private content-rule callback: per-page count in the address-field chip, blocked domains in the popover, the tracker graph. Shields and per-site switches work on macOS. \"Hide an element\" saves a rule per site. A CI probe compiles the bundled list in a real WKContentRuleListStore. Signed off in the installed app on 25 Oct. The floating overlay moved to the launcher step: the popover opens in the tabs pane.",
+      "updated": "2026-10-25T04:46:08Z"
+    },
+    "next-sleep": {
+      "status": "done",
+      "note": "bd70c9e. Three steps on macOS: hidden tabs throttled by WebKit; suspended after 5 idle minutes (snapshot taken first); unloaded beyond the 4 most recent background tabs, past 256 MB or past Settings' idle time, keeping WebKit's interactionState. Waking restores it behind the snapshot and shows the page on WebKit's first-paint report. Sound/capture never slept; unsaved edits stay loaded unless memory is critical; memory pressure from the kernel's dispatch source. Signed off in the installed app on 25 Oct. Not yet measured: memory at 60 tabs.",
+      "updated": "2026-10-25T05:34:10Z"
+    },
+    "next-launcher": {
+      "status": "done",
+      "note": "40c9dff. One launcher (⌘K, ⌘⇧K, the launcher buttons) replaced the palette, the spotlight and the old pages-and-apps launcher. Sections Search, Tabs, History, Notes, Commands capped 3/4/2/2 and 14 rows; @tabs, @history, @notes, > scopes; ↵, ⌘↵, ⇧↵, ⌘K actions, ⌥↵ task; calculator; recents on ⌘1–⌘4. Opens over a still of the page. Signed off in the installed app on 25 Oct. Later: a live overlay and ⌘⇧Space from any app.",
+      "updated": "2026-10-25T06:20:00Z"
+    },
+    "next-agent-steps": {
+      "status": "done",
+      "note": "19a4538. Checked on the smoke fixture; testing it by hand is BACKLOG #197.",
+      "updated": "2026-10-25T08:05:02Z"
+    },
+    "next-agent-cite": {
+      "status": "done",
+      "note": "0d5c840: cited answers on This page (chips that scroll to and highlight the passage), tables with code-checked claim labels and Copy CSV, Make tasks, Save as note, /restyle previewed then saved as a Boost. Checked in WebKit and Flux Smoke with the mock model; testing it with Gemma 4 is BACKLOG #198.",
+      "updated": "2026-10-25T09:44:39Z"
+    },
+    "next-tasks": {
+      "status": "done",
+      "note": "3cbe239: one-line capture (!1–!3, #list, ~45m anywhere; a date only at the end; Esc keeps the words) on a new flux://tasks with List by day and Board by list, and a five-second ⌘Z undo. The process monitor moved to flux://activity. Signed off in the installed app on 25 Oct.",
+      "updated": "2026-10-25T10:16:14Z"
+    },
+    "next-time": {
+      "status": "done",
+      "note": "2c1a01d: flux://time shows time per site (by the hour or week, against the period before; only while Flux is in front, kept on this Mac). Focus sessions of 25/50/90 min stop chosen sites before they load, with a cover (Allow 5 minutes, End focus, Stay on this page). The new tab has a strip (blocked today, focused vs goal, due today). Native check in Flux Smoke passed. Signed off in the installed app on 26 Oct.",
+      "updated": "2026-10-25T21:55:54Z"
+    },
+    "next-keys": {
+      "status": "done",
+      "note": "bea9c47: one registry of 86 commands (keys.rs) feeds a new macOS menu bar, the launcher's hints, Settings → Keyboard (recorder, \"Use here\" on a clash, fixed and system keys kept) and every page's chord map. On a Mac shortcuts use ⌘ only; keys without ⌘/⌃ leave text fields alone. Checked in WebKit and Flux Smoke. Signed off in the installed app on 26 Oct.",
+      "updated": "2026-10-25T23:26:33Z"
+    },
+    "next-welcome": {
+      "status": "done",
+      "note": "e390163: six-step welcome (name, import, new-tab sites, launcher, agent, how it asks), each skippable; opens itself only on a fresh profile. Imports bookmarks, 180 days of history and Arc's pinned sites from Chrome, Arc, Safari, Firefox, Brave, Zen, Edge and Chromium, from copies so the browser can stay open; ones macOS locks show Open Full Disk Access. Not in: site icons, Chrome's saved tab groups (the Imports step). Signed off in the installed app on 26 Oct.",
+      "updated": "2026-10-26T00:38:01Z"
+    },
+    "vault-thread": {
+      "status": "done",
+      "note": "Pushed as 2031f53 (with 486c30b, a step 6 lint cleanup). Checked in the real app: vault lock/unlock and encrypted export work.",
+      "updated": "2026-10-22T23:10:28Z"
+    },
+    "hydrate": {
+      "status": "done",
+      "note": "Pushed as 6896069. Checked in the real app: new visits show up in the Trail. Follow-up 983016a fixes the mini map drawing at the wrong pixel ratio.",
+      "updated": "2026-10-22T23:10:28Z"
+    },
+    "page-scripts": {
+      "status": "done",
+      "note": "6cf5800: an idle page runs no Flux script on a timer (WebKit, 25 s idle: 13 timer callbacks → 0); a ticking page re-reads at most once a minute after 30 s; load IPC 5 → 2; per-page scripts 84 → 50 KB with the optional ones (hints/gestures, recorder, drafts, form help) only while on. Find count cached; filter CSS only when changed; top frame only on Windows. 2dbfbf4: ⌥⌘I / F12 open the Web Inspector in its own window and close it again. Checked in Flux Smoke; you signed off.",
+      "updated": "2026-10-27T00:46:23Z"
+    },
+    "shell-render": {
+      "status": "done",
+      "note": "0af5b4f: a streamed agent reply updates one message in place (was rebuilt per token); Task Manager rows kept by pid (909 of 919 reused across polls in Flux Smoke, were all rebuilt every 2 s); the start page keeps weather, headlines, top sites and Omni stats between visits; web panels send bounds and show/hide only on change; columns snap (1-2 slow frames a toggle at 62 tabs, was 7-11 sliding). 7b3b703: every Flux page fills the card (Activity was a 40 px strip). The agent check with Gemma 4 is backlog #199. You signed off.",
+      "updated": "2026-10-29T21:56:44Z"
+    },
+    "idle-wakeups": {
+      "status": "done",
+      "note": "bb7cbd9. Idle context switches in Flux Smoke fell from 629 to 144 per 2 min (−77%). KB auto-reindex and reminders sleep until due; Omni/Scroll autostart skipped when not installed; download progress ≤ 4/s; Files watch debounced; Scribe saves after 1.5 s; KaTeX woff2 only (−876 KB); PDF text loads on first use.",
+      "updated": "2026-10-30T09:46:15Z"
+    },
+    "boot-leftovers": {
+      "status": "done",
+      "note": "68f1078. Link hints and gestures are kept in nav.txt and restored at setup, as force-dark already was: the page restored at launch starts with them working (Flux Smoke cold launch, then your check in the installed app on 31 Oct). Permission prompts raised before the shell listens are replayed at handoff; only Windows raises Flux's own prompt, so that part is unit-tested only.",
+      "updated": "2026-10-30T21:21:57Z"
+    },
+    "auto-update": {
+      "status": "done",
+      "note": "44d5e64, a07286f, 5d0328f; v0.2.0 published 31 Oct. Your installed 0.1.0 found it, downloaded it and restarted into it: /Applications/Flux.app is now 0.2.0, still signed with your certificate, and `flux --version` says 0.2.0. Checks 1 min after launch and every 6 h, verifies the updater-key signature and the signed file name, then Restart now / Later. Settings → Updates. scripts/release.sh publishes. macOS `flux` is a shim into Flux.app. Linux installer adds a .desktop entry (not run on Linux). Left in BACKLOG #26: Windows and Linux update builds, notarization. Later-installs-on-quit not exercised live.",
+      "updated": "2026-11-03T06:07:51Z"
+    },
+    "indexer-hotkey": {
+      "status": "done",
+      "note": "8722ba0, corrected by 5ab26fd. ⌥⇧Space (system-wide, rebindable in Settings → Keyboard) and `flux --ask [question]` open a floating answer card over the page: a transparent child webview (hud.rs, IndexerHud.tsx), made when you ask and closed when you dismiss it. Same matches, System 1 tie-break, Copy and Open as the orb. 8722ba0's plugin version silently replaced the patched Tauri and broke the Windows build; 5ab26fd holds the plugin at 2.3 and restores the patch, with a test. You signed off again on the corrected build on 3 Nov.",
+      "updated": "2026-11-03T07:31:52Z"
+    },
+    "indexer-sources": {
+      "status": "done",
+      "note": "ffd47a2. Done at the scope you set: the books folder only. Settings → Indexer chooses it (default ~/Documents/Books; FLUX_INDEXER_BOOKS still outranks it). You signed off in the installed app on 3 Nov. Not done, left in BACKLOG #196: Apple Notes, TextEdit and OCR for scanned PDFs. A chosen folder that's missing during a reindex drops its books until it returns.",
+      "updated": "2026-11-03T07:31:52Z"
+    },
+    "other-devices": {
+      "status": "skipped",
+      "note": "Dropped on 3 Nov: you decided it isn't needed any more. Nothing was built.",
+      "updated": "2026-11-03T07:33:40Z"
+    },
+    "imports": {
+      "status": "done",
+      "note": "53a3ff6. Saved tab groups from Chrome, Brave, Edge, Chromium and Arc come over as bookmark folders (<browser>/Tab groups/<title>), read from a private copy of the profile's sync store; the welcome is now the whole window, one question at a time. Brave, Edge and Chromium bookmarks and history shipped earlier with the welcome. Browser-import temp copies are now private (0700) and always new. You signed off on 7 Nov. Not covered: Chrome's live, unsaved groups; no real saved group has been read, because Chrome's folder needs Full Disk Access.",
+      "updated": "2026-11-07T10:07:39Z"
+    },
+    "agent-ax": {
+      "status": "done",
+      "note": "53a3ff6. On macOS the agent plans from a computed accessibility tree with versioned refs held in Flux's own JavaScript world, up to 5 steps per look. Checked with a real model on 7 Nov: Gemini 3.8 Flash through the Antigravity CLI ran /task on the smoke page by ref, asked once for the commit, sent the message once and finished, in two model calls. Gemini through Antigravity is a Settings → Model server choice (ADR 0020). You signed off on 7 Nov. Windows and Linux still plan from page text.",
+      "updated": "2026-11-07T10:07:39Z"
+    },
+    "terminal-decision": {
+      "status": "done",
+      "note": "Decided 4 Nov: flux-term retired (ADR 0019), the terminal stays on xterm.js. Built on it: ligatures from the bundled font (53a3ff6); inline images over Sixel and iTerm's protocol, through tmux once the terminal reports its pixel size (e919cc8); no black boxes under underlines, links or image edges (d4fe5b8). You confirmed images work on 7 Nov. Not in: Kitty's graphics protocol. A terminal freeze seen on 7 Nov wasn't reproduced; e919cc8 caps the one place output waits.",
+      "updated": "2026-11-07T10:07:39Z"
+    },
+    "memory": {
+      "status": "done",
+      "note": "4503d50. Scope you set on 8 Nov: the tab cap; the Indexer items are BACKLOG #200 (low value). Settings → Memory → Keep at most (default 8): background tabs past it unload after 30 s, least recently used first. On the way: on macOS a closed or unloaded tab's page lived on behind its view, so a closed YouTube tab kept playing and unloading freed nothing; it's now torn down with WebKit's _close after pausing media. Measured in Flux Smoke: 20 tabs holding 40 MB each, page memory 602 MB, then 211 MB a minute later (25 → 14 processes). You confirmed the YouTube close on 8 Nov. Still unknown: what holds closed views (each now an empty shell). 442f0cc also fixed Liquid Silk's see-through sidebar popovers.",
+      "updated": "2026-11-07T23:39:04Z"
+    },
+    "privacy": {
+      "status": "done",
+      "note": "53b5ade. Fingerprint defences: keyed noise in canvas, WebGL readPixels and Web Audio readbacks in every frame, per site and session (Brave-style); on by default, off where Shields is off; Settings → Privacy switch. Tor tabs (new-tab menu, launcher, marked 🧅): private, through the Tor on this Mac (installed with your OK, runs as a brew service), WebRTC off, refused rather than opened direct when Tor isn't running. You signed off on 8 Nov: a Tor tab works, and browserleaks.com/canvas and coveryourtracks.eff.org look good. Not done: the Settings proxy on macOS (BACKLOG #63). Entry JS and default boot budgets raised by 1 KB with your approval.",
+      "updated": "2026-11-08T00:36:45Z"
+    },
+    "css-mobile": {
+      "status": "doing",
+      "note": "All pushed: 56f1a34 (iOS milestone 1), 438c8e2 (island, Files, Share → Flux, performance), 08d3f35 (Shields), fffbdcb (phone layouts, Home on Flux pages, #185), 75c96fb (#184: Omni, Reader, Watch and Feeds styles out of startup; preloads budget 73 KB, approved). Everything in this step is done; waiting for you to mark it done.",
+      "updated": "2026-11-10T23:09:29Z"
+    },
+    "decisions": {
+      "status": "todo"
+    }
+  }
+}

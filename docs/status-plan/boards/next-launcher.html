@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Flux Next · Launcher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&amp;family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..600,0..100;1,9..144,300..600,0..100&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#0C0A0F}
+a{color:#E8A7C4}a:hover{color:#F6CFE0}
+button,input,textarea{font:inherit;color:inherit}
+input::placeholder,textarea::placeholder{color:#9286A0}
+:focus-visible{outline:2px solid #C9B5FF;outline-offset:3px}
+</style>
+</head>
+<body>
+<div style="position: relative; overflow: hidden; min-height: 900px; box-sizing: border-box; padding: 26px 30px 30px; background: radial-gradient(1100px 620px at 18% -12%, #241429 0%, rgba(36,20,41,0) 62%), radial-gradient(900px 640px at 105% 115%, #1B1228 0%, rgba(27,18,40,0) 60%), #0C0A0F; font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 14px; color: #F2EBF5">
+  <svg aria-hidden="true" viewBox="0 0 1440 900" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none">
+    <defs><filter id="next-cast-launcher" x="-5%" y="-30%" width="110%" height="160%"><feDropShadow dx="0" dy="-6" stdDeviation="8" flood-color="#050307" flood-opacity="0.6"></feDropShadow></filter></defs>
+    <path d="M-20 564.1L-8 561.8L4 560L16 558.8L28 558.6L40 559.3L52 561L64 563.4L76 566.4L88 569.4L100 572.2L112 574.3L124 575.4L136 575.3L148 573.8L160 571.2L172 567.6L184 563.2L196 558.5L208 553.8L220 549.4L232 545.6L244 542.5L256 540L268 538.1L280 536.6L292 535.2L304 533.6L316 531.6L328 529.2L340 526.3L352 523L364 519.6L376 516.3L388 513.4L400 511.4L412 510.4L424 510.7L436 512.2L448 514.9L460 518.5L472 522.6L484 526.9L496 530.9L508 534.3L520 536.8L532 538.3L544 538.7L556 538.1L568 536.9L580 535.2L592 533.5L604 532.1L616 531.2L628 531.1L640 531.6L652 532.8L664 534.5L676 536.3L688 538.1L700 539.6L712 540.6L724 541L736 540.8L748 540.3L760 539.7L772 539.3L784 539.5L796 540.5L808 542.5L820 545.6L832 549.8L844 554.9L856 560.6L868 566.4L880 572L892 577L904 581L916 583.8L928 585.3L940 585.5L952 584.7L964 583.2L976 581.2L988 579.1L1000 577.2L1012 575.6L1024 574.6L1036 574L1048 573.7L1060 573.5L1072 573.2L1084 572.4L1096 571L1108 568.8L1120 566L1132 562.5L1144 558.7L1156 554.8L1168 551.3L1180 548.4L1192 546.4L1204 545.5L1216 545.7L1228 547L1240 549.1L1252 551.6L1264 554.1L1276 556.3L1288 557.8L1300 558.4L1312 557.8L1324 556L1336 553.3L1348 549.9L1360 546L1372 542.1L1384 538.4L1396 535.1L1408 532.5L1420 530.6L1432 529.3L1444 528.3L1456 527.5L1460 920L-20 920Z" fill="#2A1B30" filter="url(#next-cast-launcher)"></path>
+    <path d="M-20 564.1L-8 561.8L4 560L16 558.8L28 558.6L40 559.3L52 561L64 563.4L76 566.4L88 569.4L100 572.2L112 574.3L124 575.4L136 575.3L148 573.8L160 571.2L172 567.6L184 563.2L196 558.5L208 553.8L220 549.4L232 545.6L244 542.5L256 540L268 538.1L280 536.6L292 535.2L304 533.6L316 531.6L328 529.2L340 526.3L352 523L364 519.6L376 516.3L388 513.4L400 511.4L412 510.4L424 510.7L436 512.2L448 514.9L460 518.5L472 522.6L484 526.9L496 530.9L508 534.3L520 536.8L532 538.3L544 538.7L556 538.1L568 536.9L580 535.2L592 533.5L604 532.1L616 531.2L628 531.1L640 531.6L652 532.8L664 534.5L676 536.3L688 538.1L700 539.6L712 540.6L724 541L736 540.8L748 540.3L760 539.7L772 539.3L784 539.5L796 540.5L808 542.5L820 545.6L832 549.8L844 554.9L856 560.6L868 566.4L880 572L892 577L904 581L916 583.8L928 585.3L940 585.5L952 584.7L964 583.2L976 581.2L988 579.1L1000 577.2L1012 575.6L1024 574.6L1036 574L1048 573.7L1060 573.5L1072 573.2L1084 572.4L1096 571L1108 568.8L1120 566L1132 562.5L1144 558.7L1156 554.8L1168 551.3L1180 548.4L1192 546.4L1204 545.5L1216 545.7L1228 547L1240 549.1L1252 551.6L1264 554.1L1276 556.3L1288 557.8L1300 558.4L1312 557.8L1324 556L1336 553.3L1348 549.9L1360 546L1372 542.1L1384 538.4L1396 535.1L1408 532.5L1420 530.6L1432 529.3L1444 528.3L1456 527.5" fill="none" stroke="rgba(243,182,211,0.070)" stroke-width="1"></path>
+    <path d="M-20 612.7L-8 611.1L4 610.2L16 609.7L28 609.6L40 609.6L52 609.6L64 609.4L76 609.1L88 608.5L100 607.8L112 606.9L124 606.1L136 605.4L148 605L160 605L172 605.3L184 605.9L196 606.8L208 607.8L220 608.7L232 609.4L244 609.6L256 609.2L268 608.2L280 606.7L292 604.6L304 602L316 599.3L328 596.6L340 594.1L352 592L364 590.4L376 589.4L388 588.9L400 589L412 589.4L424 590L436 590.8L448 591.5L460 592.2L472 592.8L484 593.3L496 593.9L508 594.6L520 595.7L532 597.1L544 599.2L556 601.8L568 605L580 608.7L592 612.7L604 616.9L616 621L628 624.8L640 628.1L652 630.9L664 632.9L676 634.3L688 635.1L700 635.4L712 635.3L724 635.1L736 634.9L748 634.8L760 635L772 635.3L784 635.7L796 636.3L808 636.7L820 637L832 637L844 636.5L856 635.8L868 634.6L880 633.3L892 631.9L904 630.5L916 629.5L928 628.9L940 628.9L952 629.5L964 630.7L976 632.4L988 634.4L1000 636.6L1012 638.8L1024 640.7L1036 642.1L1048 643.1L1060 643.5L1072 643.3L1084 642.7L1096 641.7L1108 640.5L1120 639.2L1132 638L1144 636.8L1156 635.8L1168 634.9L1180 634L1192 632.8L1204 631.4L1216 629.6L1228 627.2L1240 624.3L1252 620.9L1264 617.1L1276 613L1288 608.8L1300 604.8L1312 601.2L1324 598.1L1336 595.7L1348 594L1360 593L1372 592.6L1384 592.8L1396 593.2L1408 593.8L1420 594.4L1432 594.9L1444 595.2L1456 595.3L1460 920L-20 920Z" fill="#24182B" filter="url(#next-cast-launcher)"></path>
+    <path d="M-20 612.7L-8 611.1L4 610.2L16 609.7L28 609.6L40 609.6L52 609.6L64 609.4L76 609.1L88 608.5L100 607.8L112 606.9L124 606.1L136 605.4L148 605L160 605L172 605.3L184 605.9L196 606.8L208 607.8L220 608.7L232 609.4L244 609.6L256 609.2L268 608.2L280 606.7L292 604.6L304 602L316 599.3L328 596.6L340 594.1L352 592L364 590.4L376 589.4L388 588.9L400 589L412 589.4L424 590L436 590.8L448 591.5L460 592.2L472 592.8L484 593.3L496 593.9L508 594.6L520 595.7L532 597.1L544 599.2L556 601.8L568 605L580 608.7L592 612.7L604 616.9L616 621L628 624.8L640 628.1L652 630.9L664 632.9L676 634.3L688 635.1L700 635.4L712 635.3L724 635.1L736 634.9L748 634.8L760 635L772 635.3L784 635.7L796 636.3L808 636.7L820 637L832 637L844 636.5L856 635.8L868 634.6L880 633.3L892 631.9L904 630.5L916 629.5L928 628.9L940 628.9L952 629.5L964 630.7L976 632.4L988 634.4L1000 636.6L1012 638.8L1024 640.7L1036 642.1L1048 643.1L1060 643.5L1072 643.3L1084 642.7L1096 641.7L1108 640.5L1120 639.2L1132 638L1144 636.8L1156 635.8L1168 634.9L1180 634L1192 632.8L1204 631.4L1216 629.6L1228 627.2L1240 624.3L1252 620.9L1264 617.1L1276 613L1288 608.8L1300 604.8L1312 601.2L1324 598.1L1336 595.7L1348 594L1360 593L1372 592.6L1384 592.8L1396 593.2L1408 593.8L1420 594.4L1432 594.9L1444 595.2L1456 595.3" fill="none" stroke="rgba(243,182,211,0.062)" stroke-width="1"></path>
+    <path d="M-20 674.8L-8 674.1L4 672.8L16 670.8L28 668.2L40 665.1L52 662L64 659.1L76 656.8L88 655.3L100 654.9L112 655.7L124 657.5L136 660.2L148 663.5L160 667L172 670.4L184 673.3L196 675.5L208 676.9L220 677.5L232 677.4L244 676.9L256 676.3L268 675.8L280 675.8L292 676.4L304 677.8L316 679.8L328 682.5L340 685.4L352 688.4L364 690.9L376 692.8L388 693.8L400 693.8L412 692.9L424 691.2L436 688.9L448 686.4L460 684.1L472 682.3L484 681.3L496 681.2L508 682.1L520 683.9L532 686.3L544 689.1L556 691.9L568 694.4L580 696.3L592 697.6L604 698.2L616 698.1L628 697.7L640 697.1L652 696.7L664 696.8L676 697.6L688 699.3L700 701.9L712 705.2L724 709L736 713.1L748 716.9L760 720.2L772 722.7L784 724.1L796 724.4L808 723.7L820 722.1L832 719.9L844 717.4L856 715.1L868 713.1L880 711.7L892 711L904 710.8L916 711.2L928 711.7L940 712.1L952 712.1L964 711.5L976 709.9L988 707.5L1000 704.3L1012 700.4L1024 696.3L1036 692.1L1048 688.4L1060 685.3L1072 683.2L1084 682.2L1096 682.2L1108 683L1120 684.5L1132 686.2L1144 687.9L1156 689.2L1168 689.8L1180 689.7L1192 688.8L1204 687.3L1216 685.3L1228 683.2L1240 681.3L1252 679.9L1264 679.1L1276 679.2L1288 680L1300 681.5L1312 683.3L1324 685.1L1336 686.7L1348 687.6L1360 687.7L1372 686.7L1384 684.8L1396 681.9L1408 678.5L1420 674.7L1432 671L1444 667.7L1456 665.2L1460 920L-20 920Z" fill="#1E1424" filter="url(#next-cast-launcher)"></path>
+    <path d="M-20 674.8L-8 674.1L4 672.8L16 670.8L28 668.2L40 665.1L52 662L64 659.1L76 656.8L88 655.3L100 654.9L112 655.7L124 657.5L136 660.2L148 663.5L160 667L172 670.4L184 673.3L196 675.5L208 676.9L220 677.5L232 677.4L244 676.9L256 676.3L268 675.8L280 675.8L292 676.4L304 677.8L316 679.8L328 682.5L340 685.4L352 688.4L364 690.9L376 692.8L388 693.8L400 693.8L412 692.9L424 691.2L436 688.9L448 686.4L460 684.1L472 682.3L484 681.3L496 681.2L508 682.1L520 683.9L532 686.3L544 689.1L556 691.9L568 694.4L580 696.3L592 697.6L604 698.2L616 698.1L628 697.7L640 697.1L652 696.7L664 696.8L676 697.6L688 699.3L700 701.9L712 705.2L724 709L736 713.1L748 716.9L760 720.2L772 722.7L784 724.1L796 724.4L808 723.7L820 722.1L832 719.9L844 717.4L856 715.1L868 713.1L880 711.7L892 711L904 710.8L916 711.2L928 711.7L940 712.1L952 712.1L964 711.5L976 709.9L988 707.5L1000 704.3L1012 700.4L1024 696.3L1036 692.1L1048 688.4L1060 685.3L1072 683.2L1084 682.2L1096 682.2L1108 683L1120 684.5L1132 686.2L1144 687.9L1156 689.2L1168 689.8L1180 689.7L1192 688.8L1204 687.3L1216 685.3L1228 683.2L1240 681.3L1252 679.9L1264 679.1L1276 679.2L1288 680L1300 681.5L1312 683.3L1324 685.1L1336 686.7L1348 687.6L1360 687.7L1372 686.7L1384 684.8L1396 681.9L1408 678.5L1420 674.7L1432 671L1444 667.7L1456 665.2" fill="none" stroke="rgba(243,182,211,0.054)" stroke-width="1"></path>
+    <path d="M-20 745L-8 743.1L4 741.4L16 739.9L28 738.8L40 738.3L52 738.3L64 738.8L76 739.7L88 740.9L100 742.2L112 743.5L124 744.6L136 745.4L148 746L160 746.3L172 746.5L184 746.7L196 747L208 747.7L220 748.8L232 750.4L244 752.5L256 755.1L268 758L280 761.2L292 764.3L304 767.2L316 769.8L328 771.9L340 773.4L352 774.5L364 775.1L376 775.4L388 775.5L400 775.6L412 775.9L424 776.4L436 777.1L448 778.1L460 779.3L472 780.5L484 781.6L496 782.4L508 782.8L520 782.7L532 782.1L544 780.9L556 779.3L568 777.5L580 775.5L592 773.7L604 772.1L616 770.9L628 770.2L640 770L652 770.2L664 770.7L676 771.3L688 772L700 772.5L712 772.7L724 772.6L736 772.1L748 771.4L760 770.5L772 769.5L784 768.7L796 768.2L808 768.1L820 768.4L832 769.2L844 770.4L856 771.8L868 773.2L880 774.6L892 775.6L904 776.2L916 776.3L928 775.8L940 774.7L952 773.3L964 771.6L976 769.8L988 768L1000 766.4L1012 765.1L1024 764L1036 763.3L1048 762.7L1060 762.2L1072 761.6L1084 760.8L1096 759.5L1108 757.8L1120 755.7L1132 753.1L1144 750.3L1156 747.4L1168 744.5L1180 741.8L1192 739.6L1204 737.9L1216 736.8L1228 736.3L1240 736.3L1252 736.6L1264 737.1L1276 737.6L1288 738.1L1300 738.3L1312 738.3L1324 738L1336 737.5L1348 737L1360 736.6L1372 736.4L1384 736.6L1396 737.3L1408 738.5L1420 740.1L1432 742.2L1444 744.4L1456 746.8L1460 920L-20 920Z" fill="#19111E" filter="url(#next-cast-launcher)"></path>
+    <path d="M-20 745L-8 743.1L4 741.4L16 739.9L28 738.8L40 738.3L52 738.3L64 738.8L76 739.7L88 740.9L100 742.2L112 743.5L124 744.6L136 745.4L148 746L160 746.3L172 746.5L184 746.7L196 747L208 747.7L220 748.8L232 750.4L244 752.5L256 755.1L268 758L280 761.2L292 764.3L304 767.2L316 769.8L328 771.9L340 773.4L352 774.5L364 775.1L376 775.4L388 775.5L400 775.6L412 775.9L424 776.4L436 777.1L448 778.1L460 779.3L472 780.5L484 781.6L496 782.4L508 782.8L520 782.7L532 782.1L544 780.9L556 779.3L568 777.5L580 775.5L592 773.7L604 772.1L616 770.9L628 770.2L640 770L652 770.2L664 770.7L676 771.3L688 772L700 772.5L712 772.7L724 772.6L736 772.1L748 771.4L760 770.5L772 769.5L784 768.7L796 768.2L808 768.1L820 768.4L832 769.2L844 770.4L856 771.8L868 773.2L880 774.6L892 775.6L904 776.2L916 776.3L928 775.8L940 774.7L952 773.3L964 771.6L976 769.8L988 768L1000 766.4L1012 765.1L1024 764L1036 763.3L1048 762.7L1060 762.2L1072 761.6L1084 760.8L1096 759.5L1108 757.8L1120 755.7L1132 753.1L1144 750.3L1156 747.4L1168 744.5L1180 741.8L1192 739.6L1204 737.9L1216 736.8L1228 736.3L1240 736.3L1252 736.6L1264 737.1L1276 737.6L1288 738.1L1300 738.3L1312 738.3L1324 738L1336 737.5L1348 737L1360 736.6L1372 736.4L1384 736.6L1396 737.3L1408 738.5L1420 740.1L1432 742.2L1444 744.4L1456 746.8" fill="none" stroke="rgba(243,182,211,0.046)" stroke-width="1"></path>
+    <path d="M-20 823.9L-8 825.1L4 826.9L16 829L28 831.3L40 833.3L52 834.7L64 835.4L76 835.2L88 834.1L100 832.3L112 830.1L124 827.7L136 825.6L148 824L160 823.3L172 823.4L184 824.5L196 826.4L208 828.9L220 831.7L232 834.5L244 836.8L256 838.5L268 839.4L280 839.5L292 838.9L304 837.7L316 836.4L328 835.2L340 834.4L352 834.4L364 835.1L376 836.8L388 839.1L400 842L412 845.1L424 848.1L436 850.6L448 852.4L460 853.2L472 853L484 851.9L496 850L508 847.7L520 845.3L532 843.1L544 841.4L556 840.5L568 840.2L580 840.7L592 841.7L604 842.9L616 844.1L628 844.8L640 844.9L652 844.1L664 842.3L676 839.7L688 836.4L700 832.6L712 828.9L724 825.4L736 822.5L748 820.5L760 819.4L772 819.2L784 819.8L796 820.9L808 822.1L820 823.2L832 823.9L844 823.9L856 823.1L868 821.6L880 819.4L892 816.9L904 814.4L916 812.2L928 810.5L940 809.7L952 809.8L964 810.9L976 812.7L988 815.1L1000 817.7L1012 820.1L1024 822L1036 823.2L1048 823.6L1060 823L1072 821.6L1084 819.6L1096 817.4L1108 815.3L1120 813.5L1132 812.4L1144 812.1L1156 812.5L1168 813.7L1180 815.4L1192 817.2L1204 818.9L1216 820.2L1228 820.7L1240 820.3L1252 819L1264 816.9L1276 814.2L1288 811.2L1300 808.3L1312 805.8L1324 803.9L1336 803L1348 803L1360 803.9L1372 805.5L1384 807.5L1396 809.6L1408 811.5L1420 812.8L1432 813.5L1444 813.4L1456 812.6L1460 920L-20 920Z" fill="#140E18" filter="url(#next-cast-launcher)"></path>
+    <path d="M-20 823.9L-8 825.1L4 826.9L16 829L28 831.3L40 833.3L52 834.7L64 835.4L76 835.2L88 834.1L100 832.3L112 830.1L124 827.7L136 825.6L148 824L160 823.3L172 823.4L184 824.5L196 826.4L208 828.9L220 831.7L232 834.5L244 836.8L256 838.5L268 839.4L280 839.5L292 838.9L304 837.7L316 836.4L328 835.2L340 834.4L352 834.4L364 835.1L376 836.8L388 839.1L400 842L412 845.1L424 848.1L436 850.6L448 852.4L460 853.2L472 853L484 851.9L496 850L508 847.7L520 845.3L532 843.1L544 841.4L556 840.5L568 840.2L580 840.7L592 841.7L604 842.9L616 844.1L628 844.8L640 844.9L652 844.1L664 842.3L676 839.7L688 836.4L700 832.6L712 828.9L724 825.4L736 822.5L748 820.5L760 819.4L772 819.2L784 819.8L796 820.9L808 822.1L820 823.2L832 823.9L844 823.9L856 823.1L868 821.6L880 819.4L892 816.9L904 814.4L916 812.2L928 810.5L940 809.7L952 809.8L964 810.9L976 812.7L988 815.1L1000 817.7L1012 820.1L1024 822L1036 823.2L1048 823.6L1060 823L1072 821.6L1084 819.6L1096 817.4L1108 815.3L1120 813.5L1132 812.4L1144 812.1L1156 812.5L1168 813.7L1180 815.4L1192 817.2L1204 818.9L1216 820.2L1228 820.7L1240 820.3L1252 819L1264 816.9L1276 814.2L1288 811.2L1300 808.3L1312 805.8L1324 803.9L1336 803L1348 803L1360 803.9L1372 805.5L1384 807.5L1396 809.6L1408 811.5L1420 812.8L1432 813.5L1444 813.4L1456 812.6" fill="none" stroke="rgba(243,182,211,0.038)" stroke-width="1"></path>
+  </svg>
+
+  <div aria-hidden="true" style="position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 844px">
+    <div style="flex: 1; display: flex; gap: 30px; align-items: stretch">
+      <nav aria-label="Tabs" style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88); flex: 0 0 268px; min-width: 0; min-height: 844px; padding: 26px 14px 16px; display: flex; flex-direction: column; gap: 6px">
+        <span style="position: absolute; top: -10px; left: 24px; display: flex; align-items: center; gap: 8px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; line-height: 18px; white-space: nowrap; color: #F2EBF5">Tabs · Uni</span>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 0 2px 4px">
+          <span style="display: flex; align-items: center; gap: 10px; font-family: Fraunces, Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 48; font-size: 22px">
+            <span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F6EDE4 0%, #C9B5FF 45%, #4B2B5E 100%); box-shadow: 0 0 22px rgba(201,181,255,0.13)"></span>
+            flux
+          </span>
+          <div style="display: flex; gap: 4px; margin-left: auto">
+            <button aria-label="Back" style="width: 34px; height: 34px; border: none; border-radius: 12px; background: #1E1823; color: #F2EBF5; display: grid; place-items: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+            <button aria-label="Forward" style="width: 34px; height: 34px; border: none; border-radius: 12px; background: #17121C; color: #9286A0; display: grid; place-items: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+            <button aria-label="Reload" style="width: 34px; height: 34px; border: none; border-radius: 12px; background: #1E1823; color: #F2EBF5; display: grid; place-items: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"></path></svg></button>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 5px 0 13px; border-radius: 999px; background: #0F0B13; box-shadow: inset 0 1px 2px rgba(0,0,0,0.6), inset 0 -1px 0 rgba(246,237,228,0.04)">
+          <span style="flex: none; display: grid; color: #B9A3E8"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11h10a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1zM8.5 11V8a3.5 3.5 0 0 1 7 0v3"></path></svg></span>
+          <button aria-label="Address, arxiv.org/abs/1706.03762. Click to edit" style="flex: 1; min-width: 0; height: 30px; padding: 0; border: none; background: transparent; font-size: 13.5px; font-weight: 600; letter-spacing: 0.01em; color: #F2EBF5; text-align: center; cursor: text">arxiv.org</button>
+          <span style="flex: none; display: flex; align-items: center; gap: 2px; padding: 3px; border-radius: 999px; background: #1E1823">
+            <button aria-label="Highlighter extension" style="width: 22px; height: 22px; padding: 0; border: none; border-radius: 50%; background: transparent; color: #F3B6D3; display: grid; place-items: center; cursor: pointer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4.5-1L19 8.5 15.5 5 5 15.5zM13.5 7l3.5 3.5"></path></svg></button>
+            <button aria-label="Night mode extension" style="width: 22px; height: 22px; padding: 0; border: none; border-radius: 50%; background: transparent; color: #A9E6EC; display: grid; place-items: center; cursor: pointer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18zM12 3v18"></path></svg></button>
+            <button aria-label="Shields, 12 blocked on this page" aria-expanded="" style="display: flex; align-items: center; gap: 4px; height: 24px; padding: 0 8px 0 6px; border: none; border-radius: 999px; background: rgba(169,230,236,0.16); color: #A9E6EC; font-size: 11.5px; font-weight: 700; cursor: pointer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.2-7 10-4-1.8-7-5.4-7-10V6z"></path></svg>12</button>
+          </span>
+        </div>
+        <div aria-hidden="true" style="height: 1px; margin: 8px 2px 6px; background: rgba(240,222,250,0.06)"></div>
+        <div style="display: flex; gap: 6px; padding: 0 2px 10px">
+          <button style="height: 30px; padding: 0 14px; border: none; border-radius: 15px; background: #E8A7C4; color: #22121B; font-size: 12.5px; font-weight: 600; cursor: pointer">Uni</button>
+          <button style="height: 30px; padding: 0 14px; border: 1px solid rgba(240,222,250,0.10); border-radius: 15px; background: transparent; color: #BBB0C4; font-size: 12.5px; cursor: pointer">Personal</button>
+          <button style="height: 30px; padding: 0 14px; border: 1px solid rgba(240,222,250,0.10); border-radius: 15px; background: transparent; color: #BBB0C4; font-size: 12.5px; cursor: pointer">Flux</button>
+        </div>
+        
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <button style="display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 0 10px; border: none; border-radius: 16px; background: linear-gradient(100deg, rgba(243,182,211,0.16), rgba(201,181,255,0.16) 50%, rgba(169,230,236,0.12)); box-shadow: inset 0 1px 0 rgba(246,237,228,0.08), 0 6px 14px -8px rgba(0,0,0,0.7); transform: none; color: #F2EBF5; text-align: left; cursor: pointer">
+              <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #F3B6D3; color: #22121B; font-size: 12px; font-weight: 700">A</span>
+              <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+                <span style="font-size: 13.5px; font-weight: 600; color: #F2EBF5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Attention Is All You Need</span>
+                <span style="font-size: 11.5px; color: #CFC4D8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">arxiv.org</span>
+              </span>
+              
+            </button>
+            
+          </div>
+        
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <button style="display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 0 10px; border: none; border-radius: 16px; background: transparent; box-shadow: none; transform: none; color: #F2EBF5; text-align: left; cursor: pointer">
+              <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 12px; font-weight: 700">L</span>
+              <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+                <span style="font-size: 13.5px; font-weight: 500; color: #F2EBF5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Attention? Attention!</span>
+                <span style="font-size: 11.5px; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">lilianweng.github.io</span>
+              </span>
+              
+            </button>
+            
+          </div>
+        
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <button style="display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 0 10px; border: none; border-radius: 16px; background: transparent; box-shadow: none; transform: none; color: #F2EBF5; text-align: left; cursor: pointer">
+              <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 12px; font-weight: 700">G</span>
+              <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+                <span style="font-size: 13.5px; font-weight: 500; color: #F2EBF5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">COMP2310 · Assignment 2</span>
+                <span style="font-size: 11.5px; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">gitlab.cecs.anu.edu.au</span>
+              </span>
+              
+            </button>
+            
+          </div>
+        
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <button style="display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 0 10px; border: none; border-radius: 16px; background: transparent; box-shadow: none; transform: none; color: #F2EBF5; text-align: left; cursor: pointer">
+              <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 12px; font-weight: 700">C</span>
+              <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+                <span style="font-size: 13.5px; font-weight: 500; color: #F2EBF5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Dashboard</span>
+                <span style="font-size: 11.5px; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">canvas.anu.edu.au</span>
+              </span>
+              
+            </button>
+            
+          </div>
+        
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <button style="display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 0 10px; border: none; border-radius: 16px; background: transparent; box-shadow: none; transform: none; color: #F2EBF5; text-align: left; cursor: pointer">
+              <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 12px; font-weight: 700">E</span>
+              <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+                <span style="font-size: 13.5px; font-weight: 500; color: #F2EBF5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Lecture 11 · Self-attention</span>
+                <span style="font-size: 11.5px; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">echo360.net.au</span>
+              </span>
+              
+            </button>
+            
+          </div>
+        
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <button style="display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 0 10px; border: none; border-radius: 16px; background: transparent; box-shadow: none; transform: none; color: #F2EBF5; text-align: left; cursor: pointer">
+              <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #17121C; color: #9286A0; font-size: 12px; font-weight: 700">Y</span>
+              <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+                <span style="font-size: 13.5px; font-weight: 500; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Hacker News</span>
+                <span style="font-size: 11.5px; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">asleep 2 h · news.ycombinator.com</span>
+              </span>
+              
+                <span title="Asleep" style="flex: none; display: grid; color: #9286A0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg></span>
+              
+            </button>
+            
+          </div>
+        
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <button style="display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 0 10px; border: none; border-radius: 16px; background: transparent; box-shadow: none; transform: none; color: #F2EBF5; text-align: left; cursor: pointer">
+              <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #17121C; color: #9286A0; font-size: 12px; font-weight: 700">R</span>
+              <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+                <span style="font-size: 13.5px; font-weight: 500; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Fearless concurrency</span>
+                <span style="font-size: 11.5px; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">asleep 1 d · doc.rust-lang.org</span>
+              </span>
+              
+                <span title="Asleep" style="flex: none; display: grid; color: #9286A0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg></span>
+              
+            </button>
+            
+          </div>
+        
+        <button style="display: flex; align-items: center; gap: 12px; min-height: 44px; margin-top: 2px; padding: 0 12px; border: 1px dashed rgba(240,222,250,0.14); border-radius: 16px; background: transparent; color: #BBB0C4; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>New tab</button>
+        <div style="margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(240,222,250,0.06); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+          
+            <button aria-label="Mail" style="height: 48px; border: none; border-radius: 16px; background: #1E1823; color: #F3B6D3; display: grid; place-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6"></path></svg></button>
+          
+            <button aria-label="Calendar" style="height: 48px; border: none; border-radius: 16px; background: #1E1823; color: #C9B5FF; display: grid; place-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6h14v13H5zM5 10h14M9 4v4M15 4v4"></path></svg></button>
+          
+            <button aria-label="Music" style="height: 48px; border: none; border-radius: 16px; background: #1E1823; color: #F6EDE4; display: grid; place-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v12M9 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM19 16a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"></path></svg></button>
+          
+            <button aria-label="Chat" style="height: 48px; border: none; border-radius: 16px; background: #1E1823; color: #A9E6EC; display: grid; place-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6h14v9H10l-4 4v-4H5z"></path></svg></button>
+          
+        </div>
+      </nav>
+      <main style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88); flex: 1; min-width: 0; padding: 50px 56px 40px; display: flex; flex-direction: column; gap: 24px">
+        <span style="position: absolute; top: -11px; left: 28px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; line-height: 20px; white-space: nowrap; color: #F2EBF5">arxiv.org/abs/1706.03762</span>
+        <div style="display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 34px">
+          <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 26px; font-size: 13px; line-height: 1.45; color: #BBB0C4">
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; color: #9286A0">arXiv:1706.03762 · cs.CL</span>
+            <span>Submitted 12 Jun 2017<br>Last revised 2 Aug 2023 (v7)</span>
+            <span style="margin-top: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #F2EBF5">Access paper</span>
+            <a href="#">View PDF</a>
+            <a href="#">HTML (experimental)</a>
+            <a href="#">TeX source</a>
+            <span style="margin-top: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #F2EBF5">Cite as</span>
+            <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px">arXiv:1706.03762 [cs.CL]</span>
+            <a href="#">Export BibTeX</a>
+            <span style="margin-top: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #F2EBF5">Current browse</span>
+            <span>cs.CL · new · recent · 2017-06</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <h1 style="margin: 0; font-family: Fraunces, Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 96; font-weight: 400; font-size: 52px; line-height: 1.04; letter-spacing: -0.01em">Attention Is All You Need</h1>
+            <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #BBB0C4">Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, Polosukhin · 2017</p>
+            <p style="margin: 0; font-size: 15px; line-height: 1.75; color: #E3DAE8">A sequence model built from attention alone, with no recurrence and no convolution. It trains in a fraction of the time and sets a new mark for machine translation.</p>
+            <div style="display: flex; gap: 10px">
+              <a href="#" style="display: inline-flex; align-items: center; height: 42px; padding: 0 22px; border-radius: 999px; background: linear-gradient(100deg, #F3B6D3, #C9B5FF 40%, #F6EDE4 72%, #A9E6EC); color: #1A1020; font-weight: 600; box-shadow: 0 10px 26px -12px rgba(201,181,255,0.18); text-decoration: none">View PDF</a>
+              <a href="#" style="display: inline-flex; align-items: center; height: 42px; padding: 0 22px; border-radius: 999px; background: #1E1823; color: #F2EBF5; box-shadow: inset 0 1px 0 rgba(246,237,228,0.06); text-decoration: none">Clip to Onyx</a>
+            </div>
+          </div>
+        </div>
+        <figure style="margin: auto 0 0; padding: 22px 24px; border-radius: 22px; background: #17121C; box-shadow: inset 0 1px 0 rgba(246,237,228,0.04); display: flex; flex-direction: column; gap: 12px">
+          <figcaption style="display: flex; justify-content: space-between; font-size: 12px; color: #9286A0"><span>BLEU · English → German · newstest2014</span><span>higher is better</span></figcaption>
+          
+            <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 44px; gap: 14px; align-items: center">
+              <span style="font-size: 13px; color: #F2EBF5">Transformer big</span>
+              <span style="height: 8px; border-radius: 4px; background: #241D2B; overflow: hidden"><span style="display: block; height: 100%; width: 94.7%; border-radius: 4px; background: linear-gradient(90deg, #F3B6D3, #C9B5FF 50%, #A9E6EC)"></span></span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; color: #F2EBF5">28.4</span>
+            </div>
+          
+            <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 44px; gap: 14px; align-items: center">
+              <span style="font-size: 13px; color: #BBB0C4">Transformer base</span>
+              <span style="height: 8px; border-radius: 4px; background: #241D2B; overflow: hidden"><span style="display: block; height: 100%; width: 91.0%; border-radius: 4px; background: #4A3B57"></span></span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; color: #BBB0C4">27.3</span>
+            </div>
+          
+            <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 44px; gap: 14px; align-items: center">
+              <span style="font-size: 13px; color: #BBB0C4">ConvS2S</span>
+              <span style="height: 8px; border-radius: 4px; background: #241D2B; overflow: hidden"><span style="display: block; height: 100%; width: 84.0%; border-radius: 4px; background: #4A3B57"></span></span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; color: #BBB0C4">25.2</span>
+            </div>
+          
+            <div style="display: grid; grid-template-columns: 150px minmax(0, 1fr) 44px; gap: 14px; align-items: center">
+              <span style="font-size: 13px; color: #BBB0C4">GNMT + RL</span>
+              <span style="height: 8px; border-radius: 4px; background: #241D2B; overflow: hidden"><span style="display: block; height: 100%; width: 82.0%; border-radius: 4px; background: #4A3B57"></span></span>
+              <span style="text-align: right; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; color: #BBB0C4">24.6</span>
+            </div>
+          
+        </figure>
+      </main>
+      <aside aria-label="Connections and system" style="flex: 0 0 300px; min-width: 0; display: flex; flex-direction: column; gap: 32px">
+        <button style="height: 44px; padding: 0 22px; width: 100%; border: none; border-radius: 999px; background: linear-gradient(100deg, #F3B6D3, #C9B5FF 40%, #F6EDE4 72%, #A9E6EC); color: #1A1020; font-weight: 600; box-shadow: 0 10px 26px -12px rgba(201,181,255,0.18); cursor: pointer">Ask your notes</button>
+        <section style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88); padding: 26px 12px 12px; display: flex; flex-direction: column; gap: 6px">
+          <span style="position: absolute; top: -10px; left: 24px; display: flex; align-items: center; gap: 8px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; line-height: 18px; white-space: nowrap; color: #F2EBF5">From your notes</span>
+          
+            <button style="display: flex; flex-direction: column; gap: 5px; padding: 11px 12px; border: none; border-radius: 18px; background: #1E1823; text-align: left; cursor: pointer">
+              <span style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #F3B6D3">Onyx · ML</span><span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: #BBB0C4">.86</span></span>
+              <span style="font-size: 13.5px; font-weight: 600; line-height: 1.3">Self-attention: queries, keys and values</span>
+            </button>
+          
+            <button style="display: flex; flex-direction: column; gap: 5px; padding: 11px 12px; border: none; border-radius: 18px; background: #1E1823; text-align: left; cursor: pointer">
+              <span style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #C9B5FF">Book · p.214</span><span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: #BBB0C4">.79</span></span>
+              <span style="font-size: 13.5px; font-weight: 600; line-height: 1.3">Sequence models before attention</span>
+            </button>
+          
+            <button style="display: flex; flex-direction: column; gap: 5px; padding: 11px 12px; border: none; border-radius: 18px; background: #1E1823; text-align: left; cursor: pointer">
+              <span style="display: flex; justify-content: space-between; gap: 8px"><span style="font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #A9E6EC">Onyx · COMP4670</span><span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: #BBB0C4">.71</span></span>
+              <span style="font-size: 13.5px; font-weight: 600; line-height: 1.3">Week 6 · Positional encodings</span>
+            </button>
+          
+        </section>
+        <section style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88); padding: 28px 18px 18px; display: flex; flex-direction: column; gap: 14px">
+          <span style="position: absolute; top: -10px; left: 24px; display: flex; align-items: center; gap: 8px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; line-height: 18px; white-space: nowrap; color: #F2EBF5">System · M3</span>
+          
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <span style="display: flex; justify-content: space-between; font-size: 12.5px"><span style="color: #BBB0C4">CPU</span><span style="font-family: 'JetBrains Mono', ui-monospace, monospace">23%</span></span>
+              <span style="height: 6px; border-radius: 3px; background: #241D2B; overflow: hidden"><span style="display: block; height: 100%; width: 23%; border-radius: 3px; background: linear-gradient(90deg, #F3B6D3, #C9B5FF 50%, #A9E6EC)"></span></span>
+            </div>
+          
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <span style="display: flex; justify-content: space-between; font-size: 12.5px"><span style="color: #BBB0C4">Memory</span><span style="font-family: 'JetBrains Mono', ui-monospace, monospace">61%</span></span>
+              <span style="height: 6px; border-radius: 3px; background: #241D2B; overflow: hidden"><span style="display: block; height: 100%; width: 61%; border-radius: 3px; background: linear-gradient(90deg, #F3B6D3, #C9B5FF 50%, #A9E6EC)"></span></span>
+            </div>
+          
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <span style="display: flex; justify-content: space-between; font-size: 12.5px"><span style="color: #BBB0C4">Disk</span><span style="font-family: 'JetBrains Mono', ui-monospace, monospace">19%</span></span>
+              <span style="height: 6px; border-radius: 3px; background: #241D2B; overflow: hidden"><span style="display: block; height: 100%; width: 19%; border-radius: 3px; background: linear-gradient(90deg, #F3B6D3, #C9B5FF 50%, #A9E6EC)"></span></span>
+            </div>
+          
+        </section>
+        <section style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88); flex: 1; padding: 26px 12px 12px; display: flex">
+          <span style="position: absolute; top: -10px; left: 24px; display: flex; align-items: center; gap: 8px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; line-height: 18px; white-space: nowrap; color: #F2EBF5">Trail · 140</span>
+          <svg role="img" aria-label="Map of today's browsing" viewBox="0 0 260 170" style="width: 100%; flex: 1; min-height: 150px; border-radius: 18px; background: #17121C">
+            <g stroke="#4A3B57" stroke-width="1.2" fill="none"><path d="M34 112L78 68L130 92L180 46L226 76"></path><path d="M78 68L98 134L152 138L180 46"></path><path d="M130 92L152 138"></path></g>
+            <circle cx="34" cy="112" r="4" fill="#F3B6D3"></circle><circle cx="78" cy="68" r="5" fill="#F3B6D3"></circle><circle cx="130" cy="92" r="4" fill="#C9B5FF"></circle><circle cx="226" cy="76" r="4" fill="#A9E6EC"></circle><circle cx="98" cy="134" r="3.5" fill="#C9B5FF"></circle><circle cx="152" cy="138" r="3.5" fill="#A9E6EC"></circle>
+            <circle cx="180" cy="46" r="6" fill="#F6EDE4"></circle><circle cx="180" cy="46" r="12" fill="none" stroke="#F6EDE4" stroke-width="1" opacity="0.7"></circle>
+          </svg>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <div aria-hidden="true" style="position: absolute; inset: 0; z-index: 1; background: rgba(9,6,11,0.52)"></div>
+  <section role="dialog" aria-label="Launcher" style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88), 0 60px 110px -40px rgba(0,0,0,0.95); position: absolute; left: 380px; top: 70px; z-index: 1; width: 680px; padding: 12px 12px 0; display: flex; flex-direction: column">
+    <label style="display: flex; align-items: center; gap: 10px; height: 54px; padding: 0 12px 0 18px; border-radius: 999px; background: #0F0B13; box-shadow: inset 0 1px 2px rgba(0,0,0,0.6), inset 0 -1px 0 rgba(246,237,228,0.04)">
+      <span style="display: grid; color: #C9B5FF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM20 20l-4-4"></path></svg></span>
+      <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Search tabs, history, notes and commands</span>
+      <span style="flex: none; display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: rgba(201,181,255,0.16); color: #D9CBFF; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px">@tabs</span>
+      <input value="attention" style="flex: 1; min-width: 0; border: none; background: transparent; outline: none; font-size: 17px">
+      <kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap">esc</kbd>
+    </label>
+    <div role="listbox" aria-label="Results" style="display: flex; flex-direction: column; gap: 2px; margin-top: 8px">
+      
+        
+          <div style="display: flex; align-items: baseline; gap: 8px; height: 24px; margin-top: 0px; padding: 0 12px; font-size: 13px; font-weight: 600; font-variant-caps: all-small-caps; letter-spacing: 0.08em; color: #BBB0C4">
+            <span>Search</span><span style="font-variant-caps: normal; font-size: 11.5px; font-weight: 500; letter-spacing: 0; color: #9286A0"></span>
+          </div>
+        
+        
+      
+        
+        
+          <div role="option" aria-selected="false" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: transparent; box-shadow: none">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #221A29; color: #E8DDF0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM20 20l-4-4"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Search the web for <mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">attention</mark></span>
+            <span style="flex: none; font-size: 12px; color: #9286A0; white-space: nowrap">default engine</span>
+            
+          </div>
+        
+      
+        
+          <div style="display: flex; align-items: baseline; gap: 8px; height: 24px; margin-top: 8px; padding: 0 12px; font-size: 13px; font-weight: 600; font-variant-caps: all-small-caps; letter-spacing: 0.08em; color: #BBB0C4">
+            <span>Tabs</span><span style="font-variant-caps: normal; font-size: 11.5px; font-weight: 500; letter-spacing: 0; color: #9286A0">3 open</span>
+          </div>
+        
+        
+      
+        
+        
+          <div role="option" aria-selected="true" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: linear-gradient(100deg, rgba(243,182,211,0.16), rgba(201,181,255,0.16) 50%, rgba(169,230,236,0.12)); box-shadow: inset 0 1px 0 rgba(246,237,228,0.08), 0 6px 14px -8px rgba(0,0,0,0.7)">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #F3B6D3; color: #22121B"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v13H4zM4 10h16"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">Attention</mark>? Attention!</span>
+            <span style="flex: none; font-size: 12px; color: #CFC4D8; white-space: nowrap">lilianweng.github.io</span>
+            
+              <span style="margin-left: auto; flex: none; display: flex; align-items: center; gap: 12px; font-size: 11.5px; color: #CFC4D8">
+                <span style="display: flex; align-items: center; gap: 5px"><kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap">↵</kbd>open</span>
+                <span style="display: flex; align-items: center; gap: 5px"><kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap">⌘↵</kbd>background tab</span>
+                <span style="display: flex; align-items: center; gap: 5px"><kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap">⌘K</kbd>actions</span>
+              </span>
+            
+          </div>
+        
+      
+        
+        
+          <div role="option" aria-selected="false" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: transparent; box-shadow: none">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #221A29; color: #E8DDF0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v13H4zM4 10h16"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Lecture 11 · Self-<mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">attention</mark></span>
+            <span style="flex: none; font-size: 12px; color: #9286A0; white-space: nowrap">echo360.net.au</span>
+            
+          </div>
+        
+      
+        
+        
+          <div role="option" aria-selected="false" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: transparent; box-shadow: none">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #221A29; color: #E8DDF0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v13H4zM4 10h16"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">Attention</mark> Is All You Need</span>
+            <span style="flex: none; font-size: 12px; color: #9286A0; white-space: nowrap">arxiv.org · this tab</span>
+            
+          </div>
+        
+      
+        
+          <div style="display: flex; align-items: baseline; gap: 8px; height: 24px; margin-top: 8px; padding: 0 12px; font-size: 13px; font-weight: 600; font-variant-caps: all-small-caps; letter-spacing: 0.08em; color: #BBB0C4">
+            <span>History</span><span style="font-variant-caps: normal; font-size: 11.5px; font-weight: 500; letter-spacing: 0; color: #9286A0">4 of 23</span>
+          </div>
+        
+        
+      
+        
+        
+          <div role="option" aria-selected="false" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: transparent; box-shadow: none">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #221A29; color: #E8DDF0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18zM12 7v5l3 2"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"><mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">Attention</mark> and Augmented Recurrent Neural Networks</span>
+            <span style="flex: none; font-size: 12px; color: #9286A0; white-space: nowrap">distill.pub · 3 d</span>
+            
+          </div>
+        
+      
+        
+        
+          <div role="option" aria-selected="false" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: transparent; box-shadow: none">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #221A29; color: #E8DDF0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18zM12 7v5l3 2"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Flash<mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">Attention</mark>-3: fast and accurate attention</span>
+            <span style="flex: none; font-size: 12px; color: #9286A0; white-space: nowrap">arxiv.org · last week</span>
+            
+          </div>
+        
+      
+        
+        
+          <div role="option" aria-selected="false" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: transparent; box-shadow: none">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #221A29; color: #E8DDF0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18zM12 7v5l3 2"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">COMP4670 · Week 6: <mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">attention</mark> and transformers</span>
+            <span style="flex: none; font-size: 12px; color: #9286A0; white-space: nowrap">canvas.anu.edu.au · yesterday</span>
+            
+          </div>
+        
+      
+        
+        
+          <div role="option" aria-selected="false" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: transparent; box-shadow: none">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #221A29; color: #E8DDF0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18zM12 7v5l3 2"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Show HN: Visualising <mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">attention</mark> heads in the browser</span>
+            <span style="flex: none; font-size: 12px; color: #9286A0; white-space: nowrap">news.ycombinator.com · 2 d</span>
+            
+          </div>
+        
+      
+        
+          <div style="display: flex; align-items: baseline; gap: 8px; height: 24px; margin-top: 8px; padding: 0 12px; font-size: 13px; font-weight: 600; font-variant-caps: all-small-caps; letter-spacing: 0.08em; color: #BBB0C4">
+            <span>Notes</span><span style="font-variant-caps: normal; font-size: 11.5px; font-weight: 500; letter-spacing: 0; color: #9286A0">2 of 5</span>
+          </div>
+        
+        
+      
+        
+        
+          <div role="option" aria-selected="false" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: transparent; box-shadow: none">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #221A29; color: #E8DDF0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Self-<mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">attention</mark>: queries, keys and values</span>
+            <span style="flex: none; font-size: 12px; color: #9286A0; white-space: nowrap">Onyx · ML</span>
+            
+          </div>
+        
+      
+        
+        
+          <div role="option" aria-selected="false" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: transparent; box-shadow: none">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #221A29; color: #E8DDF0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Week 6 · <mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">Attention</mark> recap</span>
+            <span style="flex: none; font-size: 12px; color: #9286A0; white-space: nowrap">Onyx · COMP4670</span>
+            
+          </div>
+        
+      
+        
+          <div style="display: flex; align-items: baseline; gap: 8px; height: 24px; margin-top: 8px; padding: 0 12px; font-size: 13px; font-weight: 600; font-variant-caps: all-small-caps; letter-spacing: 0.08em; color: #BBB0C4">
+            <span>Commands</span><span style="font-variant-caps: normal; font-size: 11.5px; font-weight: 500; letter-spacing: 0; color: #9286A0"></span>
+          </div>
+        
+        
+      
+        
+        
+          <div role="option" aria-selected="false" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: transparent; box-shadow: none">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #221A29; color: #E8DDF0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l4 4-4 4M12 16h7"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Group tabs matching “<mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">attention</mark>”</span>
+            <span style="flex: none; font-size: 12px; color: #9286A0; white-space: nowrap">3 tabs</span>
+            
+          </div>
+        
+      
+        
+        
+          <div role="option" aria-selected="false" style="display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 8px 0 10px; border-radius: 14px; background: transparent; box-shadow: none">
+            <span style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #221A29; color: #E8DDF0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l4 4-4 4M12 16h7"></path></svg></span>
+            <span style="flex: 0 1 auto; min-width: 0; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Ask your notes about <mark style="padding: 0 2px; border-radius: 4px; background: rgba(243,182,211,0.18); color: #FFD3E6; font-weight: 600">attention</mark></span>
+            <span style="flex: none; font-size: 12px; color: #9286A0; white-space: nowrap">Indexer</span>
+            
+          </div>
+        
+      
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; height: 46px; margin: 10px -12px 0; padding: 0 18px; border-top: 1px solid rgba(240,222,250,0.06); font-size: 12px; color: #BBB0C4">
+      <span>Narrow with</span>
+      <code style="height: 22px; padding: 0 7px; border-radius: 7px; background: #221A29; color: #D9CBFF; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; line-height: 22px">@tabs</code>
+      <code style="height: 22px; padding: 0 7px; border-radius: 7px; background: #221A29; color: #D9CBFF; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; line-height: 22px">@history</code>
+      <code style="height: 22px; padding: 0 7px; border-radius: 7px; background: #221A29; color: #D9CBFF; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; line-height: 22px">@notes</code>
+      <span aria-hidden="true" style="color: #9286A0">·</span>
+      <code style="height: 22px; padding: 0 7px; border-radius: 7px; background: #221A29; color: #D9CBFF; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; line-height: 22px">&gt;</code>
+      <span>commands</span>
+      <span style="margin-left: auto; display: flex; align-items: center; gap: 5px"><kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap">↑</kbd><kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap">↓</kbd><span style="margin-left: 2px">move</span></span>
+    </div>
+  </section>
+  <section aria-label="Actions for Attention? Attention!" style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1E1823; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88), 0 60px 110px -40px rgba(0,0,0,0.95); position: absolute; left: 1074px; top: 232px; z-index: 1; width: 252px; border-radius: 22px; padding: 12px 8px 8px; display: flex; flex-direction: column; gap: 2px">
+    <span style="display: flex; align-items: center; gap: 8px; padding: 2px 10px 2px; font-size: 13px; font-weight: 600; font-variant-caps: all-small-caps; letter-spacing: 0.08em; color: #F2EBF5">Actions<span style="display: inline-flex; align-items: center; height: 16px; padding: 0 7px; border-radius: 999px; background: rgba(201,181,255,0.12); color: #C9B5FF; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; line-height: 16px">New</span><span style="margin-left: auto"><kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap">⌘K</kbd></span></span>
+    <span aria-hidden="true" style="position: absolute; left: -6px; top: 26px; width: 14px; height: 14px; border-radius: 3px; background: #1E1823; transform: rotate(45deg)"></span>
+    <span style="padding: 0 10px 6px; font-size: 12px; color: #BBB0C4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Attention? Attention! · lilianweng.github.io</span>
+    
+      <button style="display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 8px 0 10px; border: none; border-radius: 12px; background: linear-gradient(100deg, rgba(243,182,211,0.16), rgba(201,181,255,0.16) 50%, rgba(169,230,236,0.12)); box-shadow: inset 0 1px 0 rgba(246,237,228,0.08), 0 6px 14px -8px rgba(0,0,0,0.7); color: #F2EBF5; text-align: left; font-size: 13.5px; cursor: pointer">
+        <span style="display: grid; color: #C9B5FF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h11v11H4zM9 4h11v11h-2"></path></svg></span>
+        <span style="flex: 1">Open in background</span>
+        <kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap">⌘↵</kbd>
+      </button>
+    
+      <button style="display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 8px 0 10px; border: none; border-radius: 12px; background: transparent; box-shadow: none; color: #F2EBF5; text-align: left; font-size: 13.5px; cursor: pointer">
+        <span style="display: grid; color: #A9E6EC"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 9h11v11H9zM5 15H4V4h11v1"></path></svg></span>
+        <span style="flex: 1">Copy link</span>
+        <kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap">⌘C</kbd>
+      </button>
+    
+      <button style="display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 8px 0 10px; border: none; border-radius: 12px; background: transparent; box-shadow: none; color: #F2EBF5; text-align: left; font-size: 13.5px; cursor: pointer">
+        <span style="display: grid; color: #F6EDE4"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4zM12 5v14"></path></svg></span>
+        <span style="flex: 1">Split with current</span>
+        
+      </button>
+    
+      <button style="display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 8px 0 10px; border: none; border-radius: 12px; background: transparent; box-shadow: none; color: #F2EBF5; text-align: left; font-size: 13.5px; cursor: pointer">
+        <span style="display: grid; color: #F3B6D3"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4 4L19 7"></path></svg></span>
+        <span style="flex: 1">Add to Tasks</span>
+        <kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap">⌥↵</kbd>
+      </button>
+    
+  </section>
+  <section aria-label="Launcher, empty, with Command held" style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88), 0 60px 110px -40px rgba(0,0,0,0.95); position: absolute; left: 1094px; top: 524px; z-index: 1; width: 316px; padding: 24px 12px 12px; display: flex; flex-direction: column; gap: 8px">
+    <span style="position: absolute; top: -10px; left: 24px; display: flex; align-items: center; gap: 8px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; line-height: 18px; white-space: nowrap; color: #F2EBF5">Empty launcher</span>
+    <div style="display: flex; align-items: center; gap: 9px; height: 40px; padding: 0 14px; border-radius: 999px; background: #0F0B13; box-shadow: inset 0 1px 2px rgba(0,0,0,0.6); font-size: 13.5px; color: #9286A0"><span style="display: grid; color: #C9B5FF"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM20 20l-4-4"></path></svg></span>Search or type a URL</div>
+    <div style="display: flex; align-items: center; gap: 7px; padding: 2px 6px; font-size: 12px; color: #BBB0C4"><kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap">⌘</kbd>held, so recents show their numbers</div>
+    
+      <button style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 8px; border: none; border-radius: 12px; background: transparent; color: #F2EBF5; text-align: left; cursor: pointer">
+        <kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap; min-width: 30px">⌘1</kbd>
+        <span style="flex: none; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 11px; font-weight: 700">G</span>
+        <span style="flex: 1; min-width: 0; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">COMP2310 · Assignment 2</span>
+      </button>
+    
+      <button style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 8px; border: none; border-radius: 12px; background: transparent; color: #F2EBF5; text-align: left; cursor: pointer">
+        <kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap; min-width: 30px">⌘2</kbd>
+        <span style="flex: none; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 11px; font-weight: 700">C</span>
+        <span style="flex: 1; min-width: 0; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Dashboard</span>
+      </button>
+    
+      <button style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 8px; border: none; border-radius: 12px; background: transparent; color: #F2EBF5; text-align: left; cursor: pointer">
+        <kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap; min-width: 30px">⌘3</kbd>
+        <span style="flex: none; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 11px; font-weight: 700">Y</span>
+        <span style="flex: 1; min-width: 0; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Hacker News</span>
+      </button>
+    
+      <button style="display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 8px; border: none; border-radius: 12px; background: transparent; color: #F2EBF5; text-align: left; cursor: pointer">
+        <kbd style="display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 6px; background: #2B2233; box-shadow: inset 0 -1px 0 rgba(0,0,0,0.5), inset 0 1px 0 rgba(246,237,228,0.08); font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #F2EBF5; white-space: nowrap; min-width: 30px">⌘4</kbd>
+        <span style="flex: none; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 11px; font-weight: 700">O</span>
+        <span style="flex: 1; min-width: 0; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Self-attention</span>
+      </button>
+    
+    <div style="display: flex; align-items: center; gap: 10px; height: 48px; margin-top: 2px; padding: 0 12px; border-radius: 14px; background: #221A29; box-shadow: inset 0 1px 0 rgba(246,237,228,0.05)">
+      <span style="display: grid; color: #C9B5FF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01"></path></svg></span>
+      <span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: #E3DAE8">80 + 15%</span>
+      <span style="display: inline-flex; align-items: center; height: 16px; padding: 0 7px; border-radius: 999px; background: rgba(201,181,255,0.12); color: #C9B5FF; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; line-height: 16px">New</span>
+      <span style="margin-left: auto; font-family: Fraunces, Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 48; font-size: 22px; color: #F6EDE4">= 92</span>
+    </div>
+  </section>
+  <svg aria-hidden="true" style="position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; opacity: 0.07; mix-blend-mode: overlay">
+    <filter id="next-nap-launcher"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter>
+    <rect width="100%" height="100%" filter="url(#next-nap-launcher)"></rect>
+  </svg>
+</div>
+</body>
+</html>

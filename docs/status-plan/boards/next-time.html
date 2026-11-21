@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Flux next · Time & Focus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&amp;family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..600,0..100;1,9..144,300..600,0..100&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#0C0A0F}
+a{color:#E8A7C4}a:hover{color:#F6CFE0}
+button,input,textarea{font:inherit;color:inherit}
+input::placeholder,textarea::placeholder{color:#9286A0}
+:focus-visible{outline:2px solid #C9B5FF;outline-offset:3px}
+</style>
+</head>
+<body>
+<div style="position: relative; overflow: hidden; min-height: 900px; box-sizing: border-box; padding: 26px 30px 30px; background: radial-gradient(1100px 620px at 18% -12%, #241429 0%, rgba(36,20,41,0) 62%), radial-gradient(900px 640px at 105% 115%, #1B1228 0%, rgba(27,18,40,0) 60%), #0C0A0F; font-family: Figtree, ui-sans-serif, system-ui, sans-serif; font-size: 14px; color: #F2EBF5">
+  <svg aria-hidden="true" viewBox="0 0 1440 900" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none">
+    <defs><filter id="next-cast-time" x="-5%" y="-30%" width="110%" height="160%"><feDropShadow dx="0" dy="-6" stdDeviation="8" flood-color="#050307" flood-opacity="0.6"></feDropShadow></filter></defs>
+    <path d="M-20 533.9L-8 533L4 532.5L16 532.1L28 531.6L40 530.8L52 529.5L64 527.9L76 525.9L88 523.9L100 522.2L112 520.9L124 520.3L136 520.7L148 522L160 524.2L172 527L184 530.1L196 533.3L208 536L220 537.9L232 538.9L244 538.7L256 537.4L268 535.1L280 532.1L292 528.8L304 525.5L316 522.7L328 520.7L340 519.6L352 519.6L364 520.6L376 522.5L388 524.9L400 527.7L412 530.4L424 532.9L436 535L448 536.6L460 537.9L472 538.9L484 540L496 541.4L508 543.4L520 546.1L532 549.7L544 554.1L556 559.1L568 564.5L580 569.8L592 574.8L604 579L616 582.1L628 583.8L640 584.2L652 583.3L664 581.3L676 578.5L688 575.4L700 572.2L712 569.4L724 567.2L736 565.8L748 565.2L760 565.2L772 565.8L784 566.5L796 567.2L808 567.5L820 567.2L832 566.4L844 565L856 563.2L868 561.1L880 559.2L892 557.7L904 556.8L916 556.8L928 557.5L940 559L952 561L964 563.2L976 565.2L988 566.7L1000 567.3L1012 566.7L1024 564.9L1036 561.7L1048 557.5L1060 552.5L1072 546.9L1084 541.4L1096 536.2L1108 531.6L1120 527.9L1132 525.1L1144 523.3L1156 522.2L1168 521.6L1180 521.3L1192 521L1204 520.4L1216 519.5L1228 518.2L1240 516.6L1252 515L1264 513.6L1276 512.7L1288 512.6L1300 513.5L1312 515.5L1324 518.5L1336 522.4L1348 526.9L1360 531.6L1372 536L1384 539.9L1396 542.9L1408 544.8L1420 545.5L1432 545.1L1444 543.8L1456 541.9L1460 920L-20 920Z" fill="#2A1B30" filter="url(#next-cast-time)"></path>
+    <path d="M-20 533.9L-8 533L4 532.5L16 532.1L28 531.6L40 530.8L52 529.5L64 527.9L76 525.9L88 523.9L100 522.2L112 520.9L124 520.3L136 520.7L148 522L160 524.2L172 527L184 530.1L196 533.3L208 536L220 537.9L232 538.9L244 538.7L256 537.4L268 535.1L280 532.1L292 528.8L304 525.5L316 522.7L328 520.7L340 519.6L352 519.6L364 520.6L376 522.5L388 524.9L400 527.7L412 530.4L424 532.9L436 535L448 536.6L460 537.9L472 538.9L484 540L496 541.4L508 543.4L520 546.1L532 549.7L544 554.1L556 559.1L568 564.5L580 569.8L592 574.8L604 579L616 582.1L628 583.8L640 584.2L652 583.3L664 581.3L676 578.5L688 575.4L700 572.2L712 569.4L724 567.2L736 565.8L748 565.2L760 565.2L772 565.8L784 566.5L796 567.2L808 567.5L820 567.2L832 566.4L844 565L856 563.2L868 561.1L880 559.2L892 557.7L904 556.8L916 556.8L928 557.5L940 559L952 561L964 563.2L976 565.2L988 566.7L1000 567.3L1012 566.7L1024 564.9L1036 561.7L1048 557.5L1060 552.5L1072 546.9L1084 541.4L1096 536.2L1108 531.6L1120 527.9L1132 525.1L1144 523.3L1156 522.2L1168 521.6L1180 521.3L1192 521L1204 520.4L1216 519.5L1228 518.2L1240 516.6L1252 515L1264 513.6L1276 512.7L1288 512.6L1300 513.5L1312 515.5L1324 518.5L1336 522.4L1348 526.9L1360 531.6L1372 536L1384 539.9L1396 542.9L1408 544.8L1420 545.5L1432 545.1L1444 543.8L1456 541.9" fill="none" stroke="rgba(243,182,211,0.070)" stroke-width="1"></path>
+    <path d="M-20 601.5L-8 599.7L4 598.1L16 597L28 596.4L40 596.3L52 596.9L64 597.9L76 599.2L88 600.8L100 602.4L112 604L124 605.4L136 606.7L148 607.9L160 609.1L172 610.4L184 611.9L196 613.8L208 616.2L220 619.1L232 622.5L244 626.2L256 630.2L268 634.2L280 638L292 641.3L304 644.1L316 646.2L328 647.5L340 648.1L352 648.1L364 647.5L376 646.6L388 645.5L400 644.4L412 643.4L424 642.7L436 642.1L448 641.7L460 641.3L472 640.8L484 640.1L496 639.2L508 637.9L520 636.2L532 634.2L544 632.1L556 629.9L568 627.9L580 626.2L592 624.9L604 624.3L616 624.3L628 624.8L640 625.9L652 627.3L664 628.8L676 630.2L688 631.3L700 632L712 632.2L724 631.9L736 630.9L748 629.6L760 628L772 626.2L784 624.4L796 622.7L808 621.2L820 619.8L832 618.6L844 617.4L856 616.1L868 614.6L880 612.7L892 610.4L904 607.7L916 604.5L928 601L940 597.4L952 593.8L964 590.5L976 587.7L988 585.5L1000 584.1L1012 583.5L1024 583.6L1036 584.3L1048 585.6L1060 587.1L1072 588.8L1084 590.5L1096 592.1L1108 593.4L1120 594.5L1132 595.5L1144 596.5L1156 597.5L1168 598.8L1180 600.3L1192 602.2L1204 604.4L1216 606.8L1228 609.4L1240 612L1252 614.4L1264 616.3L1276 617.8L1288 618.6L1300 618.8L1312 618.4L1324 617.5L1336 616.3L1348 615L1360 613.8L1372 612.9L1384 612.4L1396 612.4L1408 613L1420 614.1L1432 615.5L1444 617.2L1456 619L1460 920L-20 920Z" fill="#24182B" filter="url(#next-cast-time)"></path>
+    <path d="M-20 601.5L-8 599.7L4 598.1L16 597L28 596.4L40 596.3L52 596.9L64 597.9L76 599.2L88 600.8L100 602.4L112 604L124 605.4L136 606.7L148 607.9L160 609.1L172 610.4L184 611.9L196 613.8L208 616.2L220 619.1L232 622.5L244 626.2L256 630.2L268 634.2L280 638L292 641.3L304 644.1L316 646.2L328 647.5L340 648.1L352 648.1L364 647.5L376 646.6L388 645.5L400 644.4L412 643.4L424 642.7L436 642.1L448 641.7L460 641.3L472 640.8L484 640.1L496 639.2L508 637.9L520 636.2L532 634.2L544 632.1L556 629.9L568 627.9L580 626.2L592 624.9L604 624.3L616 624.3L628 624.8L640 625.9L652 627.3L664 628.8L676 630.2L688 631.3L700 632L712 632.2L724 631.9L736 630.9L748 629.6L760 628L772 626.2L784 624.4L796 622.7L808 621.2L820 619.8L832 618.6L844 617.4L856 616.1L868 614.6L880 612.7L892 610.4L904 607.7L916 604.5L928 601L940 597.4L952 593.8L964 590.5L976 587.7L988 585.5L1000 584.1L1012 583.5L1024 583.6L1036 584.3L1048 585.6L1060 587.1L1072 588.8L1084 590.5L1096 592.1L1108 593.4L1120 594.5L1132 595.5L1144 596.5L1156 597.5L1168 598.8L1180 600.3L1192 602.2L1204 604.4L1216 606.8L1228 609.4L1240 612L1252 614.4L1264 616.3L1276 617.8L1288 618.6L1300 618.8L1312 618.4L1324 617.5L1336 616.3L1348 615L1360 613.8L1372 612.9L1384 612.4L1396 612.4L1408 613L1420 614.1L1432 615.5L1444 617.2L1456 619" fill="none" stroke="rgba(243,182,211,0.062)" stroke-width="1"></path>
+    <path d="M-20 721.4L-8 723L4 723.6L16 723L28 721.3L40 718.8L52 715.8L64 712.7L76 709.7L88 707.3L100 705.6L112 704.7L124 704.5L136 705L148 705.8L160 706.7L172 707.3L184 707.4L196 706.8L208 705.4L220 703.3L232 700.7L244 697.8L256 695.1L268 692.8L280 691.1L292 690.4L304 690.7L316 691.9L328 693.9L340 696.4L352 698.9L364 701.2L376 702.9L388 703.8L400 703.7L412 702.7L424 700.8L436 698.3L448 695.5L460 692.8L472 690.4L484 688.6L496 687.4L508 687L520 687.1L532 687.6L544 688L556 688.2L568 687.8L580 686.7L592 684.6L604 681.6L616 677.9L628 673.7L640 669.4L652 665.3L664 661.8L676 659.2L688 657.7L700 657.2L712 657.8L724 659.1L736 661L748 663L760 664.9L772 666.4L784 667.2L796 667.4L808 667L820 666.3L832 665.4L844 664.7L856 664.6L868 665.2L880 666.6L892 669L904 672.2L916 676L928 680.1L940 684L952 687.5L964 690.3L976 692.1L988 692.8L1000 692.6L1012 691.5L1024 690L1036 688.2L1048 686.6L1060 685.5L1072 685.1L1084 685.4L1096 686.5L1108 688.2L1120 690.3L1132 692.4L1144 694.3L1156 695.6L1168 696.2L1180 696.1L1192 695.2L1204 693.7L1216 691.9L1228 690.2L1240 688.8L1252 688.2L1264 688.5L1276 689.8L1288 692.1L1300 695.3L1312 699L1324 703L1336 706.9L1348 710.3L1360 713L1372 714.7L1384 715.6L1396 715.6L1408 715.1L1420 714.2L1432 713.3L1444 712.7L1456 712.6L1460 920L-20 920Z" fill="#1E1424" filter="url(#next-cast-time)"></path>
+    <path d="M-20 721.4L-8 723L4 723.6L16 723L28 721.3L40 718.8L52 715.8L64 712.7L76 709.7L88 707.3L100 705.6L112 704.7L124 704.5L136 705L148 705.8L160 706.7L172 707.3L184 707.4L196 706.8L208 705.4L220 703.3L232 700.7L244 697.8L256 695.1L268 692.8L280 691.1L292 690.4L304 690.7L316 691.9L328 693.9L340 696.4L352 698.9L364 701.2L376 702.9L388 703.8L400 703.7L412 702.7L424 700.8L436 698.3L448 695.5L460 692.8L472 690.4L484 688.6L496 687.4L508 687L520 687.1L532 687.6L544 688L556 688.2L568 687.8L580 686.7L592 684.6L604 681.6L616 677.9L628 673.7L640 669.4L652 665.3L664 661.8L676 659.2L688 657.7L700 657.2L712 657.8L724 659.1L736 661L748 663L760 664.9L772 666.4L784 667.2L796 667.4L808 667L820 666.3L832 665.4L844 664.7L856 664.6L868 665.2L880 666.6L892 669L904 672.2L916 676L928 680.1L940 684L952 687.5L964 690.3L976 692.1L988 692.8L1000 692.6L1012 691.5L1024 690L1036 688.2L1048 686.6L1060 685.5L1072 685.1L1084 685.4L1096 686.5L1108 688.2L1120 690.3L1132 692.4L1144 694.3L1156 695.6L1168 696.2L1180 696.1L1192 695.2L1204 693.7L1216 691.9L1228 690.2L1240 688.8L1252 688.2L1264 688.5L1276 689.8L1288 692.1L1300 695.3L1312 699L1324 703L1336 706.9L1348 710.3L1360 713L1372 714.7L1384 715.6L1396 715.6L1408 715.1L1420 714.2L1432 713.3L1444 712.7L1456 712.6" fill="none" stroke="rgba(243,182,211,0.054)" stroke-width="1"></path>
+    <path d="M-20 762.3L-8 762.4L4 763L16 763.7L28 764.6L40 765.3L52 765.9L64 766L76 765.6L88 764.6L100 763.1L112 761.1L124 758.8L136 756.3L148 753.9L160 751.6L172 749.6L184 748L196 746.9L208 746L220 745.5L232 745L244 744.5L256 743.8L268 742.8L280 741.5L292 739.9L304 738L316 736.1L328 734.2L340 732.5L352 731.3L364 730.6L376 730.6L388 731.2L400 732.3L412 733.9L424 735.7L436 737.7L448 739.6L460 741.3L472 742.7L484 743.8L496 744.5L508 745L520 745.4L532 745.9L544 746.5L556 747.5L568 748.8L580 750.6L592 752.7L604 754.9L616 757.3L628 759.5L640 761.4L652 762.9L664 763.9L676 764.3L688 764.1L700 763.6L712 762.7L724 761.8L736 760.9L748 760.2L760 759.9L772 760L784 760.4L796 761.2L808 762.2L820 763.2L832 764.1L844 764.8L856 765.1L868 765.1L880 764.7L892 764.1L904 763.4L916 762.7L928 762.3L940 762.3L952 762.7L964 763.7L976 765.2L988 767.2L1000 769.5L1012 771.9L1024 774.2L1036 776.4L1048 778.1L1060 779.4L1072 780.3L1084 780.7L1096 780.9L1108 780.9L1120 780.8L1132 780.9L1144 781.2L1156 781.8L1168 782.7L1180 783.8L1192 785L1204 786.1L1216 786.9L1228 787.3L1240 787.2L1252 786.5L1264 785.2L1276 783.3L1288 781L1300 778.5L1312 775.8L1324 773.3L1336 771.1L1348 769.2L1360 767.7L1372 766.5L1384 765.7L1396 765.1L1408 764.4L1420 763.6L1432 762.6L1444 761.2L1456 759.5L1460 920L-20 920Z" fill="#19111E" filter="url(#next-cast-time)"></path>
+    <path d="M-20 762.3L-8 762.4L4 763L16 763.7L28 764.6L40 765.3L52 765.9L64 766L76 765.6L88 764.6L100 763.1L112 761.1L124 758.8L136 756.3L148 753.9L160 751.6L172 749.6L184 748L196 746.9L208 746L220 745.5L232 745L244 744.5L256 743.8L268 742.8L280 741.5L292 739.9L304 738L316 736.1L328 734.2L340 732.5L352 731.3L364 730.6L376 730.6L388 731.2L400 732.3L412 733.9L424 735.7L436 737.7L448 739.6L460 741.3L472 742.7L484 743.8L496 744.5L508 745L520 745.4L532 745.9L544 746.5L556 747.5L568 748.8L580 750.6L592 752.7L604 754.9L616 757.3L628 759.5L640 761.4L652 762.9L664 763.9L676 764.3L688 764.1L700 763.6L712 762.7L724 761.8L736 760.9L748 760.2L760 759.9L772 760L784 760.4L796 761.2L808 762.2L820 763.2L832 764.1L844 764.8L856 765.1L868 765.1L880 764.7L892 764.1L904 763.4L916 762.7L928 762.3L940 762.3L952 762.7L964 763.7L976 765.2L988 767.2L1000 769.5L1012 771.9L1024 774.2L1036 776.4L1048 778.1L1060 779.4L1072 780.3L1084 780.7L1096 780.9L1108 780.9L1120 780.8L1132 780.9L1144 781.2L1156 781.8L1168 782.7L1180 783.8L1192 785L1204 786.1L1216 786.9L1228 787.3L1240 787.2L1252 786.5L1264 785.2L1276 783.3L1288 781L1300 778.5L1312 775.8L1324 773.3L1336 771.1L1348 769.2L1360 767.7L1372 766.5L1384 765.7L1396 765.1L1408 764.4L1420 763.6L1432 762.6L1444 761.2L1456 759.5" fill="none" stroke="rgba(243,182,211,0.046)" stroke-width="1"></path>
+    <path d="M-20 811L-8 810.3L4 809.1L16 807.9L28 806.9L40 806.4L52 806.8L64 808L76 810.1L88 812.9L100 816.3L112 819.9L124 823.3L136 826.2L148 828.4L160 829.6L172 829.9L184 829.4L196 828.2L208 826.6L220 825.1L232 823.8L244 823.2L256 823.3L268 824.2L280 825.8L292 828L304 830.3L316 832.6L328 834.4L340 835.5L352 835.8L364 835.2L376 833.7L388 831.7L400 829.3L412 826.9L424 824.9L436 823.6L448 823.1L460 823.6L472 825L484 827.1L496 829.6L508 832.3L520 834.7L532 836.6L544 837.8L556 838.2L568 837.8L580 836.8L592 835.4L604 834L616 832.9L628 832.5L640 832.8L652 834L664 836L676 838.8L688 841.9L700 845.1L712 848L724 850.3L736 851.8L748 852.3L760 851.9L772 850.6L784 848.7L796 846.5L808 844.4L820 842.7L832 841.6L844 841.2L856 841.6L868 842.6L880 843.9L892 845.4L904 846.5L916 847.1L928 846.9L940 845.8L952 843.7L964 840.7L976 837.2L988 833.5L1000 829.8L1012 826.5L1024 824L1036 822.3L1048 821.6L1060 821.7L1072 822.4L1084 823.4L1096 824.5L1108 825.2L1120 825.4L1132 824.8L1144 823.5L1156 821.4L1168 818.9L1180 816.1L1192 813.5L1204 811.4L1216 810L1228 809.5L1240 809.9L1252 811.3L1264 813.3L1276 815.8L1288 818.3L1300 820.5L1312 822.1L1324 822.9L1336 822.8L1348 821.9L1360 820.2L1372 818.2L1384 816.1L1396 814.2L1408 812.9L1420 812.2L1432 812.4L1444 813.4L1456 815L1460 920L-20 920Z" fill="#140E18" filter="url(#next-cast-time)"></path>
+    <path d="M-20 811L-8 810.3L4 809.1L16 807.9L28 806.9L40 806.4L52 806.8L64 808L76 810.1L88 812.9L100 816.3L112 819.9L124 823.3L136 826.2L148 828.4L160 829.6L172 829.9L184 829.4L196 828.2L208 826.6L220 825.1L232 823.8L244 823.2L256 823.3L268 824.2L280 825.8L292 828L304 830.3L316 832.6L328 834.4L340 835.5L352 835.8L364 835.2L376 833.7L388 831.7L400 829.3L412 826.9L424 824.9L436 823.6L448 823.1L460 823.6L472 825L484 827.1L496 829.6L508 832.3L520 834.7L532 836.6L544 837.8L556 838.2L568 837.8L580 836.8L592 835.4L604 834L616 832.9L628 832.5L640 832.8L652 834L664 836L676 838.8L688 841.9L700 845.1L712 848L724 850.3L736 851.8L748 852.3L760 851.9L772 850.6L784 848.7L796 846.5L808 844.4L820 842.7L832 841.6L844 841.2L856 841.6L868 842.6L880 843.9L892 845.4L904 846.5L916 847.1L928 846.9L940 845.8L952 843.7L964 840.7L976 837.2L988 833.5L1000 829.8L1012 826.5L1024 824L1036 822.3L1048 821.6L1060 821.7L1072 822.4L1084 823.4L1096 824.5L1108 825.2L1120 825.4L1132 824.8L1144 823.5L1156 821.4L1168 818.9L1180 816.1L1192 813.5L1204 811.4L1216 810L1228 809.5L1240 809.9L1252 811.3L1264 813.3L1276 815.8L1288 818.3L1300 820.5L1312 822.1L1324 822.9L1336 822.8L1348 821.9L1360 820.2L1372 818.2L1384 816.1L1396 814.2L1408 812.9L1420 812.2L1432 812.4L1444 813.4L1456 815" fill="none" stroke="rgba(243,182,211,0.038)" stroke-width="1"></path>
+  </svg>
+  <div style="position: relative; z-index: 1; display: flex; gap: 30px; align-items: stretch; min-height: 844px">
+      <nav aria-label="Tabs" style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88); flex: 0 0 268px; padding: 26px 14px 16px; display: flex; flex-direction: column; gap: 6px">
+        <span style="position: absolute; top: -10px; left: 24px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); white-space: nowrap; color: #F2EBF5; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; line-height: 18px">Tabs · Uni</span>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 0 2px 4px">
+          <span style="display: flex; align-items: center; gap: 10px; font-family: Fraunces, Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 48; font-size: 22px">
+            <span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F6EDE4 0%, #C9B5FF 45%, #4B2B5E 100%); box-shadow: 0 0 22px rgba(201,181,255,0.13)"></span>
+            flux
+          </span>
+          <div style="display: flex; gap: 4px; margin-left: auto">
+            <button aria-label="Back" style="width: 34px; height: 34px; border: none; border-radius: 12px; background: #1E1823; color: #F2EBF5; display: grid; place-items: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+            <button aria-label="Forward" style="width: 34px; height: 34px; border: none; border-radius: 12px; background: #17121C; color: #9286A0; display: grid; place-items: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+            <button aria-label="Reload" style="width: 34px; height: 34px; border: none; border-radius: 12px; background: #1E1823; color: #F2EBF5; display: grid; place-items: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"></path><path d="M20 4v5h-5"></path></svg></button>
+          </div>
+        </div>
+        <label style="display: flex; align-items: center; gap: 9px; height: 42px; padding: 0 14px; border-radius: 999px; background: #120C16; box-shadow: inset 0 1px 3px rgba(0,0,0,0.55), inset 0 -1px 0 rgba(246,237,228,0.05)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B9A3E8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3"></path></svg>
+          <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Address</span>
+          <input value="flux://time" style="flex: 1; min-width: 0; border: none; background: transparent; outline: none; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px">
+        </label>
+        <div aria-hidden="true" style="height: 1px; margin: 8px 2px 6px; background: rgba(240,222,250,0.06)"></div>
+        <div style="display: flex; gap: 6px; padding: 0 2px 10px">
+          <button style="height: 30px; padding: 0 14px; border: none; border-radius: 15px; background: #E8A7C4; color: #22121B; font-size: 12.5px; font-weight: 600; cursor: pointer">Uni</button>
+          <button style="height: 30px; padding: 0 14px; border: 1px solid rgba(240,222,250,0.10); border-radius: 15px; background: transparent; color: #BBB0C4; font-size: 12.5px; cursor: pointer">Personal</button>
+          <button style="height: 30px; padding: 0 14px; border: 1px solid rgba(240,222,250,0.10); border-radius: 15px; background: transparent; color: #BBB0C4; font-size: 12.5px; cursor: pointer">Flux</button>
+        </div>
+        
+          <button style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 10px; border: none; border-radius: 16px; background: linear-gradient(100deg, rgba(243,182,211,0.16), rgba(201,181,255,0.16) 50%, rgba(169,230,236,0.12)); color: #F2EBF5; text-align: left; cursor: pointer">
+            <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #F3B6D3; color: #22121B; font-size: 12px; font-weight: 700">T</span>
+            <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+              <span style="font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Time & Focus</span>
+              <span style="font-size: 11.5px; color: #CFC4D8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">flux://time</span>
+            </span>
+          </button>
+        
+          <button style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 10px; border: none; border-radius: 16px; background: transparent; color: #F2EBF5; text-align: left; cursor: pointer">
+            <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 12px; font-weight: 700">G</span>
+            <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+              <span style="font-size: 13.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">COMP3320 · Assignment 2</span>
+              <span style="font-size: 11.5px; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">gitlab.anu.edu.au</span>
+            </span>
+          </button>
+        
+          <button style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 10px; border: none; border-radius: 16px; background: transparent; color: #F2EBF5; text-align: left; cursor: pointer">
+            <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 12px; font-weight: 700">Y</span>
+            <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+              <span style="font-size: 13.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Lecture 14 · Caches</span>
+              <span style="font-size: 11.5px; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">youtube.com</span>
+            </span>
+          </button>
+        
+          <button style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 10px; border: none; border-radius: 16px; background: transparent; color: #F2EBF5; text-align: left; cursor: pointer">
+            <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 12px; font-weight: 700">G</span>
+            <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+              <span style="font-size: 13.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">flux · Pull requests</span>
+              <span style="font-size: 11.5px; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">github.com</span>
+            </span>
+          </button>
+        
+          <button style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 10px; border: none; border-radius: 16px; background: transparent; color: #F2EBF5; text-align: left; cursor: pointer">
+            <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 12px; font-weight: 700">C</span>
+            <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+              <span style="font-size: 13.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">COMP3320 · Announcements</span>
+              <span style="font-size: 11.5px; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">canvas.anu.edu.au</span>
+            </span>
+          </button>
+        
+          <button style="display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 10px; border: none; border-radius: 16px; background: transparent; color: #F2EBF5; text-align: left; cursor: pointer">
+            <span style="flex: none; width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; background: #221A29; color: #E8DDF0; font-size: 12px; font-weight: 700">N</span>
+            <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+              <span style="font-size: 13.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Cache-oblivious algorithms</span>
+              <span style="font-size: 11.5px; color: #9286A0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">flux://notebook</span>
+            </span>
+          </button>
+        
+        <button style="display: flex; align-items: center; gap: 12px; min-height: 46px; margin-top: 4px; padding: 0 12px; border: 1px dashed rgba(240,222,250,0.14); border-radius: 16px; background: transparent; color: #BBB0C4; cursor: pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>New tab
+        </button>
+        <div style="margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(240,222,250,0.06); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+          
+            <button aria-label="Mail" style="height: 48px; border: none; border-radius: 16px; background: #1E1823; color: #F3B6D3; display: grid; place-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6"></path></svg></button>
+          
+            <button aria-label="Calendar" style="height: 48px; border: none; border-radius: 16px; background: #1E1823; color: #C9B5FF; display: grid; place-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6h14v13H5zM5 10h14M9 4v4M15 4v4"></path></svg></button>
+          
+            <button aria-label="Music" style="height: 48px; border: none; border-radius: 16px; background: #1E1823; color: #F6EDE4; display: grid; place-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V6l10-2v12M9 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM19 16a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"></path></svg></button>
+          
+            <button aria-label="Chat" style="height: 48px; border: none; border-radius: 16px; background: #1E1823; color: #A9E6EC; display: grid; place-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6h14v9H10l-4 4v-4H5z"></path></svg></button>
+          
+        </div>
+      </nav>
+
+      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 32px">
+        <section aria-label="Time on the web" style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88); flex: 1; padding: 30px 28px 22px; display: flex; flex-direction: column; gap: 18px">
+          <span style="position: absolute; top: -10px; left: 24px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); white-space: nowrap; color: #F2EBF5; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; line-height: 18px">Time</span>
+          <span style="position: absolute; top: 16px; right: 22px"><span style="flex: none; display: inline-flex; align-items: center; height: 18px; padding: 0 7px; border-radius: 999px; background: rgba(201,181,255,0.12); color: #C9B5FF; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; white-space: nowrap">New</span></span>
+          <div style="display: flex; align-items: flex-end; gap: 16px; padding-top: 8px">
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <span style="font-size: 13px; color: #BBB0C4">Thursday 23 October</span>
+              <span style="display: flex; align-items: baseline; gap: 12px"><span style="font-family: Fraunces, Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 96; font-weight: 300; font-size: 58px; line-height: 1; font-variant-numeric: tabular-nums">4h 12m</span><span style="font-size: 15px; color: #BBB0C4">on the web</span></span>
+            </div>
+            <div role="radiogroup" aria-label="Period" style="margin-left: auto; display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: 999px; background: #120C16; box-shadow: inset 0 1px 3px rgba(0,0,0,0.55), inset 0 -1px 0 rgba(246,237,228,0.05)">
+              <button role="radio" aria-checked="true" style="height: 30px; padding: 0 14px; border: none; border-radius: 999px; background: linear-gradient(100deg, rgba(243,182,211,0.16), rgba(201,181,255,0.16) 50%, rgba(169,230,236,0.12)); color: #F2EBF5; font-size: 13px; font-weight: 600; cursor: pointer">Today</button>
+              <button role="radio" aria-checked="false" style="height: 30px; padding: 0 14px; border: none; border-radius: 999px; background: transparent; color: #BBB0C4; font-size: 13px; cursor: pointer">This week</button>
+            </div>
+          </div>
+          <figure style="margin: 0; display: flex; flex-direction: column; gap: 8px">
+            <figcaption style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Minutes on the web in each hour today; most in the 10 am hour</figcaption>
+            <div aria-hidden="true" style="display: flex; align-items: flex-end; gap: 5px; height: 150px; padding: 0 2px; border-bottom: 1px solid rgba(240,222,250,0.08)">
+              
+                <span style="flex: 1; height: 2px; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #2B2233"></span>
+              
+                <span style="flex: 1; height: 2px; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #2B2233"></span>
+              
+                <span style="flex: 1; height: 2px; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #2B2233"></span>
+              
+                <span style="flex: 1; height: 2px; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #2B2233"></span>
+              
+                <span style="flex: 1; height: 2px; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #2B2233"></span>
+              
+                <span style="flex: 1; height: 2px; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #2B2233"></span>
+              
+                <span style="flex: 1; height: 2px; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #2B2233"></span>
+              
+                <span style="flex: 1; height: 2px; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #2B2233"></span>
+              
+                <span style="flex: 1; height: 23.5%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 64.7%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 100.0%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 82.4%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 35.3%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 52.9%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 91.2%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 76.5%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 41.2%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 17.6%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 26.5%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 50.0%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 32.4%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #7A6890"></span>
+              
+                <span style="flex: 1; height: 47.1%; min-height: 2px; border-radius: 5px 5px 2px 2px; background: linear-gradient(180deg, #F3B6D3, #C9B5FF)"></span>
+              
+                <span style="flex: 1; height: 2px; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #2B2233"></span>
+              
+                <span style="flex: 1; height: 2px; min-height: 2px; border-radius: 5px 5px 2px 2px; background: #2B2233"></span>
+              
+            </div>
+            <div aria-hidden="true" style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: #9286A0"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
+          </figure>
+          <div role="table" aria-label="Time by site" style="display: flex; flex-direction: column">
+            <div role="row" style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 64px 118px; column-gap: 14px; align-items: center; height: 26px; padding: 0 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #9286A0">
+              <span role="columnheader">Site</span><span role="columnheader" aria-label="Share"></span><span role="columnheader" style="text-align: right">Today</span><span role="columnheader" style="text-align: right; white-space: nowrap">vs yesterday</span>
+            </div>
+            
+              <div role="row" style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 64px 118px; column-gap: 14px; align-items: center; height: 44px; padding: 0 4px; border-top: 1px solid rgba(240,222,250,0.06)">
+                <span role="cell" style="display: flex; align-items: center; gap: 10px; min-width: 0"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #F2EBF5; color: #1A1020; font-size: 11px; font-weight: 700">G</span><span style="font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">github.com</span></span>
+                <span role="cell" aria-hidden="true" style="height: 8px; border-radius: 4px; background: #241D2B; overflow: hidden"><span style="display: block; height: 100%; width: 100.0%; border-radius: 4px; background: linear-gradient(90deg, #F3B6D3, #C9B5FF 50%, #A9E6EC)"></span></span>
+                <span role="cell" style="text-align: right; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; color: #F2EBF5">1h 34m</span>
+                <span role="cell" style="display: flex; align-items: center; justify-content: flex-end; gap: 5px; font-size: 12.5px; color: #F3B6D3; white-space: nowrap"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"></path></svg>+22m</span>
+              </div>
+            
+              <div role="row" style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 64px 118px; column-gap: 14px; align-items: center; height: 44px; padding: 0 4px; border-top: 1px solid rgba(240,222,250,0.06)">
+                <span role="cell" style="display: flex; align-items: center; gap: 10px; min-width: 0"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #E8A7C4; color: #1A1020; font-size: 11px; font-weight: 700">G</span><span style="font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">gitlab.anu.edu.au</span></span>
+                <span role="cell" aria-hidden="true" style="height: 8px; border-radius: 4px; background: #241D2B; overflow: hidden"><span style="display: block; height: 100%; width: 61.7%; border-radius: 4px; background: #7A6890"></span></span>
+                <span role="cell" style="text-align: right; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; color: #F2EBF5">58m</span>
+                <span role="cell" style="display: flex; align-items: center; justify-content: flex-end; gap: 5px; font-size: 12.5px; color: #A9E6EC; white-space: nowrap"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"></path></svg>−18m</span>
+              </div>
+            
+              <div role="row" style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 64px 118px; column-gap: 14px; align-items: center; height: 44px; padding: 0 4px; border-top: 1px solid rgba(240,222,250,0.06)">
+                <span role="cell" style="display: flex; align-items: center; gap: 10px; min-width: 0"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #F3B6D3; color: #1A1020; font-size: 11px; font-weight: 700">Y</span><span style="font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">youtube.com</span></span>
+                <span role="cell" aria-hidden="true" style="height: 8px; border-radius: 4px; background: #241D2B; overflow: hidden"><span style="display: block; height: 100%; width: 43.6%; border-radius: 4px; background: #7A6890"></span></span>
+                <span role="cell" style="text-align: right; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; color: #F2EBF5">41m</span>
+                <span role="cell" style="display: flex; align-items: center; justify-content: flex-end; gap: 5px; font-size: 12.5px; color: #BBB0C4; white-space: nowrap"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path></svg>About the same</span>
+              </div>
+            
+              <div role="row" style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 64px 118px; column-gap: 14px; align-items: center; height: 44px; padding: 0 4px; border-top: 1px solid rgba(240,222,250,0.06)">
+                <span role="cell" style="display: flex; align-items: center; gap: 10px; min-width: 0"><span aria-hidden="true" style="flex: none; width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center; background: #C9B5FF; color: #1A1020; font-size: 11px; font-weight: 700">C</span><span style="font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">canvas.anu.edu.au</span></span>
+                <span role="cell" aria-hidden="true" style="height: 8px; border-radius: 4px; background: #241D2B; overflow: hidden"><span style="display: block; height: 100%; width: 27.7%; border-radius: 4px; background: #7A6890"></span></span>
+                <span role="cell" style="text-align: right; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; color: #F2EBF5">26m</span>
+                <span role="cell" style="display: flex; align-items: center; justify-content: flex-end; gap: 5px; font-size: 12.5px; color: #F3B6D3; white-space: nowrap"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"></path></svg>+9m</span>
+              </div>
+            
+            <div role="row" style="display: grid; grid-template-columns: minmax(0, 1fr) 150px 64px 118px; column-gap: 14px; align-items: center; height: 40px; padding: 0 4px; border-top: 1px solid rgba(240,222,250,0.06); font-size: 12.5px; color: #BBB0C4">
+              <span role="cell">18 other sites</span><span role="cell" aria-hidden="true"></span><span role="cell" style="text-align: right; font-family: 'JetBrains Mono', ui-monospace, monospace">33m</span><span role="cell"></span>
+            </div>
+          </div>
+          <p style="margin: auto 0 0; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #9286A0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6h14v9H5zM3 18h18"></path></svg>Counted on this Mac only</p>
+        </section>
+
+        <section aria-label="New tab strip" style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88); flex: none; padding: 28px 24px 18px; display: flex; flex-direction: column; gap: 10px">
+          <span style="position: absolute; top: -10px; left: 24px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); white-space: nowrap; color: #F2EBF5; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; line-height: 18px">On your new tab</span>
+          <div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 46px; padding: 0 20px; border-radius: 999px; background: #120C16; box-shadow: inset 0 2px 5px rgba(0,0,0,0.6), inset 0 -1px 0 rgba(246,237,228,0.05); font-size: 13px; color: #BBB0C4; white-space: nowrap">
+            <span style="display: flex; align-items: center; gap: 7px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F3B6D3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10c-4-2-7-5.5-7-10V6z"></path></svg>Blocked today <b style="font-weight: 600; color: #F2EBF5; font-variant-numeric: tabular-nums">284</b></span>
+            <span aria-hidden="true">·</span>
+            <span style="display: flex; align-items: center; gap: 7px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C9B5FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 7.5V12l3 2"></path></svg>Focused <b style="font-weight: 600; color: #F2EBF5">1h 12m</b> of 2h<span aria-hidden="true" style="width: 44px; height: 4px; margin-left: 4px; border-radius: 2px; background: #2B2233; overflow: hidden"><span style="display: block; width: 60%; height: 100%; background: linear-gradient(90deg, #F3B6D3, #C9B5FF 50%, #A9E6EC)"></span></span></span>
+            <span aria-hidden="true">·</span>
+            <span style="display: flex; align-items: center; gap: 7px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#A9E6EC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Due today <b style="font-weight: 600; color: #F2EBF5">2</b></span>
+          </div>
+          <span style="font-size: 12px; color: #9286A0; text-align: center">Under the clock on every new tab</span>
+        </section>
+      </div>
+
+      <div style="flex: 0 0 430px; display: flex; flex-direction: column; gap: 32px">
+        <section aria-label="Focus" style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88); padding: 32px 26px 24px; display: flex; flex-direction: column; gap: 18px">
+          <span style="position: absolute; top: -10px; left: 24px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); white-space: nowrap; color: #F2EBF5; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; line-height: 18px">Focus</span>
+          <span style="position: absolute; top: -10px; right: 24px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); white-space: nowrap; color: #F2EBF5; display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 18px; color: #A9E6EC"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #A9E6EC; box-shadow: 0 0 5px rgba(169,230,236,0.3)"></span>Running</span>
+          <div style="display: flex; align-items: center; gap: 22px">
+            <svg viewBox="0 0 140 140" width="140" height="140" role="img" aria-label="Focus timer, 18 minutes 2 seconds of 25 minutes left" style="flex: none">
+              <defs><linearGradient id="next-time-focus" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3B6D3"></stop><stop offset="0.5" stop-color="#C9B5FF"></stop><stop offset="1" stop-color="#A9E6EC"></stop></linearGradient></defs>
+              <circle cx="70" cy="70" r="58" fill="none" stroke="#241D2B" stroke-width="8"></circle>
+              <circle cx="70" cy="70" r="58" fill="none" stroke="url(#next-time-focus)" stroke-width="8" stroke-linecap="round" stroke-dasharray="263 365" transform="rotate(-90 70 70)"></circle>
+              <text x="70" y="74" text-anchor="middle" fill="#F2EBF5" style="font-family: Fraunces, Georgia, serif; font-size: 30px">18:02</text>
+              <text x="70" y="94" text-anchor="middle" fill="#BBB0C4" style="font-family: Figtree, sans-serif; font-size: 11px">left</text>
+            </svg>
+            <div style="min-width: 0; display: flex; flex-direction: column; gap: 6px">
+              <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #9286A0">25-minute session</span>
+              <span style="font-family: Fraunces, Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 96; font-size: 21px; line-height: 1.2">COMP3320 assignment 2</span>
+              <span style="font-size: 13px; color: #BBB0C4">7 of 25 minutes · ends 21:32</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 12.5px; color: #BBB0C4">Blocks 3 sites</span>
+            <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px">
+              
+                <li style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 11px 0 9px; border-radius: 999px; background: #221A29; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; color: #E8DDF0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#F3B6D3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM5.6 5.6l12.8 12.8"></path></svg>youtube.com</li>
+              
+                <li style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 11px 0 9px; border-radius: 999px; background: #221A29; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; color: #E8DDF0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#F3B6D3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM5.6 5.6l12.8 12.8"></path></svg>reddit.com</li>
+              
+                <li style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 11px 0 9px; border-radius: 999px; background: #221A29; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; color: #E8DDF0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#F3B6D3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM5.6 5.6l12.8 12.8"></path></svg>x.com</li>
+              
+            </ul>
+          </div>
+          <div style="display: flex; gap: 8px">
+            <button style="height: 40px; padding: 0 20px; border: none; border-radius: 999px; background: linear-gradient(100deg, #F3B6D3, #C9B5FF 40%, #F6EDE4 72%, #A9E6EC); color: #1A1020; font-weight: 600; box-shadow: 0 10px 26px -12px rgba(201,181,255,0.18); cursor: pointer; display: flex; align-items: center; gap: 8px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6v12M15 6v12"></path></svg>Pause</button>
+            <button style="height: 40px; padding: 0 18px; border: 1px solid rgba(240,222,250,0.10); border-radius: 999px; background: #1E1823; color: #F2EBF5; cursor: pointer">End focus</button>
+          </div>
+        </section>
+
+        <section aria-label="youtube.com, closed while you focus" style="position: relative; box-sizing: border-box; border-radius: 26px; background: #1A1320; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), inset 0 26px 34px -28px rgba(246,237,228,0.06), inset 0 -30px 40px -32px rgba(0,0,0,0.6), 0 3px 6px -2px rgba(0,0,0,0.45), 0 16px 26px -12px rgba(0,0,0,0.65), 0 38px 64px -30px rgba(0,0,0,0.88); flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 40px 36px; text-align: center; background: radial-gradient(420px 260px at 50% 38%, rgba(201,181,255,0.07), rgba(201,181,255,0) 70%), #1A1320">
+          <span style="position: absolute; top: -11px; left: 28px; padding: 0 10px; background: #1A1320; border-radius: 9px 9px 0 0; box-shadow: inset 0 1px 0 rgba(246,237,228,0.07), 0 -3px 8px -3px rgba(0,0,0,0.6); white-space: nowrap; color: #F2EBF5; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; line-height: 20px">youtube.com</span>
+          <span style="position: absolute; top: 18px; right: 20px"><span style="flex: none; display: inline-flex; align-items: center; height: 18px; padding: 0 7px; border-radius: 999px; background: rgba(201,181,255,0.12); color: #C9B5FF; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1; white-space: nowrap">New</span></span>
+          <span aria-hidden="true" style="width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: #221A29; box-shadow: inset 0 1px 0 rgba(246,237,228,0.08), 0 10px 22px -10px rgba(0,0,0,0.7); color: #C9B5FF"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 1 1 9.5 5a6 6 0 0 0 9.5 9.5z"></path></svg></span>
+          <h2 style="margin: 0; max-width: 15ch; font-family: Fraunces, Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 96; font-weight: 400; font-size: 30px; line-height: 1.15"><span style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 25px">youtube.com</span> is closed while you focus</h2>
+          <p style="margin: 0; font-size: 15px; color: #BBB0C4"><span style="font-variant-numeric: tabular-nums; color: #F2EBF5; font-weight: 600">18:02</span> left</p>
+          <div style="display: flex; gap: 8px; margin-top: 6px">
+            <button style="height: 40px; padding: 0 18px; border: 1px solid rgba(240,222,250,0.10); border-radius: 999px; background: #1E1823; color: #F2EBF5; cursor: pointer">Allow 5 minutes</button>
+            <button style="height: 40px; padding: 0 18px; border: 1px solid rgba(240,222,250,0.10); border-radius: 999px; background: #1E1823; color: #F2EBF5; cursor: pointer; background: transparent">End focus</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
