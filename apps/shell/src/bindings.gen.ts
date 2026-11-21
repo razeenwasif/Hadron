@@ -373,6 +373,18 @@ export type VaultFillRequest = { tab: number; host: string; choices: FillChoice[
  * **chrome-only** — never in the fluxtab ACL, so a page can't ask it.
  */
 export type VaultDiag = { stage: string; detail: string; host: string; matches: number; page_reason: string }
+/**
+ * Live status of the Axion sensitive-info vault companion.
+ */
+export type AxionStatus = { installed: boolean; running: boolean; locked: boolean; login_count: number; total_count: number; device_name: string | null }
+/**
+ * Live TOTP 2FA code computed by Axion for a login credential.
+ */
+export type AxionTotp = { code: string; period: number; remaining: number }
+/**
+ * Result of a two-way sync between Flux's local vault and Axion.
+ */
+export type AxionSyncReport = { imported_into_flux: number; pushed_to_axion: number; total_flux_logins: number }
 export type ContentScript = { matches: string[]; js?: string[]; css?: string[]; run_at?: string }
 export type ToolbarButton = { title: string; icon?: string | null }
 export type UiContrib = { toolbar_button?: ToolbarButton | null; panel?: boolean | null }

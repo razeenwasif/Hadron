@@ -9,6 +9,7 @@ mod android_jni;
 mod ios_shields;
 pub mod archive;
 pub mod audioviz;
+pub mod axion;
 pub mod bindings;
 pub mod bookmarks;
 pub mod boosts;
@@ -1697,6 +1698,10 @@ pub fn run(intent: cli::LaunchIntent) {
             vault::vault_save_confirm,
             vault::vault_save_dismiss,
             vault::vault_never_save,
+            axion::axion_status,
+            axion::axion_totp,
+            axion::axion_open,
+            axion::axion_sync,
             files::fs_list,
             files::fs_list_stream,
             files::fs_stat_entries,

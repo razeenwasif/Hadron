@@ -9,6 +9,9 @@ import { For, Show, createEffect, createSignal, onCleanup, onMount, untrack, typ
 import { visibleInterval } from "./poll";
 import {
   VAULT_URL,
+  axionOpen,
+  axionStatus,
+  axionTotp,
   onVaultLocked,
   onVaultReady,
   vaultFill,
@@ -18,6 +21,7 @@ import {
   vaultLock,
   vaultStatus,
   vaultUnlock,
+  type AxionStatus,
   type CredentialMeta,
   type VaultStatus,
 } from "./ipc";
@@ -34,6 +38,7 @@ function hostOf(url: string): string | null {
 const Passwords: Component<{ initialOpen?: boolean }> = (props) => {
   const [open, setOpen] = createSignal(!!props.initialOpen);
   const [status, setStatus] = createSignal<VaultStatus | null>(null);
+  const [axion, setAxion] = createSignal<AxionStatus | null>(null);
   const [matches, setMatches] = createSignal<CredentialMeta[]>([]);
   const [unlockPw, setUnlockPw] = createSignal("");
   const [msg, setMsg] = createSignal<string | null>(null);
@@ -48,6 +53,9 @@ const Passwords: Component<{ initialOpen?: boolean }> = (props) => {
     void vaultStatus()
       .then(setStatus)
       .catch(() => {});
+    void axionStatus()
+      .then(setAxion)
+      .catch(() => setAxion(null));
     const h = host();
     if (h && !locked())
       void vaultForHost(h, activeId())
@@ -181,6 +189,11 @@ const Passwords: Component<{ initialOpen?: boolean }> = (props) => {
         <div class="glass popover footer-pop">
           <div class="shields-row">
             <span class="shields-label">Passwords</span>
+            <Show when={axion()?.running}>
+              <span class="ext-ver" style={{ color: "#5CE1CA" }}>
+                Axion
+              </span>
+            </Show>
             <span class="ext-ver">{locked() ? "locked" : `${status()?.count ?? 0}`}</span>
           </div>
 
@@ -248,6 +261,23 @@ const Passwords: Component<{ initialOpen?: boolean }> = (props) => {
                         >
                           Copy
                         </button>
+                        <Show when={c.has_totp && axion()?.running}>
+                          <button
+                            class="vault-copy"
+                            title="Copy live 2FA TOTP code from Axion"
+                            onClick={() => {
+                              void axionTotp(c.id)
+                                .then(async (t) => {
+                                  if (!t) return setMsg("No 2FA code");
+                                  await navigator.clipboard.writeText(t.code).catch(() => {});
+                                  setMsg(`2FA ${t.code} copied (${t.remaining}s)`);
+                                })
+                                .catch(() => setMsg("Couldn't read 2FA code"));
+                            }}
+                          >
+                            2FA
+                          </button>
+                        </Show>
                       </div>
                     </div>
                   )}
@@ -266,6 +296,17 @@ const Passwords: Component<{ initialOpen?: boolean }> = (props) => {
             <button class="shields-update" onClick={openManager}>
               ⤢ Open Passwords manager
             </button>
+            <Show when={axion()?.installed || axion()?.running}>
+              <button
+                class="shields-update"
+                onClick={() => {
+                  setOpen(false);
+                  void axionOpen().catch((e) => setMsg(String(e)));
+                }}
+              >
+                ⬡ Open Axion Vault ↗
+              </button>
+            </Show>
             <Show when={status()?.protection === "password"}>
               <button class="shields-update" onClick={() => void vaultLock().then(refresh)}>
                 🔒 Lock now

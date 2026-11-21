@@ -1380,6 +1380,25 @@ export function invoke<T>(cmd: string, args?: Record<string, unknown>): Promise<
     case "vault_save_dismiss":
     case "vault_never_save":
       return Promise.resolve(undefined as T);
+    case "axion_status":
+      return Promise.resolve({
+        installed: true,
+        running: true,
+        locked: false,
+        login_count: mockVault.length,
+        total_count: mockVault.length,
+        device_name: "Preview",
+      } as T);
+    case "axion_totp":
+      return Promise.resolve({ code: "482910", period: 30, remaining: 24 } as T);
+    case "axion_open":
+      return Promise.resolve(undefined as T);
+    case "axion_sync":
+      return Promise.resolve({
+        imported_into_flux: 0,
+        pushed_to_axion: mockVault.length,
+        total_flux_logins: mockVault.length,
+      } as T);
     case "cookies_status":
       return Promise.resolve({ clear_on_close: [] } as T);
     case "omni_sites":

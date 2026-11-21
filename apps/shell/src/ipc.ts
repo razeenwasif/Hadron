@@ -60,6 +60,9 @@ import type {
   FramePolicy as GenFramePolicy,
   ArchiveEntryWire as GenArchiveEntryWire,
   ArchiveMeta as GenArchiveMeta,
+  AxionStatus as GenAxionStatus,
+  AxionTotp as GenAxionTotp,
+  AxionSyncReport as GenAxionSyncReport,
   Bookmark as GenBookmark,
   Boost as GenBoost,
   CalEvent as GenCalEvent,
@@ -1030,6 +1033,15 @@ export const vaultFill = (tabId: number, id: string, confirmRelated = false) =>
  *  page, this names the actual stage that stopped it. */
 export type VaultDiag = GenVaultDiag;
 export const vaultWhy = (tab: number) => invoke<VaultDiag>("vault_why", { tab });
+
+// ─── Axion Vault companion bridge ────────────────────────────────────────────
+export type AxionStatus = GenAxionStatus;
+export type AxionTotp = GenAxionTotp;
+export type AxionSyncReport = GenAxionSyncReport;
+export const axionStatus = () => invoke<AxionStatus>("axion_status");
+export const axionTotp = (id: string) => invoke<AxionTotp | null>("axion_totp", { id });
+export const axionOpen = () => invoke<void>("axion_open");
+export const axionSync = () => invoke<AxionSyncReport>("axion_sync");
 
 // ─── Extensions (BACKLOG #92, ADR 0008) ──────────────────────────────────────
 // ExtContentScript / ExtManifest / InstalledExt are generated (bindings.gen,

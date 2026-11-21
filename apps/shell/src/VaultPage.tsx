@@ -12,6 +12,10 @@ import { For, Show, createMemo, createSignal, onCleanup, onMount, type Component
 import { visibleInterval } from "./poll";
 import {
   VAULT_URL,
+  axionOpen,
+  axionStatus,
+  axionSync,
+  axionTotp,
   vaultAdd,
   vaultDisableMasterPassword,
   vaultExport,
@@ -26,6 +30,8 @@ import {
   vaultUnlock,
   onVaultLocked,
   onVaultReady,
+  type AxionStatus,
+  type AxionTotp,
   type CredentialMeta,
   type VaultStatus,
 } from "./ipc";
@@ -49,11 +55,13 @@ function hostLabel(url: string): string {
 
 const VaultPage: Component<{ onNavigate: (url: string) => void }> = (props) => {
   const [status, setStatus] = createSignal<VaultStatus | null>(null);
+  const [axion, setAxion] = createSignal<AxionStatus | null>(null);
   const [list, setList] = createSignal<CredentialMeta[]>([]);
   const [query, setQuery] = createSignal("");
   const [selId, setSelId] = createSignal<string | null>(null);
   const [pane, setPane] = createSignal<Pane>("detail");
   const [pw, setPw] = createSignal<string | null>(null); // revealed password of selection
+  const [totp, setTotp] = createSignal<AxionTotp | null>(null);
   const [showPw, setShowPw] = createSignal(false);
   const [msg, setMsg] = createSignal<string | null>(null);
   // forms
@@ -76,6 +84,9 @@ const VaultPage: Component<{ onNavigate: (url: string) => void }> = (props) => {
     void vaultStatus()
       .then(setStatus)
       .catch(() => {});
+    void axionStatus()
+      .then(setAxion)
+      .catch(() => setAxion(null));
     void vaultList()
       .then(setList)
       .catch(() => setList([]));
@@ -115,7 +126,20 @@ const VaultPage: Component<{ onNavigate: (url: string) => void }> = (props) => {
     setPane("detail");
     setShowPw(false);
     setPw(null);
+    setTotp(null);
     setPw(await vaultReveal(c.id).catch(() => null));
+    if (c.has_totp && axion()?.running) {
+      setTotp(await axionTotp(c.id).catch(() => null));
+    }
+  };
+  const syncAxion = async () => {
+    try {
+      const r = await axionSync();
+      setMsg(`Synced with Axion (${r.total_flux_logins} logins)`);
+      refresh();
+    } catch (e) {
+      setMsg(String(e));
+    }
   };
 
   const unlock = async () => {
@@ -268,7 +292,16 @@ const VaultPage: Component<{ onNavigate: (url: string) => void }> = (props) => {
       <Show when={!locked()}>
         <header class="vault-head">
           <div class="vault-title">
-            🔑 Passwords <span class="vault-count">{status()?.count ?? 0}</span>
+            🔑 Passwords <span class="vault-count">{list().length}</span>
+            <Show when={axion()?.running}>
+              <span
+                class="vault-count"
+                style={{ color: "#5CE1CA", border: "1px solid rgba(92,225,202,0.32)" }}
+                title={`Connected to Axion (${axion()?.total_count ?? 0} total vault items)`}
+              >
+                ⬡ Axion Live
+              </span>
+            </Show>
           </div>
           <input
             class="vault-search"
@@ -277,6 +310,20 @@ const VaultPage: Component<{ onNavigate: (url: string) => void }> = (props) => {
             onInput={(e) => setQuery(e.currentTarget.value)}
           />
           <div class="vault-head-actions">
+            <Show when={axion()?.running}>
+              <button class="vault-btn" title="Two-way merge logins with Axion Vault" onClick={() => void syncAxion()}>
+                ↻ Sync Axion
+              </button>
+            </Show>
+            <Show when={axion()?.installed || axion()?.running}>
+              <button
+                class="vault-btn"
+                title="Open Axion Sensitive Info Vault"
+                onClick={() => void axionOpen().catch((e) => setMsg(String(e)))}
+              >
+                ⬡ Axion ↗
+              </button>
+            </Show>
             <button
               class="vault-btn"
               classList={{ on: pane() === "add" }}
@@ -651,9 +698,22 @@ const VaultPage: Component<{ onNavigate: (url: string) => void }> = (props) => {
                     </Show>
                     <Show when={c().has_totp}>
                       <div class="vault-field">
-                        <span>TOTP</span>
+                        <span>TOTP (2FA)</span>
                         <div class="vault-value">
-                          <code>stored ⏱</code>
+                          <code>
+                            {totp()
+                              ? `${totp()!.code.slice(0, 3)} ${totp()!.code.slice(3)} (${totp()!.remaining}s)`
+                              : "stored ⏱"}
+                          </code>
+                          <Show when={totp()}>
+                            <button
+                              class="vault-mini"
+                              title="Copy 2FA code"
+                              onClick={() => void copy(totp()!.code, "2FA code")}
+                            >
+                              ⧉
+                            </button>
+                          </Show>
                         </div>
                       </div>
                     </Show>
