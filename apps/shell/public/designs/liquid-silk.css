@@ -1895,3 +1895,21 @@
 :root[data-design][data-silk][data-theme="graphite"] .silk-cards::-webkit-scrollbar-thumb {
   background: #313136;
 }
+
+/* The tab pane: a darker grey than the window round it, so it reads as its
+   own card (the controls in it keep their lighter greys). */
+:root[data-design][data-silk][data-theme="graphite"] .sidebar {
+  --vp-paper: #0c0c0e;
+}
+
+/* Home's dither (start/HomeDither.tsx): fills the home behind everything on
+   it, its 2 px dots kept square when scaled up. */
+:root[data-design][data-silk][data-theme="graphite"] .home-dither {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  pointer-events: none;
+}

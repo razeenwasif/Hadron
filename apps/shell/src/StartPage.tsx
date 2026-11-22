@@ -78,6 +78,7 @@ const VpMailCard = lazy(() => import("./start/VpMailCard"));
 const VpTodayCard = lazy(() => import("./start/VpTodayCard"));
 const SilkDock = lazy(() => import("./start/SilkDock"));
 const SilkWaves = lazy(() => import("./start/SilkWaves"));
+const HomeDither = lazy(() => import("./start/HomeDither"));
 
 /** A shortcut's name for a pill: the site's own name where we know it, else
  *  its hostname. */
@@ -1870,6 +1871,12 @@ const StartPage: Component<{
    *  and the dock. The other widgets stay reachable from Customize home. */
   const silkHome = () => (
     <div class="silk-home">
+      {/* Graphite: a still, dithered warm glow at the foot of the black home. */}
+      <Show when={theme() === "graphite"}>
+        <Suspense>
+          <HomeDither />
+        </Suspense>
+      </Show>
       <header>
         <div class="silk-date">{vpDateLegend()}</div>
         <div class="silk-clock">
