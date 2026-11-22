@@ -223,48 +223,67 @@
    the blur is off, and the material rules at the end of this file flatten the
    sheens and switch off the window's acrylic. The accents are a warm sunset
    (amber → orange → coral → rose), used as gradients where Flux draws one.
-   `--velvet-700` is the page card, so it is black; `--velvet-800` is the chrome. */
+
+   It recolours two designs and keeps their layout: Classic (here) and Liquid
+   Silk (liquid-silk.css, which maps its glass onto the same scale). Velvet
+   Paper keeps its own colours, as it does with every theme.
+
+   The greys are neutral with a breath of blue, never warm: next to orange
+   accents a true grey already reads brown. Picked from Antigravity's own
+   window (chrome #111015, page near-black). */
 :root[data-theme="graphite"] {
-  --velvet-900: #000000; /* deepest */
-  --velvet-800: #181818; /* chrome: titlebar, sidebar, frame */
-  --velvet-700: #000000; /* the page — black */
-  --velvet-600: #212121; /* raised controls */
-  --velvet-500: #2b2b2b; /* hover */
+  --gr-chrome: #121214; /* titlebar, sidebar, the frame */
+  --gr-page: #000000; /* the page, home included */
+  --gr-raised: #151518; /* cards and fields on the page */
+  --gr-control: #1e1e22; /* hover, chips */
+  --gr-selected: #2a2a2f; /* the current tab, the chosen segment */
+  --gr-edge: #26262b; /* hairlines */
+  --gr-popover: #19191c;
+  --gr-ink: #1a1008; /* text on the warm gradient */
+  --graphite-warm: linear-gradient(115deg, #ffb35c, #ff7a50 55%, #ff4f79);
+}
+/* Classic's tokens. (Liquid Silk sets its own, from the same scale.) */
+:root[data-theme="graphite"]:not([data-design]) {
+  --velvet-900: var(--gr-page);
+  --velvet-800: var(--gr-chrome);
+  --velvet-700: var(--gr-page); /* the page card */
+  --velvet-600: var(--gr-control);
+  --velvet-500: var(--gr-selected);
 
   --accent-rgb: 255, 153, 72; /* primary interactive — orange #ff9948 */
   --accent-ai-rgb: 255, 107, 87; /* the agent — coral #ff6b57 */
   --accent-ai2-rgb: 255, 190, 110; /* its softer companion — amber #ffbe6e */
   --accent-hot-rgb: 255, 79, 121; /* attention — rose #ff4f79 */
-  --neutral-rgb: 168, 168, 168; /* borders and thumbs — true grey, no tint */
+  --neutral-rgb: 160, 160, 168; /* borders and thumbs — grey, no warmth */
   --rim-rgb: 255, 255, 255;
 
   --flux-ok: #7ee2a8;
   --flux-warn: #ffffff;
 
-  --flux-text: #ececec;
-  --flux-text-dim: #a6a6a6;
-  --flux-text-mute: #6e6e6e;
+  --flux-text: #ececf0;
+  --flux-text-dim: #a4a4ab;
+  --flux-text-mute: #6c6c74;
 
-  /* Solid surfaces in place of the tinted overlays. */
-  --flux-surface: #242424;
-  --flux-surface-2: #2c2c2c;
-  --flux-border: #2a2a2a;
-  --flux-teal-dim: #3a2616; /* orange at 14%, flattened over black */
-  --flux-popover-fill: #1e1e1e;
+  /* Solid surfaces in place of the tinted overlays. A chosen item is a lighter
+     grey with the accent in its text, not an orange wash (which reads brown). */
+  --flux-surface: var(--gr-control);
+  --flux-surface-2: var(--gr-selected);
+  --flux-border: var(--gr-edge);
+  --flux-teal-dim: var(--gr-selected);
+  --flux-popover-fill: var(--gr-popover);
 
   --flux-ai-gradient: linear-gradient(115deg, #ffc46b 0%, #ff9948 34%, #ff6b57 68%, #ff4f79 100%);
-  --graphite-warm: linear-gradient(115deg, #ffb35c, #ff7a50 55%, #ff4f79);
 
-  --glass-fill: #1b1b1b;
-  --glass-fill-soft: #181818;
+  --glass-fill: var(--gr-raised);
+  --glass-fill-soft: var(--gr-chrome);
   --glass-blur: none;
-  --glass-rim: #2e2e2e;
-  --glass-rim-soft: #242424;
+  --glass-rim: var(--gr-edge);
+  --glass-rim-soft: var(--gr-edge);
   --glass-shadow: 0 0 0 0 transparent;
   --glass-inset: inset 0 0 0 0 transparent;
 
-  --flux-scroll-thumb: #333333;
-  --flux-scroll-thumb-hover: #474747;
+  --flux-scroll-thumb: #313136;
+  --flux-scroll-thumb-hover: #46464c;
   --flux-scroll-thumb-active: #ff9948;
 }
 
@@ -10580,120 +10599,120 @@ html[data-density="comfortable"] .new-tab-options {
    The tokens make the glass solid; these rules catch what doesn't go through a
    token: blur set with a literal, the white sheens layered over the glass, the
    home page's glow and liquid, and the acrylic window. Last in the file so they
-   also beat the acrylic rules' `!important`s on order. */
-:root[data-theme="graphite"] *,
-:root[data-theme="graphite"] *::before,
-:root[data-theme="graphite"] *::after {
+   also beat the acrylic rules' `!important`s on order.
+   The first two apply to both designs Graphite recolours; the rest are
+   Classic's (`:not([data-design])`). Liquid Silk's are in liquid-silk.css. */
+:root[data-theme="graphite"]:is(:not([data-design]), [data-silk]) *,
+:root[data-theme="graphite"]:is(:not([data-design]), [data-silk]) *::before,
+:root[data-theme="graphite"]:is(:not([data-design]), [data-silk]) *::after {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
 
 /* The window is opaque whatever the Acrylic setting says. */
-:root[data-theme="graphite"],
-:root[data-theme="graphite"] body,
-:root[data-theme="graphite"] #root,
-:root[data-theme="graphite"] .shell,
-:root[data-theme="graphite"] .shell.window-acrylic {
-  background-color: var(--velvet-800) !important;
+:root[data-theme="graphite"]:is(:not([data-design]), [data-silk]),
+:root[data-theme="graphite"]:is(:not([data-design]), [data-silk]) body,
+:root[data-theme="graphite"]:is(:not([data-design]), [data-silk]) #root,
+:root[data-theme="graphite"]:is(:not([data-design]), [data-silk]) .shell,
+:root[data-theme="graphite"]:is(:not([data-design]), [data-silk]) .shell.window-acrylic {
+  background-color: var(--gr-chrome) !important;
   background-image: none !important;
 }
-:root[data-theme="graphite"] .titlebar,
-:root[data-theme="graphite"] .shell.window-acrylic .titlebar {
-  background: var(--velvet-800) !important;
+
+:root[data-theme="graphite"]:not([data-design]) .titlebar,
+:root[data-theme="graphite"]:not([data-design]) .shell.window-acrylic .titlebar {
+  background: var(--gr-chrome) !important;
   border-bottom-color: transparent !important;
 }
-:root[data-theme="graphite"] .sidebar,
-:root[data-theme="graphite"] .shell.window-acrylic .sidebar {
-  background: var(--velvet-800) !important;
+:root[data-theme="graphite"]:not([data-design]) .sidebar,
+:root[data-theme="graphite"]:not([data-design]) .shell.window-acrylic .sidebar {
+  background: var(--gr-chrome) !important;
   border-right-color: transparent !important;
   box-shadow: none !important;
 }
-:root[data-theme="graphite"] .shell.window-acrylic .pages-bar,
-:root[data-theme="graphite"] .shell.window-acrylic .tui-bar,
-:root[data-theme="graphite"] .shell.window-acrylic .agent-inner,
-:root[data-theme="graphite"] .shell.window-acrylic .terminal-surface,
-:root[data-theme="graphite"] .shell.window-acrylic .editor-col-surface,
-:root[data-theme="graphite"] .shell.window-acrylic .editor-col-dead,
-:root[data-theme="graphite"] .shell.window-acrylic .term-col-bar,
-:root[data-theme="graphite"] .shell.window-acrylic .dock-card {
+:root[data-theme="graphite"]:not([data-design]) .shell.window-acrylic .pages-bar,
+:root[data-theme="graphite"]:not([data-design]) .shell.window-acrylic .tui-bar,
+:root[data-theme="graphite"]:not([data-design]) .shell.window-acrylic .agent-inner,
+:root[data-theme="graphite"]:not([data-design]) .shell.window-acrylic .terminal-surface,
+:root[data-theme="graphite"]:not([data-design]) .shell.window-acrylic .editor-col-surface,
+:root[data-theme="graphite"]:not([data-design]) .shell.window-acrylic .editor-col-dead,
+:root[data-theme="graphite"]:not([data-design]) .shell.window-acrylic .term-col-bar,
+:root[data-theme="graphite"]:not([data-design]) .shell.window-acrylic .dock-card {
   background: var(--glass-fill) !important;
-  border-color: var(--glass-rim-soft) !important;
+  border-color: var(--gr-edge) !important;
   box-shadow: none !important;
 }
 
 /* The page: black, flat, a hairline edge instead of a lift. */
-:root[data-theme="graphite"] .card,
-:root[data-theme="graphite"] .shell.window-acrylic .card {
-  background: #000 !important;
-  border: 1px solid #222 !important;
+:root[data-theme="graphite"]:not([data-design]) .card,
+:root[data-theme="graphite"]:not([data-design]) .shell.window-acrylic .card {
+  background: var(--gr-page) !important;
+  border: 1px solid var(--gr-edge) !important;
   box-shadow: none !important;
 }
 
 /* Glass's specular rim, and the white sheens over the glass, go. */
-:root[data-theme="graphite"] .glass::before,
-:root[data-theme="graphite"] .start-card::after,
-:root[data-theme="graphite"] .start-search::after {
+:root[data-theme="graphite"]:not([data-design]) .glass::before,
+:root[data-theme="graphite"]:not([data-design]) .start-card::after,
+:root[data-theme="graphite"]:not([data-design]) .start-search::after {
   display: none;
 }
 
 /* Fields: solid, so nothing shows through them. `:where` keeps this at the
    base rule's weight, so fields that sit inside a pill (home search, find)
    stay transparent to the pill as they are in every theme. */
-:where(:root[data-theme="graphite"]) input {
-  background: #1e1e1e;
-  border-color: #2c2c2c;
+:where(:root[data-theme="graphite"]:not([data-design])) input {
+  background: var(--gr-control);
+  border-color: var(--gr-edge);
 }
-:where(:root[data-theme="graphite"]) input:focus {
-  background: #222;
+:where(:root[data-theme="graphite"]:not([data-design])) input:focus {
+  background: var(--gr-control);
   border-color: #ff9948;
-  box-shadow: 0 0 0 3px #3a2616;
+  box-shadow: none;
 }
-:root[data-theme="graphite"] .address {
-  background: #222;
+:root[data-theme="graphite"]:not([data-design]) .address {
+  background: var(--gr-control);
 }
 
 /* The tab rail: the selected tab is a lighter grey with a warm edge. */
-:root[data-theme="graphite"] .tab-row.active {
-  background: #2a2a2a;
+:root[data-theme="graphite"]:not([data-design]) .tab-row.active {
+  background: var(--gr-selected);
   box-shadow: inset 2px 0 0 0 #ff9948;
 }
 
 /* Home: black, no glow, no liquid; the hero and cards are flat grey. */
-:root[data-theme="graphite"] .start {
-  background: #000;
+:root[data-theme="graphite"]:not([data-design]) .start {
+  background: var(--gr-page);
 }
-:root[data-theme="graphite"] .start-liquid,
-:root[data-theme="graphite"] .start-wave {
+:root[data-theme="graphite"]:not([data-design]) .start-liquid,
+:root[data-theme="graphite"]:not([data-design]) .start-wave {
   display: none;
 }
-:root[data-theme="graphite"] .start-search {
-  background: #161616;
-  border: 1px solid #2a2a2a;
+:root[data-theme="graphite"]:not([data-design]) .start-search {
+  background: var(--gr-raised);
+  border: 1px solid var(--gr-edge);
   box-shadow: none;
 }
-:root[data-theme="graphite"] .start-search:focus-within {
+:root[data-theme="graphite"]:not([data-design]) .start-search:focus-within {
   border-color: #ff9948;
-  box-shadow: 0 0 0 3px #3a2616;
-}
-:root[data-theme="graphite"] .start-card,
-:root[data-theme="graphite"] .start-card:hover,
-:root[data-theme="graphite"] .cal-modal {
-  background: #121212;
-  border: 1px solid #242424;
   box-shadow: none;
 }
-:root[data-theme="graphite"] .start-card:hover {
-  border-color: #333;
+:root[data-theme="graphite"]:not([data-design]) .start-card,
+:root[data-theme="graphite"]:not([data-design]) .start-card:hover,
+:root[data-theme="graphite"]:not([data-design]) .cal-modal {
+  background: var(--gr-raised);
+  border: 1px solid var(--gr-edge);
+  box-shadow: none;
 }
-:root[data-theme="graphite"] .start-engine {
-  color: #1a1008;
-  background: var(--graphite-warm);
+:root[data-theme="graphite"]:not([data-design]) .start-card:hover {
+  border-color: #34343a;
 }
-:root[data-theme="graphite"] .shields-toggle.on {
-  color: #1a1008;
+:root[data-theme="graphite"]:not([data-design]) .start-engine,
+:root[data-theme="graphite"]:not([data-design]) .shields-toggle.on {
+  color: var(--gr-ink);
   background: var(--graphite-warm);
 }
 /* Flux's own pages sit on the black page too, not on the chrome's grey. */
-:root[data-theme="graphite"] .set-page {
-  background: #000;
+:root[data-theme="graphite"]:not([data-design]) .set-page {
+  background: var(--gr-page);
 }

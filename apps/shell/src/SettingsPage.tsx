@@ -879,8 +879,9 @@ const SettingsPage: Component<{ onNavigate: (url: string) => void }> = (props) =
               </For>
             </div>
           </Row>
-          {/* Liquid Silk's wallpaper (wallpaper.ts) — its palette comes with it. */}
-          <Show when={design() === "liquid-silk"}>
+          {/* Liquid Silk's wallpaper (wallpaper.ts) — its palette comes with it.
+              Graphite replaces the wallpaper with flat grey, so not then. */}
+          <Show when={design() === "liquid-silk" && theme() !== "graphite"}>
             <Row label="Wallpaper" hint="The silk behind the glass. Its colours become Flux's accent.">
               <div class="silk-walls" role="radiogroup" aria-label="Wallpaper">
                 <For each={WALLPAPERS}>
@@ -991,8 +992,8 @@ const SettingsPage: Component<{ onNavigate: (url: string) => void }> = (props) =
               design() === "classic"
                 ? "Colours the whole of Flux. Applies immediately."
                 : design() === "liquid-silk"
-                  ? "Liquid Silk takes its colours from the wallpaper; the theme applies to the Classic design. Graphite switches to Classic for you."
-                  : "This design brings its own colours; the theme applies to the Classic design. Graphite switches to Classic for you."
+                  ? "Liquid Silk takes its colours from the wallpaper, or from Graphite, which recolours it in place. The other themes apply to the Classic design."
+                  : "This design brings its own colours; the theme applies to the Classic design."
             }
           >
             <div class="theme-picker">
@@ -1001,14 +1002,7 @@ const SettingsPage: Component<{ onNavigate: (url: string) => void }> = (props) =
                   <button
                     classList={{ "theme-chip": true, on: theme() === t.id }}
                     title={t.blurb}
-                    onClick={() => {
-                      // Graphite is a whole look (grey chrome, black page, no
-                      // glass), so picking it from a card design switches to
-                      // Classic too: one click, not a theme that silently waits.
-                      if (t.switchesToClassic && design() !== "classic") {
-                        void setDesign("classic").then(() => setTheme(t.id));
-                      } else setTheme(t.id);
-                    }}
+                    onClick={() => setTheme(t.id)}
                   >
                     <span class="theme-swatch">
                       <For each={t.swatch}>{(c) => <i style={{ background: c }} />}</For>

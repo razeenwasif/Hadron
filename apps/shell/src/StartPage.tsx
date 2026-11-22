@@ -64,6 +64,7 @@ import ClockWidget from "./ClockWidget";
 import Converter from "./Converter";
 import { askConfirm } from "./ask";
 import { design } from "./design";
+import { theme } from "./themes";
 import { wallpaper } from "./wallpaper";
 import { silkWaves } from "./start/silkWavesPref";
 import { focusLine } from "./focusGate";
@@ -1942,7 +1943,7 @@ const StartPage: Component<{
         <SilkDock />
       </Suspense>
       {/* Opal in motion: the wallpaper moves in slow waves while home shows. */}
-      <Show when={wallpaper() === "opal" && silkWaves()}>
+      <Show when={wallpaper() === "opal" && silkWaves() && theme() !== "graphite"}>
         <Suspense>
           <SilkWaves />
         </Suspense>

@@ -1668,3 +1668,230 @@
     transition: none !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════════════
+   Graphite on Liquid Silk (themes.ts; the grey scale is in theme.css)
+   ════════════════════════════════════════════════════════════════════════
+   Silk's layout exactly as it is (every card, gutter, rail and the home's
+   clock, shortcuts, cards and dock in their places), only recoloured and made
+   opaque: no wallpaper, no glass, no blur. The chrome and every card on it are
+   dark grey, the page and home are black, and the accents are Graphite's warm
+   sunset. Mostly Silk's own variables pointed at the scale; the rules after
+   them catch the few surfaces Silk tints with a literal.
+   Last in the sheet, so on equal weight these beat each wallpaper's palette. */
+:root[data-design][data-silk][data-theme="graphite"] {
+  --silk-tint: 18, 18, 20; /* = --gr-chrome */
+  --silk-glass: 1;
+  --silk-fill: var(--gr-chrome);
+  --silk-blur: none;
+  --silk-home-fill: var(--gr-raised);
+  --silk-home-blur: none;
+  --silk-edge: var(--gr-edge);
+  --silk-lift: 0 0 0 0 transparent;
+  --silk-sheen: inset 0 0 0 0 transparent;
+  --silk-image: none;
+  --silk-scrim: none;
+  --silk-accent-ink: var(--gr-ink);
+  --silk-ai-ink: var(--gr-ink);
+  /* The agent backdrop's first colour (silkBackdrop.ts). */
+  --silk-grain-base: #ff4f79;
+
+  --accent-rgb: 255, 153, 72;
+  --accent-ai-rgb: 255, 107, 87;
+  --accent-ai2-rgb: 255, 190, 110;
+  --accent-hot-rgb: 255, 79, 121;
+  --neutral-rgb: 160, 160, 168;
+  --rim-rgb: 255, 255, 255;
+
+  --velvet-900: var(--gr-page);
+  --velvet-800: var(--gr-chrome);
+  --velvet-700: var(--gr-page);
+  --velvet-600: var(--gr-control);
+  --velvet-500: var(--gr-selected);
+
+  --flux-text: #ececf0;
+  --flux-text-dim: #a4a4ab;
+  --flux-text-mute: #6c6c74;
+  --flux-ok: #7ee2a8;
+  --flux-warn: #ffffff;
+  --flux-surface: var(--gr-control);
+  --flux-surface-2: var(--gr-selected);
+  --flux-border: var(--gr-edge);
+  --flux-teal-dim: var(--gr-selected);
+  --flux-popover-fill: var(--gr-popover);
+  --flux-ai-gradient: linear-gradient(115deg, #ffc46b 0%, #ff9948 34%, #ff6b57 68%, #ff4f79 100%);
+
+  --vp-paper: var(--gr-chrome);
+  --vp-paper-2: var(--gr-page);
+  --vp-raise: var(--gr-control);
+  --vp-chip: var(--gr-selected);
+  --vp-edge: var(--gr-edge);
+  --vp-shadow: 0 0 0 0 transparent;
+  --vp-foil: linear-gradient(var(--gr-edge), var(--gr-edge));
+  --vp-foil-line: linear-gradient(var(--gr-edge), var(--gr-edge));
+  --vp-wash: linear-gradient(var(--gr-selected), var(--gr-selected));
+  --vp-satin: var(--graphite-warm);
+  --vp-pearl: #ececf0;
+  /* Velvet Paper rings and haloes chosen items in its lilac at low alpha;
+     Silk points that at the accent, which over grey reads brown. Graphite
+     rings them in plain grey (solid lilac, --vp-lilac, stays the accent). */
+  --vp-lilac-rgb: 200, 200, 210;
+  --vp-well: var(--gr-page);
+  --vp-well-2: var(--gr-page);
+  --vp-bar: var(--gr-chrome);
+  --vp-track: var(--gr-selected);
+
+  --glass-fill: var(--gr-chrome);
+  --glass-fill-soft: var(--gr-chrome);
+  --glass-blur: none;
+  --glass-rim: var(--gr-edge);
+  --glass-rim-soft: var(--gr-edge);
+  --glass-shadow: 0 0 0 0 transparent;
+  --glass-inset: inset 0 0 0 0 transparent;
+
+  --flux-scroll-thumb: #313136;
+  --flux-scroll-thumb-hover: #46464c;
+  --flux-scroll-thumb-active: #ff9948;
+}
+
+/* No wallpaper: the window is the chrome's grey (theme.css), and the moving
+   Opal never mounts (StartPage). */
+:root[data-design][data-silk][data-theme="graphite"] body::before {
+  display: none;
+}
+
+/* The page is black, home included: the same card in the same place, filled
+   black instead of glass (home's card has no ring, as in Silk). */
+:root[data-design][data-silk][data-theme="graphite"] .card::before {
+  background: var(--gr-page);
+}
+:root[data-design][data-silk][data-theme="graphite"] .card:has(.start) {
+  background: var(--gr-page);
+}
+/* Cards on the black page are a step lighter than it. */
+:root[data-design][data-silk][data-theme="graphite"] .set-page {
+  --vp-card: var(--gr-raised);
+}
+:root[data-design][data-silk][data-theme="graphite"] .set-card::before,
+:root[data-design][data-silk][data-theme="graphite"] .set-nav::before,
+:root[data-design][data-silk][data-theme="graphite"] .files-rail::before,
+:root[data-design][data-silk][data-theme="graphite"] .files-main::before,
+:root[data-design][data-silk][data-theme="graphite"] .files-preview::before,
+:root[data-design][data-silk][data-theme="graphite"] .idx-panel::before,
+:root[data-design][data-silk][data-theme="graphite"] .idx-card::before,
+:root[data-design][data-silk][data-theme="graphite"] .idx-sheet-card::before,
+:root[data-design][data-silk][data-theme="graphite"] .idx-sheet-tuning::before {
+  background: var(--gr-raised);
+}
+
+/* Floating panels: solid, and nothing dims or frosts the window behind them. */
+:root[data-design][data-silk][data-theme="graphite"] .files-panel-backdrop,
+:root[data-design][data-silk][data-theme="graphite"] .map-panel-backdrop,
+:root[data-design][data-silk][data-theme="graphite"] .cal-pane-backdrop {
+  background: transparent;
+}
+:root[data-design][data-silk][data-theme="graphite"] .files-panel,
+:root[data-design][data-silk][data-theme="graphite"] .kb-panel,
+:root[data-design][data-silk][data-theme="graphite"] .playground-panel,
+:root[data-design][data-silk][data-theme="graphite"] .glass.cal-pane:not(.docked) {
+  background: var(--gr-chrome);
+}
+
+/* Silk's literal tints, made solid. */
+:root[data-design][data-silk][data-theme="graphite"] .tab-modes-thumb,
+:root[data-design][data-silk][data-theme="graphite"] .set-seg button.on,
+:root[data-design][data-silk][data-theme="graphite"] .mail-filter button.on {
+  background: var(--gr-selected);
+}
+:root[data-design][data-silk][data-theme="graphite"] .set-page .shields-toggle.on {
+  background: var(--graphite-warm);
+  border-color: transparent;
+}
+:root[data-design][data-silk][data-theme="graphite"] .set-page .shields-toggle::before {
+  background: #c9c9cf;
+}
+:root[data-design][data-silk][data-theme="graphite"] .hist-day {
+  background: var(--gr-page);
+}
+:root[data-design][data-silk][data-theme="graphite"] .omni-site {
+  background: var(--gr-raised);
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar::after,
+:root[data-design][data-silk][data-theme="graphite"] .connect-notes::after,
+:root[data-design][data-silk][data-theme="graphite"] .start-card:not(.silk-cards .start-card)::after,
+:root[data-design][data-silk][data-theme="graphite"] .files-rail::after,
+:root[data-design][data-silk][data-theme="graphite"] .files-main::after,
+:root[data-design][data-silk][data-theme="graphite"] .files-preview::after,
+:root[data-design][data-silk][data-theme="graphite"] .set-nav::after,
+:root[data-design][data-silk][data-theme="graphite"] .set-card::after,
+:root[data-design][data-silk][data-theme="graphite"] .idx-sheet-card::after {
+  background: var(--gr-chrome);
+}
+:root[data-design][data-silk][data-theme="graphite"] .vp-pill-satin,
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-focus-card .vp-pill-satin {
+  background: var(--graphite-warm);
+  color: var(--gr-ink);
+}
+:root[data-design][data-silk][data-theme="graphite"] .pages-bar .pages-chip:hover {
+  background: var(--gr-control);
+}
+:root[data-design][data-silk][data-theme="graphite"] .tab-modes .tab-mode-agent::before {
+  background: var(--gr-edge);
+}
+:root[data-design][data-silk][data-theme="graphite"] .tab-modes .tab-mode-agent.on {
+  color: rgb(var(--accent-ai-rgb));
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-peek {
+  background: var(--gr-popover);
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-wave > i {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(255, 153, 72, 0.35) 38%,
+    rgba(255, 220, 190, 0.5) 50%,
+    rgba(255, 79, 121, 0.4) 62%,
+    transparent 92%
+  );
+}
+
+/* Home: the clock, shortcuts, cards and dock where Silk puts them, on black.
+   The search and cards are solid grey; the shortcuts and dock stay bare icons
+   as in Silk, with a solid grey under the hovered one. */
+:root[data-design][data-silk][data-theme="graphite"] .silk-home .start-search,
+:root[data-design][data-silk][data-theme="graphite"] .silk-home,
+:root[data-design][data-silk][data-theme="graphite"] .silk-pill,
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards,
+:root[data-design][data-silk][data-theme="graphite"] .silk-greet-line,
+:root[data-design][data-silk][data-theme="graphite"] .silk-date {
+  text-shadow: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-clock {
+  color: #f4f4f7;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-pill {
+  background: transparent;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-pill:hover,
+:root[data-design][data-silk][data-theme="graphite"] .silk-dock-btn:hover {
+  background: var(--gr-control);
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-pill-icon,
+:root[data-design][data-silk][data-theme="graphite"] .silk-dock-btn.app {
+  background: var(--gr-control);
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-glyph,
+:root[data-design][data-silk][data-theme="graphite"] .silk-dock-btn svg,
+:root[data-design][data-silk][data-theme="graphite"] .pages-bar .pages-chip {
+  filter: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .start-card-link,
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-pill:not(.vp-pill-satin) {
+  background: var(--gr-control);
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards {
+  scrollbar-color: #313136 transparent;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards::-webkit-scrollbar-thumb {
+  background: #313136;
+}

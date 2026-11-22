@@ -78,7 +78,9 @@ export async function mountSilkBackdrop(host: HTMLElement): Promise<SilkBackdrop
     host.append(el);
     return el;
   };
-  const grainColors = ["#3d6fd6", ai, accent].map(getShaderColorFromString);
+  const grainColors = [css.getPropertyValue("--silk-grain-base").trim() || "#3d6fd6", ai, accent].map(
+    getShaderColorFromString,
+  );
   const GRAIN_PACE = 0.3,
     DITHER_PACE = 0.2;
   const grain = new ShaderMount(
