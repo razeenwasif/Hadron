@@ -182,10 +182,17 @@ mod link {
     }
 
     pub fn rpc(method: &str, params: Option<serde_json::Value>) -> Result<serde_json::Value, String> {
+        rpc_with_timeout(method, params, Duration::from_millis(2000))
+    }
+
+    pub fn rpc_with_timeout(
+        method: &str,
+        params: Option<serde_json::Value>,
+        timeout: Duration,
+    ) -> Result<serde_json::Value, String> {
         let sock = socket_path();
         verify_socket_safety(&sock)?;
         let mut stream = UnixStream::connect(&sock).map_err(|e| e.to_string())?;
-        let timeout = Duration::from_millis(350);
         let _ = stream.set_read_timeout(Some(timeout));
         let _ = stream.set_write_timeout(Some(timeout));
 
@@ -217,6 +224,7 @@ mod link {
 
 #[cfg(not(unix))]
 mod link {
+    use std::time::Duration;
     pub fn installed() -> bool {
         false
     }
@@ -225,6 +233,13 @@ mod link {
         _params: Option<serde_json::Value>,
     ) -> Result<serde_json::Value, String> {
         Err("Axion bridge is only available on Unix/macOS".into())
+    }
+    pub fn rpc_with_timeout(
+        method: &str,
+        params: Option<serde_json::Value>,
+        _timeout: Duration,
+    ) -> Result<serde_json::Value, String> {
+        rpc(method, params)
     }
 }
 
@@ -306,6 +321,25 @@ pub(crate) fn match_host(host: &str, port: Option<u16>) -> Option<Vec<Credential
     fresh
 }
 
+pub(crate) fn is_active() -> bool {
+    query_status().running
+}
+
+pub(crate) fn unlock(password: &str) -> Result<(), String> {
+    link::rpc_with_timeout(
+        "unlock",
+        Some(serde_json::json!({ "password": password })),
+        Duration::from_secs(5),
+    )?;
+    invalidate_cache();
+    Ok(())
+}
+
+pub(crate) fn lock() {
+    let _ = link::rpc("lock", None);
+    invalidate_cache();
+}
+
 /// Never cached: retrieves secret on demand into a `Zeroizing<String>` buffer.
 pub(crate) fn reveal(id: &str) -> Option<AxionRevealData> {
     let val = link::rpc("flux_reveal", Some(serde_json::json!({ "id": id }))).ok()?;
@@ -320,17 +354,42 @@ pub(crate) fn reveal(id: &str) -> Option<AxionRevealData> {
     })
 }
 
-pub(crate) fn upsert_login(c: &flux_vault::Credential) {
-    let _ = link::rpc(
+pub(crate) fn upsert_login(c: &flux_vault::Credential) -> Result<(), String> {
+    link::rpc(
         "flux_upsert_login",
         Some(serde_json::json!({ "credential": c })),
-    );
+    )?;
     invalidate_cache();
+    Ok(())
 }
 
-pub(crate) fn remove_login(id: &str) {
-    let _ = link::rpc("flux_remove_login", Some(serde_json::json!({ "id": id })));
+pub(crate) fn remove_login(id: &str) -> Result<(), String> {
+    link::rpc("flux_remove_login", Some(serde_json::json!({ "id": id })))?;
     invalidate_cache();
+    Ok(())
+}
+
+/// Mirror `vault::save_kind` against Axion's remote logins when Flux has no local vault.
+pub(crate) fn save_kind(
+    host: &str,
+    port: Option<u16>,
+    username: &str,
+    password: &str,
+) -> Option<(bool, bool)> {
+    let matches = match_host(host, port)?;
+    let (mut exact_same, mut exact_other, mut related_same) = (false, false, false);
+    for m in matches.into_iter().filter(|m| m.username == username) {
+        let Some(rev) = reveal(&m.id) else { continue };
+        let same_pw = rev.password.as_str() == password;
+        match (m.exact == Some(true), same_pw) {
+            (true, true) => exact_same = true,
+            (true, false) => exact_other = true,
+            (false, true) => related_same = true,
+            (false, false) => {}
+        }
+    }
+    let already = exact_same || (!exact_other && related_same);
+    Some((already, exact_other))
 }
 
 pub(crate) fn sync_merge_with_axion(

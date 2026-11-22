@@ -241,6 +241,13 @@ impl VaultState {
         if *self.protection.read() == Protection::Password || self.open.read().is_some() {
             return;
         }
+        // Thin-client zero-local-storage mode: when no local vault.bin exists and Axion
+        // is running, never mint a local Keychain entry or key.bin — serve from Axion.
+        if !self.path.is_file() && crate::axion::is_active() {
+            *self.source.write() = "axion";
+            self.touch();
+            return;
+        }
         let (open, source) = match obtain_key(&self.dir, keychain_key()) {
             (Some(dk), src) => {
                 let vault_res = match std::fs::read(&self.path) {
@@ -606,19 +613,32 @@ async fn off_main<R: Send + 'static>(
 
 #[tauri::command]
 pub fn vault_status(state: State<'_, VaultState>) -> VaultStatus {
-    let protection = if *state.protection.read() == Protection::Password {
-        "password"
-    } else {
-        "keychain"
-    };
-    let guard = state.open.read();
-    VaultStatus {
-        available: guard.is_some() || protection == "password",
-        locked: guard.is_none(),
-        protection,
-        source: *state.source.read(),
-        count: guard.as_ref().map(|u| u.vault.entries.len()).unwrap_or(0),
-        autolock_minutes: state.autolock_min.load(Ordering::Relaxed),
+    {
+        let guard = state.open.read();
+        if guard.is_none() && !state.path.is_file() && crate::axion::is_active() {
+            let ax = crate::axion::query_status();
+            return VaultStatus {
+                available: true,
+                locked: ax.locked,
+                protection: "axion",
+                source: "axion",
+                count: ax.login_count as usize,
+                autolock_minutes: 0,
+            };
+        }
+        let protection = if *state.protection.read() == Protection::Password {
+            "password"
+        } else {
+            "keychain"
+        };
+        VaultStatus {
+            available: guard.is_some() || protection == "password",
+            locked: guard.is_none(),
+            protection,
+            source: *state.source.read(),
+            count: guard.as_ref().map(|u| u.vault.entries.len()).unwrap_or(0),
+            autolock_minutes: state.autolock_min.load(Ordering::Relaxed),
+        }
     }
 }
 
@@ -633,6 +653,9 @@ pub async fn vault_unlock(app: AppHandle, password: String) -> Result<(), String
 fn unlock(state: &VaultState, password: String) -> Result<(), String> {
     if state.open.read().is_some() {
         return Ok(());
+    }
+    if !state.dir.join("keywrap.json").is_file() && !state.path.is_file() && crate::axion::is_active() {
+        return crate::axion::unlock(&password);
     }
     let wrap = read_keywrap(&state.dir)?;
     let dk = flux_vault::unwrap_key(&password, &wrap)
@@ -658,7 +681,11 @@ fn unlock(state: &VaultState, password: String) -> Result<(), String> {
 /// Lock the vault now (clears the decrypted copy + key from memory).
 #[tauri::command]
 pub fn vault_lock(state: State<'_, VaultState>) {
+    let no_local = state.open.read().is_none() && !state.path.is_file();
     *state.open.write() = None;
+    if no_local && crate::axion::is_active() {
+        crate::axion::lock();
+    }
 }
 
 /// Set (or change) the master password — switches to password protection and
@@ -766,10 +793,29 @@ pub fn vault_set_autolock(state: State<'_, VaultState>, minutes: u64) -> Result<
     )
 }
 
+fn axion_only(state: &VaultState) -> bool {
+    state.open.read().is_none() && !state.path.is_file() && crate::axion::is_active()
+}
+
+fn require_axion_unlocked() -> Result<(), String> {
+    let ax = crate::axion::query_status();
+    if !ax.running {
+        return Err("Axion vault daemon is not running".into());
+    }
+    if ax.locked {
+        return Err("vault is locked".into());
+    }
+    Ok(())
+}
+
 /// Not activity: the Passwords page polls this every few seconds, and the
 /// sentinel reads it on every navigation.
 #[tauri::command]
 pub fn vault_list(state: State<'_, VaultState>) -> Result<Vec<CredentialMeta>, String> {
+    if axion_only(&state) {
+        require_axion_unlocked()?;
+        return Ok(crate::axion::list_logins().unwrap_or_default());
+    }
     let mut list = state.probe_open(|v| v.entries.iter().map(CredentialMeta::from).collect::<Vec<_>>())?;
     if let Some(axion_list) = crate::axion::list_logins() {
         let mut seen: HashSet<String> = list.iter().map(|c| c.id.clone()).collect();
@@ -796,6 +842,12 @@ pub fn vault_for_host(
         .and_then(|id| app.get_webview(&format!("tab-{id}")))
         .and_then(|wv| crate::committed::url_of(&wv).ok())
         .and_then(|url| url.port_or_known_default());
+    if axion_only(&state) {
+        require_axion_unlocked()?;
+        let mut found = crate::axion::match_host(&host, port).unwrap_or_default();
+        found.sort_by_key(|m| m.exact != Some(true));
+        return Ok(found);
+    }
     let mut found = state.probe_open(|v| {
         v.entries
             .iter()
@@ -823,6 +875,10 @@ pub fn vault_for_host(
 
 #[tauri::command]
 pub fn vault_reveal(state: State<'_, VaultState>, id: String) -> Result<Option<String>, String> {
+    if axion_only(&state) {
+        require_axion_unlocked()?;
+        return Ok(crate::axion::reveal(&id).map(|r| r.password.to_string()));
+    }
     let local = state.read_open(|v| {
         v.entries
             .iter()
@@ -857,16 +913,24 @@ pub fn vault_add(
         notes: String::new(),
         created_ms: 0,
     };
+    if axion_only(&state) {
+        require_axion_unlocked()?;
+        return crate::axion::upsert_login(&cred);
+    }
     let for_axion = cred.clone();
     state.write_open(|v| v.upsert(cred))?;
-    crate::axion::upsert_login(&for_axion);
+    let _ = crate::axion::upsert_login(&for_axion);
     Ok(())
 }
 
 #[tauri::command]
 pub fn vault_remove(state: State<'_, VaultState>, id: String) -> Result<(), String> {
+    if axion_only(&state) {
+        require_axion_unlocked()?;
+        return crate::axion::remove_login(&id);
+    }
     state.write_open(|v| v.remove(&id))?;
-    crate::axion::remove_login(&id);
+    let _ = crate::axion::remove_login(&id);
     Ok(())
 }
 
@@ -1106,12 +1170,17 @@ pub fn vault_fill(
     }
 
     let port = current_url.port_or_known_default();
-    let local_found = state.read_open(|v| {
-        v.entries.iter().find(|c| c.id == id).and_then(|c| {
-            let (kind, saved) = c.match_for(&host, port)?;
-            Some((kind, saved, c.username.clone(), c.password.clone()))
-        })
-    })?;
+    let local_found = if axion_only(&state) {
+        require_axion_unlocked()?;
+        None
+    } else {
+        state.read_open(|v| {
+            v.entries.iter().find(|c| c.id == id).and_then(|c| {
+                let (kind, saved) = c.match_for(&host, port)?;
+                Some((kind, saved, c.username.clone(), c.password.clone()))
+            })
+        })?
+    };
     let found = match local_found {
         Some(hit) => Some(hit),
         None => crate::axion::match_host(&host, port).and_then(|matches| {
@@ -1284,7 +1353,24 @@ If that's wrong, this is a false positive worth reporting.",
         );
         return diag;
     }
-    match state.read_open(|v| v.matches(&host).len() as u32) {
+    let match_res = if axion_only(&state) {
+        require_axion_unlocked().map(|()| {
+            crate::axion::match_host(&host, None)
+                .map(|m| m.len() as u32)
+                .unwrap_or(0)
+        })
+    } else {
+        state.read_open(|v| {
+            let mut n = v.matches(&host).len() as u32;
+            if n == 0 {
+                if let Some(m) = crate::axion::match_host(&host, None) {
+                    n = m.len() as u32;
+                }
+            }
+            n
+        })
+    };
+    match match_res {
         Err(_) => {
             diag.stage = "locked".into();
             diag.detail = "The vault is locked — unlock it and reload the page.".into();
@@ -1491,6 +1577,18 @@ pub fn vault_page_info(
     if crate::sentinel::credential_origin_risk(&app, &host).is_some() {
         return locked_out;
     }
+    if axion_only(&state) {
+        if require_axion_unlocked().is_err() {
+            return locked_out;
+        }
+        let count = crate::axion::match_host(&host, None)
+            .map(|hits| hits.len() as u32)
+            .unwrap_or(0);
+        return PageVaultInfo {
+            unlocked: true,
+            count,
+        };
+    }
     state
         .probe_open(|v| {
             let mut ids: HashSet<String> = v.matches(&host).into_iter().map(|c| c.id.clone()).collect();
@@ -1531,23 +1629,28 @@ pub fn vault_fill_page(
     if crate::sentinel::credential_origin_risk(&app, &page.host).is_some() {
         return Err(refused());
     }
-    let mut choices: Vec<FillChoice> = state
-        .probe_open(|v| {
-            v.entries
-                .iter()
-                .filter_map(|c| {
-                    let (kind, saved_host) = c.match_for(&page.host, page.port)?;
-                    Some(FillChoice {
-                        id: c.id.clone(),
-                        username: c.username.clone(),
-                        name: c.name.clone(),
-                        saved_host,
-                        exact: kind == HostMatch::Exact,
+    let mut choices: Vec<FillChoice> = if axion_only(&state) {
+        require_axion_unlocked().map_err(|_| refused())?;
+        Vec::new()
+    } else {
+        state
+            .probe_open(|v| {
+                v.entries
+                    .iter()
+                    .filter_map(|c| {
+                        let (kind, saved_host) = c.match_for(&page.host, page.port)?;
+                        Some(FillChoice {
+                            id: c.id.clone(),
+                            username: c.username.clone(),
+                            name: c.name.clone(),
+                            saved_host,
+                            exact: kind == HostMatch::Exact,
+                        })
                     })
-                })
-                .collect()
-        })
-        .map_err(|_| refused())?;
+                    .collect()
+            })
+            .map_err(|_| refused())?
+    };
     if let Some(axion_hits) = crate::axion::match_host(&page.host, page.port) {
         let mut seen: HashSet<String> = choices.iter().map(|c| c.id.clone()).collect();
         for m in axion_hits {
@@ -1583,7 +1686,11 @@ pub fn vault_fill_page(
 /// actually keep the promise of remembering it.
 #[tauri::command]
 pub fn vault_suggest_password(state: State<'_, VaultState>) -> Result<String, String> {
-    state.probe_open(|_| ())?; // unlocked check only: a page call isn't activity
+    if axion_only(&state) {
+        require_axion_unlocked()?;
+    } else {
+        state.probe_open(|_| ())?; // unlocked check only: a page call isn't activity
+    }
     Ok(flux_vault::generate_password(20))
 }
 
@@ -1622,8 +1729,12 @@ pub fn vault_save_from_page(
     }
     // No never-save skip here: the user just accepted a generated password, and
     // dropping it silently would lock them out of the new account.
-    let (already, update) =
-        state.probe_open(|v| save_kind(v, &host, page.port, &username, &password))?;
+    let (already, update) = if axion_only(&state) {
+        require_axion_unlocked()?;
+        crate::axion::save_kind(&host, page.port, &username, &password).unwrap_or((false, false))
+    } else {
+        state.probe_open(|v| save_kind(v, &host, page.port, &username, &password))?
+    };
     if already {
         // Identical credential already stored. An earlier capture from this tab
         // (a mistyped password, say) is now wrong: take it back.
@@ -1736,9 +1847,14 @@ pub fn vault_offer_save(
     }
     // Decide save vs update vs skip against the (unlocked) vault. Locked →
     // silently do nothing; we can't dedupe and the save would fail anyway.
-    let Ok((already, update)) =
+    let Ok((already, update)) = (if axion_only(&state) {
+        if require_axion_unlocked().is_err() {
+            return Ok(());
+        }
+        Ok(crate::axion::save_kind(&host, page.port, &username, &password).unwrap_or((false, false)))
+    } else {
         state.probe_open(|v| save_kind(v, &host, page.port, &username, &password))
-    else {
+    }) else {
         return Ok(());
     };
     if already {
@@ -1794,17 +1910,37 @@ pub fn vault_save_confirm(
         }
         all.remove(&tab).ok_or(SAVE_GONE)?
     };
-    let saved_cred = state.write_open(|v| apply_save(v, &pending));
-    match saved_cred {
-        Err(e) => {
-            // Locked (auto-lock fired while the bar was up) or the write failed: put
-            // the capture back, unless a newer one replaced it, so the bar's Save can
-            // be retried after unlocking instead of the password being dropped.
+    if axion_only(&state) {
+        let res = require_axion_unlocked().and_then(|()| {
+            let cred = Credential {
+                id: Credential::stable_id(&pending.host, &pending.username, &pending.origin),
+                name: pending.host.clone(),
+                urls: vec![pending.origin.clone()],
+                username: pending.username.clone(),
+                password: pending.password.to_string(),
+                totp: String::new(),
+                notes: String::new(),
+                created_ms: 0,
+            };
+            crate::axion::upsert_login(&cred)
+        });
+        if let Err(e) = res {
             state.pending_save.write().entry(tab).or_insert(pending);
             return Err(e);
         }
-        Ok(cred) => {
-            crate::axion::upsert_login(&cred);
+    } else {
+        let saved_cred = state.write_open(|v| apply_save(v, &pending));
+        match saved_cred {
+            Err(e) => {
+                // Locked (auto-lock fired while the bar was up) or the write failed: put
+                // the capture back, unless a newer one replaced it, so the bar's Save can
+                // be retried after unlocking instead of the password being dropped.
+                state.pending_save.write().entry(tab).or_insert(pending);
+                return Err(e);
+            }
+            Ok(cred) => {
+                let _ = crate::axion::upsert_login(&cred);
+            }
         }
     }
     let _ = app.emit("flux://vault-saved", pending.host);
