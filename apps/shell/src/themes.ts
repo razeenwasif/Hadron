@@ -16,9 +16,17 @@
  */
 import { createSignal } from "solid-js";
 
-export type ThemeId = "velvet" | "velvet-paper" | "gruvbox" | "ember";
+export type ThemeId = "velvet" | "velvet-paper" | "gruvbox" | "ember" | "graphite";
 
-export const THEMES: { id: ThemeId; name: string; blurb: string; swatch: string[] }[] = [
+export const THEMES: {
+  id: ThemeId;
+  name: string;
+  blurb: string;
+  swatch: string[];
+  /** Picking it from a card design (Velvet Paper, Liquid Silk) switches to
+   *  Classic as well, since themes only colour Classic. */
+  switchesToClassic?: boolean;
+}[] = [
   {
     id: "velvet",
     name: "Default (Neutral Dark)",
@@ -42,6 +50,13 @@ export const THEMES: { id: ThemeId; name: string; blurb: string; swatch: string[
     name: "Ember",
     blurb: "Oxblood, rose and ember orange",
     swatch: ["#16070f", "#ff5a7a", "#d6336c", "#ff8a4c"],
+  },
+  {
+    id: "graphite",
+    name: "Graphite",
+    blurb: "Grey sidebar, black page, warm sunset accents; fully opaque",
+    swatch: ["#181818", "#000000", "#ff9948", "#ff4f79"],
+    switchesToClassic: true,
   },
 ];
 

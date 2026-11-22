@@ -217,6 +217,57 @@
   border-color: rgba(235, 219, 178, 0.1) !important;
 }
 
+/* ── Graphite — flat and opaque, after Antigravity's dark theme ──────────────
+   Dark grey chrome (titlebar, sidebar, the frame round the page) around a black
+   page, with nothing see-through anywhere: every glass token is a solid colour,
+   the blur is off, and the material rules at the end of this file flatten the
+   sheens and switch off the window's acrylic. The accents are a warm sunset
+   (amber → orange → coral → rose), used as gradients where Flux draws one.
+   `--velvet-700` is the page card, so it is black; `--velvet-800` is the chrome. */
+:root[data-theme="graphite"] {
+  --velvet-900: #000000; /* deepest */
+  --velvet-800: #181818; /* chrome: titlebar, sidebar, frame */
+  --velvet-700: #000000; /* the page — black */
+  --velvet-600: #212121; /* raised controls */
+  --velvet-500: #2b2b2b; /* hover */
+
+  --accent-rgb: 255, 153, 72; /* primary interactive — orange #ff9948 */
+  --accent-ai-rgb: 255, 107, 87; /* the agent — coral #ff6b57 */
+  --accent-ai2-rgb: 255, 190, 110; /* its softer companion — amber #ffbe6e */
+  --accent-hot-rgb: 255, 79, 121; /* attention — rose #ff4f79 */
+  --neutral-rgb: 168, 168, 168; /* borders and thumbs — true grey, no tint */
+  --rim-rgb: 255, 255, 255;
+
+  --flux-ok: #7ee2a8;
+  --flux-warn: #ffffff;
+
+  --flux-text: #ececec;
+  --flux-text-dim: #a6a6a6;
+  --flux-text-mute: #6e6e6e;
+
+  /* Solid surfaces in place of the tinted overlays. */
+  --flux-surface: #242424;
+  --flux-surface-2: #2c2c2c;
+  --flux-border: #2a2a2a;
+  --flux-teal-dim: #3a2616; /* orange at 14%, flattened over black */
+  --flux-popover-fill: #1e1e1e;
+
+  --flux-ai-gradient: linear-gradient(115deg, #ffc46b 0%, #ff9948 34%, #ff6b57 68%, #ff4f79 100%);
+  --graphite-warm: linear-gradient(115deg, #ffb35c, #ff7a50 55%, #ff4f79);
+
+  --glass-fill: #1b1b1b;
+  --glass-fill-soft: #181818;
+  --glass-blur: none;
+  --glass-rim: #2e2e2e;
+  --glass-rim-soft: #242424;
+  --glass-shadow: 0 0 0 0 transparent;
+  --glass-inset: inset 0 0 0 0 transparent;
+
+  --flux-scroll-thumb: #333333;
+  --flux-scroll-thumb-hover: #474747;
+  --flux-scroll-thumb-active: #ff9948;
+}
+
 /* ── Velvet Paper — the velvet's plum dark, cut from thick paper ─────────────
    Picked from the design explorations. The base tones go back to the velvet's
    plum; the accents are a pearlescent set (rose, lilac, pearl, aqua) rather than
@@ -10521,4 +10572,128 @@ html[data-density="comfortable"] .new-tab-options {
 .start .start-hint,
 .start .start-empty {
   color: var(--flux-text-dim);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   Graphite material (theme tokens near the top of this file)
+   ════════════════════════════════════════════════════════════════════════
+   The tokens make the glass solid; these rules catch what doesn't go through a
+   token: blur set with a literal, the white sheens layered over the glass, the
+   home page's glow and liquid, and the acrylic window. Last in the file so they
+   also beat the acrylic rules' `!important`s on order. */
+:root[data-theme="graphite"] *,
+:root[data-theme="graphite"] *::before,
+:root[data-theme="graphite"] *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* The window is opaque whatever the Acrylic setting says. */
+:root[data-theme="graphite"],
+:root[data-theme="graphite"] body,
+:root[data-theme="graphite"] #root,
+:root[data-theme="graphite"] .shell,
+:root[data-theme="graphite"] .shell.window-acrylic {
+  background-color: var(--velvet-800) !important;
+  background-image: none !important;
+}
+:root[data-theme="graphite"] .titlebar,
+:root[data-theme="graphite"] .shell.window-acrylic .titlebar {
+  background: var(--velvet-800) !important;
+  border-bottom-color: transparent !important;
+}
+:root[data-theme="graphite"] .sidebar,
+:root[data-theme="graphite"] .shell.window-acrylic .sidebar {
+  background: var(--velvet-800) !important;
+  border-right-color: transparent !important;
+  box-shadow: none !important;
+}
+:root[data-theme="graphite"] .shell.window-acrylic .pages-bar,
+:root[data-theme="graphite"] .shell.window-acrylic .tui-bar,
+:root[data-theme="graphite"] .shell.window-acrylic .agent-inner,
+:root[data-theme="graphite"] .shell.window-acrylic .terminal-surface,
+:root[data-theme="graphite"] .shell.window-acrylic .editor-col-surface,
+:root[data-theme="graphite"] .shell.window-acrylic .editor-col-dead,
+:root[data-theme="graphite"] .shell.window-acrylic .term-col-bar,
+:root[data-theme="graphite"] .shell.window-acrylic .dock-card {
+  background: var(--glass-fill) !important;
+  border-color: var(--glass-rim-soft) !important;
+  box-shadow: none !important;
+}
+
+/* The page: black, flat, a hairline edge instead of a lift. */
+:root[data-theme="graphite"] .card,
+:root[data-theme="graphite"] .shell.window-acrylic .card {
+  background: #000 !important;
+  border: 1px solid #222 !important;
+  box-shadow: none !important;
+}
+
+/* Glass's specular rim, and the white sheens over the glass, go. */
+:root[data-theme="graphite"] .glass::before,
+:root[data-theme="graphite"] .start-card::after,
+:root[data-theme="graphite"] .start-search::after {
+  display: none;
+}
+
+/* Fields: solid, so nothing shows through them. `:where` keeps this at the
+   base rule's weight, so fields that sit inside a pill (home search, find)
+   stay transparent to the pill as they are in every theme. */
+:where(:root[data-theme="graphite"]) input {
+  background: #1e1e1e;
+  border-color: #2c2c2c;
+}
+:where(:root[data-theme="graphite"]) input:focus {
+  background: #222;
+  border-color: #ff9948;
+  box-shadow: 0 0 0 3px #3a2616;
+}
+:root[data-theme="graphite"] .address {
+  background: #222;
+}
+
+/* The tab rail: the selected tab is a lighter grey with a warm edge. */
+:root[data-theme="graphite"] .tab-row.active {
+  background: #2a2a2a;
+  box-shadow: inset 2px 0 0 0 #ff9948;
+}
+
+/* Home: black, no glow, no liquid; the hero and cards are flat grey. */
+:root[data-theme="graphite"] .start {
+  background: #000;
+}
+:root[data-theme="graphite"] .start-liquid,
+:root[data-theme="graphite"] .start-wave {
+  display: none;
+}
+:root[data-theme="graphite"] .start-search {
+  background: #161616;
+  border: 1px solid #2a2a2a;
+  box-shadow: none;
+}
+:root[data-theme="graphite"] .start-search:focus-within {
+  border-color: #ff9948;
+  box-shadow: 0 0 0 3px #3a2616;
+}
+:root[data-theme="graphite"] .start-card,
+:root[data-theme="graphite"] .start-card:hover,
+:root[data-theme="graphite"] .cal-modal {
+  background: #121212;
+  border: 1px solid #242424;
+  box-shadow: none;
+}
+:root[data-theme="graphite"] .start-card:hover {
+  border-color: #333;
+}
+:root[data-theme="graphite"] .start-engine {
+  color: #1a1008;
+  background: var(--graphite-warm);
+}
+:root[data-theme="graphite"] .shields-toggle.on {
+  color: #1a1008;
+  background: var(--graphite-warm);
+}
+/* Flux's own pages sit on the black page too, not on the chrome's grey. */
+:root[data-theme="graphite"] .set-page {
+  background: #000;
 }
