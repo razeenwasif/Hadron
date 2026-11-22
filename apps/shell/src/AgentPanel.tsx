@@ -107,6 +107,7 @@ import {
 } from "./ipc";
 import { agentPageAnswer, boostDraft } from "./citeIpc";
 import type { Cited } from "./CitedAnswer";
+import type { FeedCalloutGroup, FeedOpenedTab } from "./RestyleCard";
 import type { Blocker, HandoffChoice } from "./taskLoop";
 const TaskBar = lazy(() => import("./TaskBar"));
 const CitedAnswer = lazy(() => import("./CitedAnswer"));
@@ -186,6 +187,9 @@ type FeedItem = {
   cited?: Cited;
   /** A restyle draft previewing on the page (RestyleCard.tsx). Live only. */
   restyle?: BoostDraft;
+  restyleSummary?: string;
+  callouts?: FeedCalloutGroup;
+  openedTabs?: FeedOpenedTab[];
   voice?: string;
   /** Who answered, when it wasn't Flux's own agent (Fairy). */
   from?: string;
@@ -235,6 +239,9 @@ const AgentPanel: Component = () => {
     editNew: undefined,
     editBase: undefined,
     restyle: undefined,
+    restyleSummary: undefined,
+    callouts: undefined,
+    openedTabs: undefined,
   });
   const persistChats = (next: ChatSession[]) => {
     setChats(next);
@@ -2189,20 +2196,20 @@ const AgentPanel: Component = () => {
     setTaskStopped(false);
     fairyAsking = true;
     try {
+      const askAt = (f: FeedItem[]) => {
+        for (let i = f.length - 1; i >= 0; i--) if (f[i]!.asking) return i;
+        return f.length;
+      };
+      const pushBeforeAsk = (item: FeedItem) =>
+        setFeed((f) => {
+          const at = askAt(f);
+          return [...f.slice(0, at), item, ...f.slice(at)];
+        });
       // Her browser tools (fairyTools.ts), through the same checks and cards as /task.
       fairyTools ??= import("./fairyTools").then((m) =>
         m.serveFairyTools({
           // Above the answer she's still writing, so the feed reads in order.
-          say: (role, text) =>
-            setFeed((f) => {
-              let at = f.length;
-              for (let i = f.length - 1; i >= 0; i--)
-                if (f[i]!.asking) {
-                  at = i;
-                  break;
-                }
-              return [...f.slice(0, at), { role, text }, ...f.slice(at)];
-            }),
+          say: (role, text) => pushBeforeAsk({ role, text }),
           tabs: () => tabs().filter((t) => t.kind === "browser" && t.workspace === activeWorkspace()),
           activeTab: () => activeId() ?? undefined,
           open: async (url) => (await openTab("browser", url)).id,
@@ -2215,6 +2222,26 @@ const AgentPanel: Component = () => {
           wait: (ms) => new Promise((r) => setTimeout(r, ms)),
           stopped: taskStopped,
           working: () => setFairyWorking(true),
+          showCallouts: (tab, url, items) => pushBeforeAsk({ role: "action", text: "", callouts: { tab, url, items } }),
+          showOpenedTab: (tab, url) => {
+            let host = url;
+            try {
+              host = new URL(url).hostname.replace(/^www\./, "") || url;
+            } catch {
+              /* keep url */
+            }
+            setFeed((f) => {
+              const at = askAt(f);
+              const prev = at > 0 ? f[at - 1] : undefined;
+              if (prev?.openedTabs) {
+                const next = { ...prev, openedTabs: [...prev.openedTabs, { tab, url, host }] };
+                return [...f.slice(0, at - 1), next, ...f.slice(at)];
+              }
+              return [...f.slice(0, at), { role: "action", text: "", openedTabs: [{ tab, url, host }] }, ...f.slice(at)];
+            });
+          },
+          showRestyle: (draft, summary) =>
+            pushBeforeAsk({ role: "assistant", text: "", restyle: draft, restyleSummary: summary }),
         }),
       );
       await fairyTools;
@@ -3310,11 +3337,18 @@ const AgentPanel: Component = () => {
                       </Show>
                       <Show
                         when={item().cited || (item().role === "assistant" && /\[P\d/i.test(item().text))}
-                        fallback={<div>{item().text}</div>}
+                        fallback={<Show when={item().text}><div>{item().text}</div></Show>}
                       >
                         <CitedAnswer text={item().text} cited={item().cited} />
                       </Show>
-                      <Show when={item().restyle}>{(d) => <RestyleCard draft={d()} />}</Show>
+                      <Show when={item().restyle || item().callouts || item().openedTabs}>
+                        <RestyleCard
+                          draft={item().restyle}
+                          summary={item().restyleSummary}
+                          callouts={item().callouts}
+                          openedTabs={item().openedTabs}
+                        />
+                      </Show>
                       <Show when={item().citations?.length}>
                         <div class="agent-cites">
                           <For each={item().citations}>

@@ -8,7 +8,7 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use flux_agent::cited::{self, CitedAnswer};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use tauri::ipc::Channel;
 use tauri::{AppHandle, Manager, State};
 
@@ -114,6 +114,56 @@ pub async fn agent_cite_show(
     )
 }
 
+/// One numbered callout to outline and badge on a page (`agent_cite_show_many`).
+#[derive(Deserialize, Serialize, Clone, specta::Type)]
+pub struct CiteCallout {
+    pub n: u32,
+    pub text: String,
+    #[serde(default)]
+    pub selector: Option<String>,
+}
+
+/// Draw numbered callout boxes for multiple passages/items on `tab`.
+#[tauri::command]
+pub async fn agent_cite_show_many(
+    app: AppHandle,
+    tab: TabId,
+    url: Option<String>,
+    items: Vec<CiteCallout>,
+    scroll: Option<bool>,
+) -> Result<Vec<u32>, String> {
+    let current = app
+        .get_webview(&format!("tab-{tab}"))
+        .and_then(|w| w.url().ok())
+        .ok_or("that tab is closed")?;
+    if let Some(u) = url.as_deref().filter(|s| !s.is_empty()) {
+        if !same_page(current.as_str(), u) {
+            return Ok(Vec::new());
+        }
+    }
+    let capped: Vec<CiteCallout> = items.into_iter().take(12).collect();
+    if capped.is_empty() {
+        return Ok(Vec::new());
+    }
+    let args = serde_json::json!({
+        "items": capped,
+        "scroll": scroll.unwrap_or(true),
+    })
+    .to_string();
+    let body = crate::pagejs::fill(CITE_JS, "__ARGS__", &args);
+    let raw = crate::pagejs::run_isolated(&app, tab, "flux-cite", body, Duration::from_secs(3))
+        .await
+        .unwrap_or_default();
+    #[derive(Deserialize)]
+    struct ManyOut {
+        #[serde(default)]
+        shown: Vec<u32>,
+    }
+    Ok(serde_json::from_str::<ManyOut>(&raw)
+        .map(|o| o.shown)
+        .unwrap_or_default())
+}
+
 /// Take a shown citation's highlight off `tab`.
 #[tauri::command]
 pub async fn agent_cite_clear(app: AppHandle, tab: TabId) {
@@ -154,5 +204,18 @@ mod tests {
             "{}",
             &body[..400]
         );
+    }
+
+    #[test]
+    fn the_cite_script_supports_multi_callout_items() {
+        assert_eq!(CITE_JS.matches("__ARGS__").count(), 1);
+        assert!(CITE_JS.contains("Array.isArray(ARGS.items)"));
+        let args = serde_json::json!({
+            "items": [{"n": 1, "text": "Story A", "selector": "tr.athing"}],
+            "scroll": true
+        })
+        .to_string();
+        let body = crate::pagejs::fill(CITE_JS, "__ARGS__", &args);
+        assert!(body.contains(r#""selector":"tr.athing""#));
     }
 }

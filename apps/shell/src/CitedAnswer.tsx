@@ -6,10 +6,10 @@
  * sort and Copy CSV. Under it: Make tasks and Save as note.
  * Its own chunk, loaded with the first cited answer.
  */
-import { For, Show, createMemo, createSignal, type Component, type JSX } from "solid-js";
+import { For, Show, createEffect, createMemo, createSignal, type Component, type JSX } from "solid-js";
 import "./CitedAnswer.css";
 import { onyxNewNote, todoAdd, type CitedAnswer as Answer, type Claim } from "./ipc";
-import { agentCiteShow, agentTasksFrom } from "./citeCardIpc";
+import { agentCiteClear, agentCiteShow, agentCiteShowMany, agentTasksFrom } from "./citeCardIpc";
 import { activeId, focusTab } from "./store";
 
 export interface Cited {
@@ -45,6 +45,20 @@ const CitedAnswer: Component<{ text: string; cited?: Cited }> = (props) => {
   });
   const passage = (p: number) => props.cited?.answer.cites.find((x) => x.p === p);
   const [note, setNote] = createSignal("");
+
+  let autoMarked = "";
+  createEffect(() => {
+    const c = props.cited;
+    if (!c || !c.answer.cites.length || activeId() !== c.tab) return;
+    const key = `${c.tab}:${c.url}:${c.answer.cites.map((x) => x.p).join(",")}`;
+    if (key === autoMarked) return;
+    autoMarked = key;
+    const items = c.answer.cites.slice(0, 6).map((p, i) => ({
+      n: numbers().get(p.p) ?? i + 1,
+      text: p.text,
+    }));
+    void agentCiteShowMany(c.tab, items, c.url, false).catch(() => {});
+  });
 
   const show = async (p: number) => {
     const c = props.cited;
@@ -279,6 +293,11 @@ const CitedAnswer: Component<{ text: string; cited?: Cited }> = (props) => {
             <button class="ca-btn" onClick={() => void saveNote()}>
               Save as note
             </button>
+            <Show when={c().answer.cites.length > 0}>
+              <button class="ca-btn" onClick={() => void agentCiteClear(c().tab).catch(() => {})}>
+                Clear marks
+              </button>
+            </Show>
             <span class="ca-count">
               {c().answer.cites.length
                 ? `${c().answer.cites.length} source${c().answer.cites.length === 1 ? "" : "s"} on this page`

@@ -189,10 +189,14 @@
       "updated": "2026-11-22T22:38:14Z"
     },
     "agent-annotate": {
-      "status": "todo"
+      "status": "done",
+      "note": "Extended cite.js (closed shadow-DOM outline boxes + circular numbered badges + CSS Custom Highlights) and added CiteCallout / agent_cite_show_many in cite.rs, CalloutCards & OpenedTabsCard in RestyleCard.tsx/CitedAnswer.css, auto-highlight + Clear marks in CitedAnswer.tsx, annotate & batch open card wiring in fairyTools.ts/AgentPanel.tsx, and flux_annotate in Lyra worktree flux-tools.mjs. Verified cargo test (cite 5/5), vitest (52 files, 366 tests), perf budgets green, Lyra tests (10/10), and WKWebView Graphite + Liquid Silk.",
+      "updated": "2026-11-22T23:18:40Z"
     },
     "agent-restyle": {
-      "status": "todo"
+      "status": "done",
+      "note": "Added boost_preview_css (shared check_and_preview inert-CSS validator) in boosts.rs, boostPreviewCss in citeCardIpc.ts, flux_restyle in Lyra flux-tools.mjs + flux-agent.mjs instructions, and RestyleCard Keep on this site / Undo / collapsed View CSS controls saving to BoostStore across visits. Verified cargo test (boosts 6/6, bindings 1/1), cargo check --workspace, vitest (52/52), perf budgets green, and WKWebView Graphite + Liquid Silk.",
+      "updated": "2026-11-22T23:18:40Z"
     },
     "shields-minimal": {
       "status": "todo"

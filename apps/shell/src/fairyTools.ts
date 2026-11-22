@@ -10,6 +10,9 @@
  */
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
+import type { BoostDraft } from "./bindings.gen";
+import { agentCiteClear, agentCiteShowMany, boostPreviewClear, boostPreviewCss } from "./citeCardIpc";
+import type { FeedCallout } from "./RestyleCard";
 
 import {
   agentRunAction,
@@ -44,6 +47,9 @@ export interface FairyToolDeps {
   stopped: () => boolean;
   /** Fairy has started acting: show the task bar. */
   working: () => void;
+  showCallouts?: (tab: number, url: string, items: FeedCallout[]) => void;
+  showOpenedTab?: (tab: number, url: string) => void;
+  showRestyle?: (draft: BoostDraft, summary?: string) => void;
 }
 
 type Call = { call: number; tool: string; args: Record<string, unknown> };
@@ -130,8 +136,58 @@ export function serveFairyTools(d: FairyToolDeps): Promise<() => void> {
         const url = str(a.url, "The address", 4000).trim();
         if (!/^https?:\/\//i.test(url)) throw new Error("Only http and https addresses open.");
         const tab = await d.open(url);
-        d.say("action", `Opened ${url}`);
+        if (d.showOpenedTab) d.showOpenedTab(tab, url);
+        else d.say("action", `Opened ${url}`);
         return { tab };
+      }
+      case "annotate": {
+        const tab = tabFor(a.tab);
+        if (a.clear === true) {
+          await agentCiteClear(tab);
+          return { tab, cleared: true };
+        }
+        if (!Array.isArray(a.items) || !a.items.length) throw new Error("items is missing.");
+        const items: FeedCallout[] = [];
+        for (const raw of a.items.slice(0, 8)) {
+          if (!raw || typeof raw !== "object") continue;
+          const r = raw as Record<string, unknown>;
+          const text = typeof r.text === "string" ? r.text.trim().slice(0, 600) : "";
+          if (!text) continue;
+          items.push({
+            n: typeof r.n === "number" && r.n > 0 ? Math.trunc(r.n) : items.length + 1,
+            text,
+            title: typeof r.title === "string" && r.title.trim() ? r.title.trim().slice(0, 140) : undefined,
+            detail: typeof r.detail === "string" && r.detail.trim() ? r.detail.trim().slice(0, 180) : undefined,
+            selector:
+              typeof r.selector === "string" && r.selector.trim() ? r.selector.trim().slice(0, 160) : undefined,
+          });
+        }
+        if (!items.length) throw new Error("items must include text for each mark.");
+        const url = d.tabs().find((t) => t.id === tab)?.url ?? "";
+        const shown = await agentCiteShowMany(
+          tab,
+          items.map((c) => ({ n: c.n, text: c.text, selector: c.selector ?? null })),
+          url || undefined,
+          true,
+        );
+        if (d.showCallouts) d.showCallouts(tab, url, items);
+        else d.say("action", `Marked ${shown.length} item${shown.length === 1 ? "" : "s"} on the page`);
+        return { tab, shown, total: items.length };
+      }
+      case "restyle": {
+        const tab = tabFor(a.tab);
+        if (a.clear === true) {
+          await boostPreviewClear(tab);
+          return { tab, cleared: true };
+        }
+        const css = str(a.css, "css", 32_000);
+        const name = typeof a.name === "string" && a.name.trim() ? a.name.trim().slice(0, 60) : "Fairy restyle";
+        const summary =
+          typeof a.summary === "string" && a.summary.trim() ? a.summary.trim().slice(0, 240) : undefined;
+        const draft = await boostPreviewCss(tab, name, css);
+        if (d.showRestyle) d.showRestyle(draft, summary);
+        else d.say("action", `Previewed restyle on ${draft.host}`);
+        return { tab, host: draft.host, name: draft.name, kept: draft.kept, dropped: draft.dropped, previewed: draft.previewed };
       }
       case "click":
         return step(

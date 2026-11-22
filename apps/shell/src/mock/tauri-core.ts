@@ -1595,6 +1595,10 @@ export function invoke<T>(cmd: string, args?: Record<string, unknown>): Promise<
     }
     case "agent_cite_show":
       return Promise.resolve("unavailable" as T);
+    case "agent_cite_show_many": {
+      const items = (args?.items as { n: number }[] | undefined) ?? [];
+      return Promise.resolve(items.map((x) => x.n) as T);
+    }
     case "agent_cite_clear":
     case "boost_preview_clear":
       return Promise.resolve(undefined as T);
@@ -1603,6 +1607,16 @@ export function invoke<T>(cmd: string, args?: Record<string, unknown>): Promise<
         "Read section 3.5 on positional encoding",
         "Compare learned and sinusoidal encodings",
       ] as T);
+    case "boost_preview_css":
+      return Promise.resolve({
+        tab: Number(args?.tab ?? 1),
+        host: "news.ycombinator.com",
+        name: String(args?.name ?? "Fairy restyle").slice(0, 60),
+        css: String(args?.css ?? ""),
+        kept: 3,
+        dropped: 0,
+        previewed: true,
+      } as T);
     case "boost_draft":
       return Promise.resolve({
         tab: 1,
@@ -1615,6 +1629,54 @@ export function invoke<T>(cmd: string, args?: Record<string, unknown>): Promise<
       } as T);
     case "fairy_status":
       return Promise.resolve({ installed: true, running: true, name: "Fairy" } as T);
+    case "fairy_tool_result":
+    case "fairy_new":
+    case "fairy_stop":
+      return Promise.resolve(undefined as T);
+    case "fairy_ask": {
+      const q = String(args?.question ?? "");
+      const emitEv = (window as unknown as { __fluxPreviewEmit?: (e: string, p: unknown) => void })
+        .__fluxPreviewEmit;
+      const tab = Number(args?.tab ?? 1);
+      if (/restyle|easier to read|cleaner/i.test(q)) {
+        emitEv?.("flux://fairy-tool", {
+          call: 1,
+          tool: "restyle",
+          args: {
+            tab,
+            name: "Story list",
+            css: "tr.athing { padding: 8px 0; }\n.subtext { font-size: 12px; opacity: 0.78; }",
+            summary: "Done. The list is set as cards, with more room and one line of details.",
+          },
+        });
+        return new Promise<T>((resolve) =>
+          setTimeout(() => resolve({ text: "Updated the page style — tap Keep on this site to save it for future visits.", with_page: true } as T), 80),
+        );
+      }
+      if (/open/i.test(q)) {
+        emitEv?.("flux://fairy-tool", { call: 2, tool: "open", args: { url: "https://emudhra.com" } });
+        emitEv?.("flux://fairy-tool", { call: 3, tool: "open", args: { url: "https://github.com/flux-browser/flux" } });
+        emitEv?.("flux://fairy-tool", { call: 4, tool: "open", args: { url: "https://pepsipu.com" } });
+        return new Promise<T>((resolve) =>
+          setTimeout(() => resolve({ text: "Opened all three tabs for you.", with_page: true } as T), 80),
+        );
+      }
+      emitEv?.("flux://fairy-tool", {
+        call: 5,
+        tool: "annotate",
+        args: {
+          tab,
+          items: [
+            { n: 1, text: "eMudhra to exit global SSL/TLS", title: "eMudhra to exit global SSL/TLS certificate business", detail: "#2 · 749 points · 541 comments" },
+            { n: 2, text: "Show HN: Run full iOS 16.5", title: "Show HN: Run full iOS 16.5 firmware on Android Devices", detail: "#4 · 191 points · 69 comments" },
+            { n: 3, text: "Jailbreaking the Switch 2", title: "Jailbreaking the Switch 2", detail: "#10 · 584 points · 209 comments" },
+          ],
+        },
+      });
+      return new Promise<T>((resolve) =>
+        setTimeout(() => resolve({ text: "Three stand out on today's front page.", with_page: true } as T), 80),
+      );
+    }
     case "agent_chat_stream":
     case "agent_chat_tabs_stream": {
       const ch = args?.onToken as Channel<string> | undefined;

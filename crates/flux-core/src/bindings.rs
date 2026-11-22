@@ -166,6 +166,7 @@ pub fn generate_ts() -> String {
         specta::ts::export::<flux_agent::cited::CitedTable>(&c),
         specta::ts::export::<flux_agent::cited::CitedAnswer>(&c),
         specta::ts::export::<crate::cite::PageAnswerEvent>(&c),
+        specta::ts::export::<crate::cite::CiteCallout>(&c),
         specta::ts::export::<crate::boosts::BoostDraft>(&c),
         specta::ts::export::<ShieldsStatus>(&c),
         specta::ts::export::<crate::formhelp::FormHelpPrefs>(&c),

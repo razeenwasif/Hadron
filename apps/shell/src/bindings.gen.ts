@@ -274,6 +274,10 @@ export type CitedAnswer = { prose: string; cites: Passage[]; table: CitedTable |
  */
 export type PageAnswerEvent = { kind: "token"; text: string } | { kind: "done"; answer: CitedAnswer; tab: number; url: string; title: string }
 /**
+ * One numbered callout to outline and badge on a page (`agent_cite_show_many`).
+ */
+export type CiteCallout = { n: number; text: string; selector?: string | null }
+/**
  * A restyle drafted from a sentence, checked against the page and previewed
  * there, not yet saved (`boost_save` saves it; `boost_preview_clear` drops it).
  */
