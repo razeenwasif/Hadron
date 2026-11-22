@@ -1913,3 +1913,28 @@
   image-rendering: pixelated;
   pointer-events: none;
 }
+
+/* No mode-switch fade/slide transitions in Graphite: panes snap immediately. */
+:root[data-design][data-silk][data-theme="graphite"] .tab-mode-panel,
+:root[data-design][data-silk][data-theme="graphite"] .tab-mode-panel.open,
+:root[data-design][data-silk][data-theme="graphite"] .tab-modes-thumb,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar > .addr-stack,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar > .page-actions,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar > .ws-chips,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar > .pin-grid,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar > .new-tab-control,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar > .tab-list-head,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar > .tab-list,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar > .folders,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar > .bookmark-bar,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar[data-mode]:not([data-mode="tabs"]) > .addr-stack,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar[data-mode]:not([data-mode="tabs"]) > .page-actions,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar[data-mode]:not([data-mode="tabs"]) > .ws-chips,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar[data-mode]:not([data-mode="tabs"]) > .pin-grid,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar[data-mode]:not([data-mode="tabs"]) > .new-tab-control,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar[data-mode]:not([data-mode="tabs"]) > .tab-list-head,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar[data-mode]:not([data-mode="tabs"]) > .tab-list,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar[data-mode]:not([data-mode="tabs"]) > .folders,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar[data-mode]:not([data-mode="tabs"]) > .bookmark-bar {
+  transition: none;
+}

@@ -1606,6 +1606,7 @@ const App: Component = () => {
       case "mode-calendar":
       case "mode-mail":
       case "mode-notes":
+      case "mode-time":
       case "mode-context":
         setSidebarOpen(true);
         setTabMode(action.slice(5) as TabMode);

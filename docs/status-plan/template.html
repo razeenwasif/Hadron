@@ -718,7 +718,7 @@
         <p>Bugs first, then the redesign, then the freezes and idle cost, then features. The first unfinished step is marked Next.</p>
       </div>
       <div class="progress" aria-live="polite">
-        <div class="label"><span id="progress-text">— of 33 done</span><span id="sync" class="sync">Loading statuses…</span></div>
+        <div class="label"><span id="progress-text">— of 43 done</span><span id="sync" class="sync">Loading statuses…</span></div>
         <div class="track"><i class="p-done" id="bar-done" style="width:0%"></i><i class="p-doing" id="bar-doing" style="width:0%"></i></div>
         <div class="sync-bar" id="sync-bar" hidden>
           <button type="button" class="sync-btn primary" id="btn-copy-json">Copy steps.json</button>
@@ -2028,7 +2028,8 @@ node scripts/perf-budget.mjs                    # size gates</pre>
     { id: "next", name: "Flux Next", sub: "The redesign and the ideas from Zephium, tab bar first", fresh: true },
     { id: "perf", name: "Remove freezes and idle cost", sub: "What the performance audit left" },
     { id: "features", name: "Daily-driver features", sub: "What makes Flux better to live in" },
-    { id: "later", name: "Later, or decide first", sub: "Bigger bets and open questions" }
+    { id: "later", name: "Later, or decide first", sub: "Bigger bets and open questions" },
+    { id: "next-wave", name: "Zoxide, Fairy & Polish", sub: "Smart jumping, Fairy routing & page editing, UI refinements, and footprint", fresh: true }
   ];
 
   var STEPS = [
@@ -2168,7 +2169,48 @@ node scripts/perf-budget.mjs                    # size gates</pre>
     { key: "decisions", phase: "later", title: "Settle the open decisions", who: "You decide", size: "S", refs: [],
       why: "Three questions are parked in the backlog.",
       covers: ["A better wake word and speech-to-text (openWakeWord)", "tmux control mode", "Move the CLI to clap"],
-      done: "each is answered and scheduled or dropped." }
+      done: "each is answered and scheduled or dropped." },
+
+    { key: "fairy-routing", phase: "next-wave", title: "Route Fairy to Hydrogen High (chat) & Neon Medium (tools)", who: "Antigravity", size: "S", refs: ["Lyra"],
+      why: "Flux's browser chat should answer quickly on Gemini 4 Hydrogen High while multi-step browser tool runs use Gemini 4 Neon Medium; verify flux_open works cleanly.",
+      covers: ["Pin Lyra's browserChat for Flux to antigravity gemini-4-hydrogen-high", "Pin fluxTask browser tool runs to antigravity gemini-4-neon-medium", "Confirm flux_open tab opening and navigation"],
+      done: "Flux chat uses Hydrogen High, tool runs use Neon Medium, and Fairy opens tabs via flux_open." },
+    { key: "zoxide-jump", phase: "next-wave", title: "Zoxide-style frecency URL jump in the omnibox", who: "Antigravity", size: "M", refs: ["jump.rs"],
+      why: "Typing short tokens like yt or ama should jump straight to your most-visited match instead of running a Google search.",
+      covers: ["Frecency + prefix/acronym/subsequence jump index (crates/flux-core/src/jump.rs)", "Inline ghost preview (→ youtube.com) in the omnibox", "Enter jumps directly; Shift+Enter forces web search and demotes wrong match"],
+      done: "typing yt or ama jumps straight to YouTube or Amazon, and Shift+Enter falls back to search." },
+    { key: "notes-todo-merge", phase: "next-wave", title: "Merge Notes & To-do into one unified scrollable view", who: "Antigravity", size: "S", refs: ["TabNotes.tsx"],
+      why: "Notes and To-do currently require switching a sub-tab; stacking them in one scroll view keeps both visible at once.",
+      covers: ["Remove the Notes | To-do tab switcher in TabNotes.tsx", "Stack To-do (quick-add, open items, collapsible Done) above Notes in one scroll container", "Crisp rendering in both static Graphite and Liquid Silk"],
+      done: "opening Notes mode shows both To-do and Notes in one scrollable pane." },
+    { key: "time-tab", phase: "next-wave", title: "Add Focus / Time tab to the tab bar", who: "Antigravity", size: "M", refs: ["TimePane.tsx"],
+      why: "Time & Focus lives only at flux://time; putting it in the tab bar gives instant access to today's web time and focus timer.",
+      covers: ["Add time mode to tabMode.ts, Sidebar.tsx, and lazy TabModePanel.tsx", "Today/This week switch, total time, bar chart, Focus countdown ring card, top sites list", "Full compatibility with static Graphite theme and startup JS budgets"],
+      done: "clicking Time in the tab bar opens the Focus/Time pane with live stats and timer controls." },
+    { key: "agent-annotate", phase: "next-wave", title: "Multi-callout page drawing and batch tab-open cards", who: "Antigravity", size: "M", refs: ["cite.js", "fairy.rs"],
+      why: "Fairy should be able to place numbered callouts (1, 2, 3) directly on referenced passages on the page and show live multi-tab opening progress.",
+      covers: ["Upgrade cite.js for simultaneous numbered outline boxes & badges", "Add flux_annotate and flux_clear_annotations across Flux & Lyra", "Bidirectional click/scroll between chat cards and page callouts + multi-tab open card"],
+      done: "agent answers draw clickable numbered callouts on the page and show multi-tab open cards." },
+    { key: "agent-restyle", phase: "next-wave", title: "Conversational site restyling that persists across visits", who: "Antigravity", size: "M", refs: ["restyle.js", "Boosts.tsx"],
+      why: "Asking Fairy to make a page nicer should preview CSS immediately and let you keep it permanently via Boosts.",
+      covers: ["Expose CSS-only flux_restyle tool validated through restyle.js", "Inline Keep on this site / Undo confirmation card in AgentPanel", "Persist kept restyles per host across visits via Boosts"],
+      done: "asking Fairy to restyle a site previews live and persists across reloads when kept." },
+    { key: "shields-minimal", phase: "next-wave", title: "Minimal modern Shields popup redesign", who: "Antigravity", size: "S", refs: ["ShieldsPop.tsx"],
+      why: "The current Shields popover is tall with oversized orange buttons and noisy unsupported platform rows.",
+      covers: ["Compact header with host + modern toggle switches", "Expandable blocked-domain count, Hide element & Clear site cookies", "Hide unsupported rows on macOS behind a More disclosure"],
+      done: "the Shields popover is roughly half as tall, cleaner, and matches the minimal spec." },
+    { key: "darkmode-refine", phase: "next-wave", title: "Refine native dark mode extension", who: "Antigravity", size: "M", refs: ["darkmode.js"],
+      why: "Blanket invert(1) flips already-dark sites to white and mangles nested media/SVGs.",
+      covers: ["Detect already-dark sites (color-scheme: dark and computed background luminance)", "Double-invert guards for nested media/SVGs/canvases and softer dark palette", "Per-site dark-mode override toggle"],
+      done: "already-dark sites stay dark and forced dark pages look clean without broken media." },
+    { key: "settings-redesign", phase: "next-wave", title: "Two-pane Settings redesign with grouped icon rail", who: "Antigravity", size: "M", refs: ["SettingsNavigator.tsx", "SettingsPage.tsx"],
+      why: "Replace the multi-column card stack with a calmer two-pane Settings layout and left navigation rail.",
+      covers: ["Left rail with Search settings and Browser / Work / App groups", "Focused single-column right pane preserving unsaved values", "Works cleanly in static Graphite (no transparency/animations) and Liquid Silk"],
+      done: "Settings opens with the grouped left rail and single-column detail view." },
+    { key: "perf-footprint", phase: "next-wave", title: "Cold-start speed, memory, battery & binary size trim", who: "Antigravity", size: "L", refs: ["perf-budget.mjs", "Cargo.toml"],
+      why: "Open near-instantly, reduce idle battery/memory drain (pairing with static Graphite), and slim the release binary.",
+      covers: ["Defer TerminalView/AgentPanel out of default boot when Liquid Silk/Graphite starts on Tabs", "Pause canvas/shader loops on blur/Graphite; replace 2s polls with events", "Audit cargo bloat / feature flags / opt-level='z' on cold crates"],
+      done: "cold start, idle wakeups/RAM, and release binary size improve with perf-budget passing." }
   ];
 
   var LABEL = { todo: "Not started", doing: "In progress", done: "Done", skipped: "Skipped" };
@@ -2239,7 +2281,7 @@ node scripts/perf-budget.mjs                    # size gates</pre>
     body.appendChild(dw);
     var meta = el("div", "meta");
     meta.appendChild(el("span", "tag", s.size));
-    meta.appendChild(el("span", "tag who" + (s.who === "Claude" ? "" : " you"), s.who));
+    meta.appendChild(el("span", "tag who" + (s.who === "Claude" || s.who === "Antigravity" ? "" : " you"), s.who));
     s.refs.forEach(function (r) { meta.appendChild(el("span", "tag", r)); });
     (s.boards || []).forEach(function (id) {
       if (!boardById[id]) return;

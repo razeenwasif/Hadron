@@ -47,6 +47,7 @@ pub mod history;
 pub mod import;
 pub mod https;
 pub mod indexer;
+pub mod jump;
 pub mod kb;
 pub mod keys;
 pub mod kbfresh;
@@ -794,19 +795,31 @@ fn init_sessions_history(app: &tauri::App, boot_started: std::time::Instant) {
     // Empty now (no disk I/O on the boot thread — a large history.json
     // would delay window show); hydrated from disk on the thread below.
     app.manage(history::HistoryStore::empty(history_path));
+    let jump_path = app
+        .path()
+        .app_data_dir()
+        .map(|d| d.join("jump.json"))
+        .unwrap_or_else(|_| std::path::PathBuf::from("flux-jump.json"));
+    app.manage(jump::JumpStore::empty(jump_path));
     {
-        // Load history off the boot path, then flush to disk if it changed
-        // every 60s (was 15s) — fewer idle wakeups; the write is skipped
-        // unless dirty, so worst case is ~60s of unsaved history on a crash.
+        // Load history and jump index off the boot path, then flush to disk if
+        // changed every 60s (was 15s) — fewer idle wakeups; the write is
+        // skipped unless dirty, so worst case is ~60s of unsaved history on a crash.
         let handle = app.handle().clone();
         std::thread::spawn(move || {
             if let Some(h) = handle.try_state::<history::HistoryStore>() {
                 h.hydrate();
             }
+            if let Some(j) = handle.try_state::<jump::JumpStore>() {
+                j.hydrate();
+            }
             loop {
                 std::thread::sleep(std::time::Duration::from_secs(60));
                 if let Some(h) = handle.try_state::<history::HistoryStore>() {
                     h.persist_if_dirty();
+                }
+                if let Some(j) = handle.try_state::<jump::JumpStore>() {
+                    j.persist_if_dirty();
                 }
             }
         });
@@ -1517,6 +1530,9 @@ pub fn run(intent: cli::LaunchIntent) {
             webview::panel_close,
             search::search_resolve,
             search::search_suggest,
+            jump::jump_match,
+            jump::jump_record,
+            jump::jump_demote,
             search::search_engines,
             search::search_default,
             search::search_set_default,
@@ -1779,6 +1795,9 @@ fn flush_on_exit(app: &tauri::AppHandle) {
     }
     if let Some(h) = app.try_state::<history::HistoryStore>() {
         h.persist_if_hydrated();
+    }
+    if let Some(j) = app.try_state::<jump::JumpStore>() {
+        j.persist_if_hydrated();
     }
     flush_trail_stores(app);
     // Up to a minute of site time is counted but not yet saved.

@@ -524,6 +524,7 @@ export type SearchEngine = { id: string; name: string; keyword?: string | null; 
  * The result of resolving omnibox input.
  */
 export type Resolution = { kind: "navigate"; url: string } | { kind: "search"; engine: string; url: string }
+export type JumpMatch = { url: string; host: string; label: string; learned: boolean }
 /**
  * The closed action vocabulary. Adding a variant = adding a capability;
  * each one must come with a compile template and a policy review.

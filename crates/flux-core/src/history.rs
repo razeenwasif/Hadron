@@ -365,6 +365,88 @@ impl HistoryStore {
             self.persist_if_dirty();
         }
     }
+
+    /// Aggregated host-level frecency summary for `jump.rs` (zoxide URL jump).
+    pub(crate) fn host_summaries(&self) -> Vec<HostSummary> {
+        let mut by_host: HashMap<String, HostAccum> = HashMap::new();
+        for e in self.entries.read().values() {
+            let Some((scheme, rest)) = e.url.split_once("://") else {
+                continue;
+            };
+            let raw_host = rest.split(['/', '?', '#']).next().unwrap_or_default();
+            if raw_host.is_empty() {
+                continue;
+            }
+            let host = raw_host.strip_prefix("www.").unwrap_or(raw_host).to_lowercase();
+            let slot = by_host.entry(host).or_insert_with(|| HostAccum {
+                raw_host: raw_host.to_string(),
+                scheme: scheme.to_string(),
+                total_visits: 0,
+                last_visit_ms: 0,
+                best_url: e.url.clone(),
+                best_url_visits: 0,
+                best_title: String::new(),
+                best_title_visits: 0,
+                distinct_paths: 0,
+            });
+            slot.total_visits = slot.total_visits.saturating_add(e.visits);
+            slot.distinct_paths += 1;
+            if e.last_visit_ms > slot.last_visit_ms {
+                slot.last_visit_ms = e.last_visit_ms;
+                slot.scheme = scheme.to_string();
+                slot.raw_host = raw_host.to_string();
+            }
+            if e.visits > slot.best_url_visits
+                || (e.visits == slot.best_url_visits && e.url.len() < slot.best_url.len())
+            {
+                slot.best_url = e.url.clone();
+                slot.best_url_visits = e.visits;
+            }
+            if !e.title.trim().is_empty() && e.visits >= slot.best_title_visits {
+                slot.best_title = e.title.clone();
+                slot.best_title_visits = e.visits;
+            }
+        }
+        by_host
+            .into_iter()
+            .map(|(host, a)| {
+                let url = if a.distinct_paths >= 3
+                    && (a.best_url_visits as f64) < (a.total_visits as f64) * 0.4
+                {
+                    format!("{}://{}/", a.scheme, a.raw_host)
+                } else {
+                    a.best_url
+                };
+                HostSummary {
+                    host,
+                    url,
+                    title: a.best_title,
+                    visits: a.total_visits,
+                    last_visit_ms: a.last_visit_ms,
+                }
+            })
+            .collect()
+    }
+}
+
+pub(crate) struct HostSummary {
+    pub host: String,
+    pub url: String,
+    pub title: String,
+    pub visits: u32,
+    pub last_visit_ms: u64,
+}
+
+struct HostAccum {
+    raw_host: String,
+    scheme: String,
+    total_visits: u32,
+    last_visit_ms: u64,
+    best_url: String,
+    best_url_visits: u32,
+    best_title: String,
+    best_title_visits: u32,
+    distinct_paths: usize,
 }
 
 // ─── commands ────────────────────────────────────────────────────────────────

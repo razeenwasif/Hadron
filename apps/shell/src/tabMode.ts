@@ -13,8 +13,8 @@
  */
 import { createSignal } from "solid-js";
 
-export type TabMode = "tabs" | "calendar" | "mail" | "notes" | "context" | "agent" | "terminal";
-export const TAB_MODES: TabMode[] = ["tabs", "calendar", "mail", "notes", "context"];
+export type TabMode = "tabs" | "calendar" | "mail" | "notes" | "time" | "context" | "agent" | "terminal";
+export const TAB_MODES: TabMode[] = ["tabs", "calendar", "mail", "notes", "time", "context"];
 /** Liquid Silk's extra modes, after the others. */
 export const SIDE_PANELS: TabMode[] = ["agent", "terminal"];
 /** The pane is wide for one of them. Set by the panel as its morph starts, so

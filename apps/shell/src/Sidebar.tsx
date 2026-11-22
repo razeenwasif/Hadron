@@ -5,7 +5,7 @@ import { setLauncherOpen } from "./launcherOpen";
  * folders, split-view pairs), omnibox + suggestions, workspaces, footer panels
  * (bookmarks, extensions, downloads, shields, notes, …). Split out of App.tsx.
  */
-import Downloads from "./Downloads";
+import type { JumpMatch } from "./jumpIpc";
 import Shields from "./Shields";
 import type { FooterPanel } from "./SidebarPanels";
 import {
@@ -145,6 +145,7 @@ const Macros = lazy(() => import("./Macros"));
 const Passwords = lazy(() => import("./Passwords"));
 const FindBar = lazy(() => import("./FindBar"));
 const CalendarPop = lazy(() => import("./CalendarPop"));
+const Downloads = lazy(() => import("./Downloads"));
 
 // The pinned web-app rail folds away like the toolbar and footer (#150), giving
 // its 32px gutter back to the tab list. Persisted, default open. Kept here
@@ -330,7 +331,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
     TabMode,
     {
       label: string;
-      icon: "tabs" | "calendar" | "mail" | "note" | "trail" | "agent" | "terminal";
+      icon: "tabs" | "calendar" | "mail" | "note" | "time" | "trail" | "agent" | "terminal";
       key?: string;
     }
   > = {
@@ -338,6 +339,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
     calendar: { label: "Calendar", icon: "calendar" },
     mail: { label: "Mail", icon: "mail" },
     notes: { label: "Notes", icon: "note" },
+    time: { label: "Time", icon: "time" },
     context: { label: "Context", icon: "trail" },
     agent: { label: "Agent", icon: "agent", key: "toggle-agent" },
     terminal: { label: "Terminal", icon: "terminal", key: "toggle-terminal" },
@@ -352,6 +354,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
     if (!vp() || m === "tabs") return `Tabs · ${activeWorkspaceName()}`;
     if (m === "mail") return mailUnread() ? `Mail · Inbox · ${mailUnread()} new` : "Mail · Inbox";
     if (m === "notes") return "Notes & to-do";
+    if (m === "time") return "Time & focus";
     if (m === "context") return "Context · this page";
     if (m === "agent") return "Flux Agent";
     if (m === "terminal") return "Terminal";
@@ -808,6 +811,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
   // Omnibox live suggestions (#32): local history matches + engine suggestions.
   const [suggestions, setSuggestions] = createSignal<Suggestion[]>([]);
   const [selIdx, setSelIdx] = createSignal(-1);
+  const [jumpHint, setJumpHint] = createSignal<JumpMatch | null>(null);
 
   // Omnibox AI answer card: a grounded, streamed answer from the Omni index.
   // User-initiated (the "Ask Omni" row or Alt+Enter) — never per-keystroke, so it
@@ -819,6 +823,8 @@ const Sidebar: Component<SidebarProps> = (props) => {
   let omniDismissTimer: number | undefined;
   const closeSuggest = () => {
     addressSearch.cancel();
+    jumpSearch.cancel();
+    setJumpHint(null);
     setSuggestions([]);
     setSelIdx(-1);
   };
@@ -886,6 +892,13 @@ const Sidebar: Component<SidebarProps> = (props) => {
     () => setSuggestions([]),
     110,
   );
+  const jumpSearch = latestQuery(
+    async (q) => (await import("./jumpIpc")).jumpMatch(q),
+    setJumpHint,
+    () => setJumpHint(null),
+    30,
+  );
+  onCleanup(jumpSearch.cancel);
   onCleanup(addressSearch.cancel);
   createEffect(() => {
     activeId();
@@ -897,17 +910,23 @@ const Sidebar: Component<SidebarProps> = (props) => {
     setAddress(v);
     setSelIdx(-1);
     setSuggestions([]);
+    setJumpHint(null);
     clearOmniAns();
     const q = v.trim();
-    addressSearch.search(q.startsWith("flux://") ? "" : q);
+    const activeQ = q.startsWith("flux://") ? "" : q;
+    jumpSearch.search(activeQ);
+    addressSearch.search(activeQ);
   };
 
   const chooseSuggestion = async (s: Suggestion) => {
+    const rawQ = (address() ?? "").trim();
     closeSuggest();
     clearOmniAns();
     setAddress(null);
-    if (s.url) props.onNavigate(s.url);
-    else {
+    if (s.url) {
+      if (rawQ.length >= 2) void import("./jumpIpc").then((m) => m.jumpRecord(rawQ, s.url!));
+      props.onNavigate(s.url);
+    } else {
       const { url } = await searchResolve(s.label);
       props.onNavigate(url);
     }
@@ -918,6 +937,9 @@ const Sidebar: Component<SidebarProps> = (props) => {
     if (e.key === "Enter" && e.altKey) {
       e.preventDefault();
       startOmniAnswer(address() ?? "");
+    } else if (e.key === "Enter" && e.shiftKey) {
+      e.preventDefault();
+      void runAddressSubmit(true);
     } else if (e.key === "ArrowDown" && n) {
       e.preventDefault();
       setSelIdx((i) => (i + 1) % n);
@@ -937,17 +959,32 @@ const Sidebar: Component<SidebarProps> = (props) => {
     }
   };
 
-  const submitAddress = async (e: SubmitEvent) => {
-    e.preventDefault();
+  const runAddressSubmit = async (forceSearch: boolean) => {
+    const v = (address() ?? "").trim();
+    const hint = jumpHint();
     closeSuggest();
     clearOmniAns();
-    const v = (address() ?? "").trim();
     if (!v) return;
     setAddress(null);
     // `flux://…` internal pages (e.g. the Omni dashboard) bypass search.
     if (v.startsWith("flux://")) {
       props.onNavigate(v);
       return;
+    }
+    if (forceSearch) {
+      if (hint) void import("./jumpIpc").then((m) => m.jumpDemote(v, hint.url));
+    } else if (hint) {
+      void import("./jumpIpc").then((m) => m.jumpRecord(v, hint.url));
+      props.onNavigate(hint.url);
+      return;
+    } else if (v.length >= 2 && !/\s/.test(v)) {
+      const j = await import("./jumpIpc");
+      const m = await j.jumpMatch(v);
+      if (m) {
+        j.jumpRecord(v, m.url);
+        props.onNavigate(m.url);
+        return;
+      }
     }
     // The pluggable search backend (#68) decides navigate-vs-search, applies
     // !bang/keyword routing, and builds the final URL with the default engine;
@@ -960,6 +997,11 @@ const Sidebar: Component<SidebarProps> = (props) => {
       props.onAiSearch(v);
       if (omniAutoAnswer()) startOmniAnswer(v);
     }
+  };
+
+  const submitAddress = (e: SubmitEvent) => {
+    e.preventDefault();
+    void runAddressSubmit(false);
   };
 
   // Nav buttons act on the active browser tab's webview.
@@ -1280,6 +1322,25 @@ const Sidebar: Component<SidebarProps> = (props) => {
               spellcheck={false}
               autocomplete="off"
             />
+            <Show when={addrFocused() && selIdx() < 0 ? jumpHint() : null}>
+              {(j) => (
+                <button
+                  type="button"
+                  class="jump-pill"
+                  title={`Enter to jump to ${j().url} · Shift+Enter to search`}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    const v = (address() ?? "").trim();
+                    closeSuggest();
+                    setAddress(null);
+                    if (v) void import("./jumpIpc").then((m) => m.jumpRecord(v, j().url));
+                    props.onNavigate(j().url);
+                  }}
+                >
+                  → {j().label}
+                </button>
+              )}
+            </Show>
             {/* Velvet Paper: the page's own tools sit inside the field. */}
             <Show when={vp()}>
               <span class="addr-tray">
@@ -2454,7 +2515,15 @@ const Sidebar: Component<SidebarProps> = (props) => {
               <Passwords initialOpen />
             </Suspense>
           </Show>
-          <Downloads />
+          <Suspense
+            fallback={
+              <button class="icon-btn dl-btn" title="Downloads">
+                <span class="dl-arrow">⬇</span>
+              </button>
+            }
+          >
+            <Downloads />
+          </Suspense>
           <button
             classList={{ "icon-btn": true, active: panel() === "notes" }}
             title="Note for this page"

@@ -167,6 +167,44 @@
     },
     "decisions": {
       "status": "todo"
+    },
+    "fairy-routing": {
+      "status": "done",
+      "note": "Lyra worktree flux-model-routing: browserChat routed to Antigravity gemini-4-hydrogen-high (reasoning: high) and fluxTask tool runs routed to gemini-4-neon-medium (reasoning: medium) in flux-agent.mjs & main.cjs; confirmed flux_open new-tab wiring end-to-end. node --check & 9/9 Node tests passed; ~/Applications/Fairy.app not replaced yet.",
+      "updated": "2026-11-22T22:38:14Z"
+    },
+    "zoxide-jump": {
+      "status": "done",
+      "note": "crates/flux-core/src/jump.rs (JumpStore frecency decay, exact/prefix/initials/subsequence scoring, demotion suppression, 4/4 cargo lib tests) + lazy jumpIpc.ts + Sidebar.tsx inline .jump-pill preview (Enter jump, Shift+Enter search + demote). Verified in WKWebView (Graphite & Liquid Silk).",
+      "updated": "2026-11-22T22:38:14Z"
+    },
+    "notes-todo-merge": {
+      "status": "done",
+      "note": "TabNotes.tsx merged Notes & To-do into one unified scrollable view (no sub-tab bar) with inline note reader/editor, break-word wrapping, and hover-revealed delete button in velvet-paper.css. Verified in WKWebView (Graphite & Liquid Silk, overflowX: 0).",
+      "updated": "2026-11-22T22:38:14Z"
+    },
+    "time-tab": {
+      "status": "done",
+      "note": "Added Time mode to TAB_MODES (Alt+5; Context shifted to Alt+6), TimePane.tsx (Today | This week bars, Focus duration ring + Start/Pause/End, top SITES bars, See all of Time -> flux://time, local device note), Graphite instant transitions in liquid-silk.css, and Time & focus legend in Sidebar.tsx. Verified 52/52 vitest (366 tests), perf budgets green, and WKWebView Graphite + Liquid Silk.",
+      "updated": "2026-11-22T22:38:14Z"
+    },
+    "agent-annotate": {
+      "status": "todo"
+    },
+    "agent-restyle": {
+      "status": "todo"
+    },
+    "shields-minimal": {
+      "status": "todo"
+    },
+    "darkmode-refine": {
+      "status": "todo"
+    },
+    "settings-redesign": {
+      "status": "todo"
+    },
+    "perf-footprint": {
+      "status": "todo"
     }
   }
 }

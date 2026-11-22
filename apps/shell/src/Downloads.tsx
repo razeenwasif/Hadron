@@ -15,18 +15,19 @@ import {
   type Component,
 } from "solid-js";
 
+import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
+import type { DownloadItem } from "./bindings.gen";
 import { visibleInterval } from "./poll";
-import {
-  downloadCancel,
-  downloadOpen,
-  downloadPause,
-  downloadResume,
-  downloadReveal,
-  downloadsClear,
-  downloadsList,
-  onDownloadUpdated,
-  type DownloadItem,
-} from "./ipc";
+
+const downloadsList = () => invoke<DownloadItem[]>("downloads_list");
+const downloadsClear = () => invoke<void>("downloads_clear");
+const downloadOpen = (id: number) => invoke<void>("download_open", { id });
+const downloadReveal = (id: number) => invoke<void>("download_reveal", { id });
+const downloadCancel = (id: number) => invoke<void>("download_cancel", { id });
+const downloadPause = (id: number) => invoke<void>("download_pause", { id });
+const downloadResume = (id: number) => invoke<void>("download_resume", { id });
+const onDownloadUpdated = (cb: () => void) => listen<number>("flux://download-updated", () => cb());
 
 function fmtBytes(n: number): string {
   if (n <= 0) return "0 B";

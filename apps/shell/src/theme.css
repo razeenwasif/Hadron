@@ -2060,6 +2060,19 @@ body.resizing .panel-edge-resize::after {
 .zoom-pill:hover {
   background: rgba(var(--accent-rgb), 0.18);
 }
+.jump-pill {
+  flex: none;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: var(--flux-teal);
+  border: 1px solid rgba(var(--accent-rgb), 0.28);
+  background: rgba(var(--accent-rgb), 0.1);
+}
 .sec-secure {
   filter: grayscale(0.2);
   opacity: 0.85;

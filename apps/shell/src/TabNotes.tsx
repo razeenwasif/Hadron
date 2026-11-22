@@ -124,10 +124,11 @@ const MdView: Component<{ src: string; onToggle: (line: number) => void }> = (p)
   </div>
 );
 
-const NotesList: Component = () => {
+const NotesList: Component<{ open: string | null; onOpen: (name: string | null) => void }> = (props) => {
   const [notes, setNotes] = createSignal<MdNote[]>([]);
   const [home, setHome] = createSignal<MdNotesHome | null>(null);
-  const [open, setOpen] = createSignal<string | null>(null);
+  const open = () => props.open;
+  const setOpen = (name: string | null) => props.onOpen(name);
   const [text, setText] = createSignal("");
   const [editing, setEditing] = createSignal(false);
   const [err, setErr] = createSignal("");
@@ -226,9 +227,12 @@ const NotesList: Component = () => {
         when={open()}
         fallback={
           <>
-            <button class="notes-new" onClick={create}>
-              ＋ New note
-            </button>
+            <div class="notes-sec-head">
+              <span class="notes-sec-label">Notes</span>
+              <button class="notes-new-sm" onClick={create}>
+                ＋ New
+              </button>
+            </div>
             <div class="notes-list">
               <For each={notes()} fallback={<p class="mode-empty">No notes yet.</p>}>
                 {(n) => (
@@ -250,7 +254,7 @@ const NotesList: Component = () => {
         {(name) => (
           <>
             <div class="notes-head">
-              <button class="mode-btn" title="All notes" onClick={close}>
+              <button class="mode-btn" title="Notes & To-do" onClick={close}>
                 ‹
               </button>
               <input
@@ -405,30 +409,17 @@ const TodoList: Component = () => {
 };
 
 const TabNotes: Component = () => {
-  const [tab, setTab] = createSignal<"notes" | "todo">("notes");
+  const [openNote, setOpenNote] = createSignal<string | null>(null);
   return (
     <div class="mode-notes">
-      <div class="mail-filter" role="tablist" aria-label="Notes or to-do">
-        <button
-          role="tab"
-          aria-selected={tab() === "notes"}
-          classList={{ on: tab() === "notes" }}
-          onClick={() => setTab("notes")}
-        >
-          Notes
-        </button>
-        <button
-          role="tab"
-          aria-selected={tab() === "todo"}
-          classList={{ on: tab() === "todo" }}
-          onClick={() => setTab("todo")}
-        >
-          To-do
-        </button>
-      </div>
-      <Show when={tab() === "notes"} fallback={<TodoList />}>
-        <NotesList />
+      <Show when={!openNote()}>
+        <div class="notes-sec-head">
+          <span class="notes-sec-label">To-do</span>
+        </div>
+        <TodoList />
+        <hr class="notes-sep" />
       </Show>
+      <NotesList open={openNote()} onOpen={setOpenNote} />
     </div>
   );
 };

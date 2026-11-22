@@ -1100,6 +1100,28 @@ export function invoke<T>(cmd: string, args?: Record<string, unknown>): Promise<
     case "download_pause":
     case "download_resume":
       return Promise.resolve(undefined as T);
+    case "jump_match": {
+      const q = String(args?.query ?? "").trim().toLowerCase();
+      if (q.length < 2 || /\s|[./:?#]|^[!@>]/.test(q)) return Promise.resolve(null as T);
+      const mockHosts = [
+        { host: "youtube.com", url: "https://www.youtube.com/", title: "YouTube" },
+        { host: "amazon.com", url: "https://www.amazon.com/", title: "Amazon" },
+        { host: "github.com", url: "https://github.com/", title: "GitHub" },
+        { host: "news.ycombinator.com", url: "https://news.ycombinator.com/", title: "Hacker News" },
+      ];
+      const hit = mockHosts.find(
+        (h) =>
+          h.host.startsWith(q) ||
+          h.title.toLowerCase().replace(/[^a-z]/g, "") === q ||
+          (q === "yt" && h.host === "youtube.com") ||
+          (q === "gh" && h.host === "github.com") ||
+          (q === "hn" && h.host === "news.ycombinator.com"),
+      );
+      return Promise.resolve((hit ? { url: hit.url, host: hit.host, label: hit.host, learned: false } : null) as T);
+    }
+    case "jump_record":
+    case "jump_demote":
+      return Promise.resolve(undefined as T);
     case "search_resolve": {
       const input = String(args?.input ?? "").trim();
       const hasScheme = /^https?:\/\//.test(input);

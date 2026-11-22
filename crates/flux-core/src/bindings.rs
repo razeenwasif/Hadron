@@ -243,6 +243,7 @@ pub fn generate_ts() -> String {
         specta::ts::export::<PrefetchHint>(&c),
         specta::ts::export::<flux_search::SearchEngine>(&c),
         specta::ts::export::<flux_search::Resolution>(&c),
+        specta::ts::export::<crate::jump::JumpMatch>(&c),
         specta::ts::export::<flux_agent::AgentAction>(&c),
         specta::ts::export::<flux_agent::ExtractFormat>(&c),
         specta::ts::export::<flux_agent::NoteAction>(&c),

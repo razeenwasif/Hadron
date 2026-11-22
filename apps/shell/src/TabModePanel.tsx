@@ -61,6 +61,7 @@ import { parseQuickEvent } from "./quickEvent";
 
 const MailPane = lazy(() => import("./MailPane"));
 const TabNotes = lazy(() => import("./TabNotes"));
+const TimePane = lazy(() => import("./TimePane"));
 const ConnectionsRail = lazy(() => import("./ConnectionsRail"));
 const VoiceEdge = lazy(() => import("./VoiceEdge"));
 
@@ -70,7 +71,9 @@ const BASE = 220;
 const PAGE = 360;
 const EMPHASIZED = "cubic-bezier(0.2, 0, 0, 1)";
 const EXIT = "cubic-bezier(0.3, 0, 1, 1)";
-const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const reducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+  document.documentElement.dataset.theme === "graphite";
 
 // ── Liquid Silk's morphs: the Silk wave (into the agent or terminal) and the
 // cascade (into Calendar, Mail and Notes) ─────────────────────────────────────
@@ -876,6 +879,7 @@ const TabModePanel: Component<{
           calendar: "Calendar",
           mail: "Mail",
           notes: "Notes",
+          time: "Time",
           context: "Context",
           agent: "Flux Agent",
           terminal: "Terminal",
@@ -947,6 +951,13 @@ const TabModePanel: Component<{
           <div class="mode-page" hidden={shown() !== "notes"}>
             <Suspense>
               <TabNotes />
+            </Suspense>
+          </div>
+        </Show>
+        <Show when={seen().has("time")}>
+          <div class="mode-page" hidden={shown() !== "time"}>
+            <Suspense>
+              <TimePane />
             </Suspense>
           </div>
         </Show>

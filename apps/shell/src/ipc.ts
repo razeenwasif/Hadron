@@ -1644,18 +1644,6 @@ export const snapshotsList = () => invoke<DaySnapshot[]>("snapshots_list");
 export const snapshotRestore = (day: number) => invoke<SavedTab[]>("snapshot_restore", { day });
 export const historyClear = () => invoke<void>("history_clear");
 
-// ─── Downloads (BACKLOG #34) ─────────────────────────────────────────────────
-// DownloadItem type is generated (bindings.gen) and aliased above.
-export const downloadsList = () => invoke<DownloadItem[]>("downloads_list");
-export const downloadsClear = () => invoke<void>("downloads_clear");
-export const downloadOpen = (id: number) => invoke<void>("download_open", { id });
-export const downloadReveal = (id: number) => invoke<void>("download_reveal", { id });
-export const downloadCancel = (id: number) => invoke<void>("download_cancel", { id });
-export const downloadPause = (id: number) => invoke<void>("download_pause", { id });
-export const downloadResume = (id: number) => invoke<void>("download_resume", { id });
-/** Fires (with the download id) on any progress/state change. */
-export const onDownloadUpdated = (cb: () => void): Promise<UnlistenFn> =>
-  listen<number>("flux://download-updated", () => cb());
 /** Find-in-page (BACKLOG #33). Empty query clears the highlight. */
 export const webviewFind = (tabId: number, query: string, forward = true) =>
   invoke<void>("webview_find", { tabId, query, forward });

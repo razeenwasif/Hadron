@@ -745,15 +745,28 @@
       "fixed": null
     },
     {
-      "id": "mode-context",
-      "title": "Show context",
-      "detail": "Your notes, the system and the Trail",
+      "id": "mode-time",
+      "title": "Show time and focus",
+      "detail": "Web time and your focus timer",
       "group": "Tab bar",
       "keys": [
         "Alt+5"
       ],
       "defaults": [
         "Alt+5"
+      ],
+      "fixed": null
+    },
+    {
+      "id": "mode-context",
+      "title": "Show context",
+      "detail": "Your notes, the system and the Trail",
+      "group": "Tab bar",
+      "keys": [
+        "Alt+6"
+      ],
+      "defaults": [
+        "Alt+6"
       ],
       "fixed": null
     },
