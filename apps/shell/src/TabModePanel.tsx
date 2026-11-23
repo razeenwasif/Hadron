@@ -25,6 +25,7 @@ import {
   createMemo,
   createSignal,
   lazy,
+  on,
   onCleanup,
   onMount,
   type Component,
@@ -47,6 +48,7 @@ import {
 import { Favicon } from "./tabvisual";
 import {
   commitTabMode,
+  panePageUrl,
   paneWide,
   setPaneWide,
   setTabMode,
@@ -60,12 +62,29 @@ import { design } from "./design";
 import { visibleInterval } from "./poll";
 import { parseQuickEvent } from "./quickEvent";
 
+const PAGE_TITLES: Record<string, string> = {
+  archive: "Saved pages",
+  time: "Time & Focus",
+  speedtest: "Speed test",
+  passwords: "Passwords",
+  sentinel: "Agent activity",
+  permissions: "Site permissions",
+  tasks: "Tasks",
+  activity: "Activity",
+};
+const sidePageTitle = (url: string | null): string => {
+  if (!url) return "Page";
+  const slug = url.slice(7).split(/[?#]/)[0] || "";
+  return PAGE_TITLES[slug] ?? (slug ? slug[0]!.toUpperCase() + slug.slice(1) : "Page");
+};
+
 const MailPane = lazy(() => import("./MailPane"));
 const TabNotes = lazy(() => import("./TabNotes"));
 const TimePane = lazy(() => import("./TimePane"));
 const ConnectionsRail = lazy(() => import("./ConnectionsRail"));
 const VoiceEdge = lazy(() => import("./VoiceEdge"));
 const SettingsPage = lazy(() => import("./SettingsPage"));
+import InternalPage from "./InternalPage";
 
 // ── Motion ──────────────────────────────────────────────────────────────────
 const FAST = 120;
@@ -85,7 +104,7 @@ const WAVE_K = 2;
  *  sideW); `.shell.side-morph` animates the columns for this long. */
 const WIDEN = 620 * WAVE_K;
 const isDock = (m: TabMode) => SIDE_PANELS.includes(m);
-const isWide = (m: TabMode) => isDock(m) || m === "settings";
+const isWide = (m: TabMode) => isDock(m) || m === "settings" || m === "page";
 const silk = () => design() === "liquid-silk";
 
 /** What leaves the tabs: the pane's own parts and the rows in view, top to
@@ -648,11 +667,19 @@ const TabModePanel: Component<{
    *  it while it's closed, and can open it again. */
   connectOpen: boolean;
   onToggleConnect: () => void;
+  onToggleAgent: () => void;
+  onSleepBackground: () => void;
 }> = (props) => {
   let el!: HTMLDivElement;
   let body!: HTMLDivElement;
   let rail!: HTMLDivElement;
   let dock: HTMLDivElement | undefined;
+  let nativeBody: HTMLDivElement | undefined;
+  createEffect(
+    on(panePageUrl, () => {
+      if (nativeBody) nativeBody.scrollTop = 0;
+    }),
+  );
   const away = (m: TabMode): Away => (m === "tabs" ? "calendar" : m);
   const [shown, setShownSig] = createSignal<Away>(away(tabMode()));
   const [open, setOpen] = createSignal(false);
@@ -887,6 +914,7 @@ const TabModePanel: Component<{
           agent: "Flux Agent",
           terminal: "Terminal",
           settings: "Settings",
+          page: sidePageTitle(panePageUrl()),
         }[shown()]
       }
       inert={!open()}
@@ -970,6 +998,66 @@ const TabModePanel: Component<{
             <Suspense>
               <SettingsPage inPane onNavigate={props.onNavigate} onClose={() => setTabMode("tabs")} />
             </Suspense>
+          </div>
+        </Show>
+        <Show when={seen().has("page")}>
+          <div class="mode-page mode-native" hidden={shown() !== "page"}>
+            <header class="mode-native-head">
+              <span class="mode-native-title">{sidePageTitle(panePageUrl())}</span>
+              <div class="mode-native-actions">
+                <button
+                  type="button"
+                  class="mode-native-btn"
+                  title="Open in a tab"
+                  aria-label="Open in a tab"
+                  onClick={() => {
+                    const url = panePageUrl();
+                    setTabMode("tabs");
+                    if (url) void openTab("browser", url);
+                  }}
+                >
+                  ⤢
+                </button>
+                <button
+                  type="button"
+                  class="mode-native-btn"
+                  title="Close"
+                  aria-label="Close"
+                  onClick={() => setTabMode("tabs")}
+                >
+                  ×
+                </button>
+              </div>
+            </header>
+            <div class="mode-native-body" ref={nativeBody}>
+              <Show when={panePageUrl()} keyed>
+                {(url) => (
+                  <Suspense>
+                    <InternalPage
+                      tab={() => ({
+                        id: -2,
+                        kind: "browser",
+                        url,
+                        title: sidePageTitle(url),
+                        pinned: false,
+                        cluster: null,
+                        group: null,
+                        folder: null,
+                        custom_title: null,
+                        workspace: 0,
+                        private: false,
+                        container: 0,
+                      })}
+                      onNavigate={props.onNavigate}
+                      onNewTerminal={() => {}}
+                      onToggleAgent={props.onToggleAgent}
+                      onOpenMap={() => {}}
+                      onSleepBackground={props.onSleepBackground}
+                    />
+                  </Suspense>
+                )}
+              </Show>
+            </div>
           </div>
         </Show>
         {/* Liquid Silk's Agent and Terminal: App's own column, moved in here

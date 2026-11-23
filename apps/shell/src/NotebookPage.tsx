@@ -24,6 +24,7 @@ import {
   type ServiceStatus,
 } from "./ipc";
 import { openTab } from "./store";
+import { openSidePage } from "./tabMode";
 import { isMobile } from "./platform";
 import "./NotebookPage.css";
 
@@ -205,7 +206,10 @@ const NotebookPage: Component = () => {
   // fragment goes.
   const openCitation = (h: KbHit) => {
     if (/^https?:\/\//i.test(h.path)) void openTab("browser", h.path);
-    else if (h.path.startsWith("flux://")) void openTab("browser", h.path.split("#")[0]!);
+    else if (h.path.startsWith("flux://")) {
+      const u = h.path.split("#")[0]!;
+      if (!openSidePage(u)) void openTab("browser", u);
+    }
     else if (h.path) void fsOpen(h.path).catch((e) => setErr(String(e)));
   };
 

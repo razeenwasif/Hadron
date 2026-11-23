@@ -13,7 +13,17 @@
  */
 import { createSignal } from "solid-js";
 
-export type TabMode = "tabs" | "calendar" | "mail" | "notes" | "time" | "context" | "agent" | "terminal" | "settings";
+export type TabMode =
+  | "tabs"
+  | "calendar"
+  | "mail"
+  | "notes"
+  | "time"
+  | "context"
+  | "agent"
+  | "terminal"
+  | "settings"
+  | "page";
 export const TAB_MODES: TabMode[] = ["tabs", "calendar", "mail", "notes", "time", "context"];
 /** Liquid Silk's extra modes, after the others. */
 export const SIDE_PANELS: TabMode[] = ["agent", "terminal"];
@@ -22,6 +32,20 @@ export const SIDE_PANELS: TabMode[] = ["agent", "terminal"];
  *  while the panel's chunk is still loading). */
 const [paneWide, setPaneWide] = createSignal(false);
 export { paneWide, setPaneWide };
+
+const [panePageUrl, setPanePageUrl] = createSignal<string | null>(null);
+export { panePageUrl, setPanePageUrl };
+
+type SidePageOpener = (url: string, opts?: { toggle?: boolean }) => boolean;
+let sidePageOpener: SidePageOpener | null = null;
+export const setSidePageOpener = (fn: SidePageOpener | null): void => {
+  sidePageOpener = fn;
+};
+export const openSidePage = (url: string, opts?: { toggle?: boolean }): boolean =>
+  url.startsWith("flux://") &&
+  url !== "flux://start" &&
+  !url.startsWith("flux://pdf") &&
+  !!sidePageOpener?.(url, opts);
 
 const [tabMode, setTabModeSig] = createSignal<TabMode>("tabs");
 export { tabMode };

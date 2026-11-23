@@ -1,4 +1,13 @@
-import { paneWide, setTabMode, type TabMode } from "./tabMode";
+import {
+  openSidePage,
+  panePageUrl,
+  paneWide,
+  setPanePageUrl,
+  setSidePageOpener,
+  setTabMode,
+  tabMode,
+  type TabMode,
+} from "./tabMode";
 import "./interfacePreferences";
 import {
   launcherInitial,
@@ -991,6 +1000,7 @@ const App: Component = () => {
   // Start-page tabs have no webview yet, so the effect opens it once the url
   // becomes real; already-open tabs navigate in place.
   const go = (url: string) => {
+    if (openSidePage(url)) return;
     // PDFs open in Flux's built-in viewer (#35) rather than the engine's, except
     // in a Tor tab: the viewer's fetch goes direct (audit S3).
     if (isPdfUrl(url) && !activeTab()?.tor) url = pdfViewerUrl(url);
@@ -1521,6 +1531,7 @@ const App: Component = () => {
   // Promote the pane to a full tab (⤢) — focus an open Notebook tab or open one.
   const openNotebookTab = () => {
     closeKbPanel();
+    if (openSidePage(NOTEBOOK_URL)) return;
     const existing = tabs().find((t) => t.url === NOTEBOOK_URL);
     if (existing) void focusTab(existing.id);
     else void openTab("browser", NOTEBOOK_URL);
@@ -1736,7 +1747,7 @@ const App: Component = () => {
    *  modes (Sidebar, TabModePanel), so they take no column of their own; the
    *  sidebar widens to hold them. */
   const sideDock = () => design() === "liquid-silk" && !isMobile;
-  const sideW = () => (sideDock() && paneWide() ? Math.max(sidebarW(), 420) : sidebarW());
+  const sideW = () => (cardLayout() && !isMobile && paneWide() ? Math.max(sidebarW(), 420) : sidebarW());
   const layoutIntent = () => ({
     sidebar: sidebarOpen(),
     agent: agentOpen() && !sideDock(),
@@ -1762,6 +1773,19 @@ const App: Component = () => {
         stackWidth: 0,
       };
     return fitLayout(winW(), pageMinimum(), editorColRatio(), want, layoutWidths(stackW()));
+  });
+  setSidePageOpener((url, opts) => {
+    if (!cardLayout() || isMobile || focusMode()) return false;
+    setSidebarOpen(true);
+    if (!responsive().sidebar) return false;
+    const next: TabMode = url === SETTINGS_URL ? "settings" : "page";
+    if (opts?.toggle && tabMode() === next && (next === "settings" || panePageUrl() === url)) {
+      setTabMode("tabs");
+      return true;
+    }
+    if (next === "page") setPanePageUrl(url);
+    setTabMode(next);
+    return true;
   });
   function layoutWidths(stack: number) {
     return {
@@ -1988,6 +2012,7 @@ const App: Component = () => {
             onToggleFilesPanel={() => (filesPanelOpen() ? closeFilesPanel() : openFilesPanel())}
             onOpenPlayground={() => (playgroundOpen() ? closePlayground() : openPlayground())}
             onOpenNotebook={() => (kbPanelOpen() ? closeKbPanel() : openKbPanel())}
+            onSleepBackground={sleepBackgroundTabs}
           />
         </Suspense>
       </Show>

@@ -11,6 +11,7 @@ import { clockOf, focus, focusLeft, refreshFocus } from "./focusStore";
 import { TIME_URL, type TimeReport } from "./ipc";
 import { visibleInterval } from "./poll";
 import { openTab } from "./store";
+import { openSidePage } from "./tabMode";
 
 const formatDur = (secs: number): string => {
   const m = Math.round(secs / 60);
@@ -125,7 +126,7 @@ const TimePane: Component = () => {
                 role="menuitem"
                 onClick={() => {
                   setMenuOpen(false);
-                  void openTab("browser", TIME_URL);
+                  if (!openSidePage(TIME_URL)) void openTab("browser", TIME_URL);
                 }}
               >
                 See all of Time
@@ -319,7 +320,9 @@ const TimePane: Component = () => {
       <button
         type="button"
         class="time-see-all"
-        onClick={() => void openTab("browser", TIME_URL)}
+        onClick={() => {
+          if (!openSidePage(TIME_URL)) void openTab("browser", TIME_URL);
+        }}
       >
         See all of Time
       </button>

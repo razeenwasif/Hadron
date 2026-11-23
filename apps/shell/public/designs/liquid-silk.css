@@ -712,6 +712,11 @@
   backdrop-filter: var(--silk-blur);
   -webkit-backdrop-filter: var(--silk-blur);
 }
+:root[data-design][data-silk] .pages-bar .pages-chip.active {
+  background: rgba(var(--silk-tint), 0.72);
+  color: rgb(var(--accent-rgb));
+  box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.35);
+}
 :root[data-design][data-silk] .tui-bar {
   border-color: var(--silk-edge);
   backdrop-filter: var(--silk-blur);
@@ -1836,6 +1841,11 @@
 }
 :root[data-design][data-silk][data-theme="graphite"] .pages-bar .pages-chip:hover {
   background: var(--gr-control);
+}
+:root[data-design][data-silk][data-theme="graphite"] .pages-bar .pages-chip.active {
+  background: var(--gr-selected);
+  color: rgb(var(--accent-rgb));
+  box-shadow: inset 0 0 0 1px var(--gr-edge);
 }
 :root[data-design][data-silk][data-theme="graphite"] .tab-modes .tab-mode-agent::before {
   background: var(--gr-edge);

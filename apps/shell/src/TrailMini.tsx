@@ -20,6 +20,7 @@ import { palette as pal, rgba } from "./palette";
 import { TRAIL_URL, traceGraph, type Edge, type Visit } from "./ipc";
 import { visibleInterval } from "./poll";
 import { activeWorkspace, activeWorkspaceName, openTab } from "./store";
+import { openSidePage } from "./tabMode";
 
 /** Simulation tuning. Attraction is deliberately strong relative to repulsion:
  *  at this size a spread-out graph is noise, and clusters are the whole point. */
@@ -414,7 +415,9 @@ const TrailMini: Component = () => {
         <button
           class="trailmini-expand"
           title="Open the full Trail graph"
-          onClick={() => void openTab("browser", TRAIL_URL)}
+          onClick={() => {
+            if (!openSidePage(TRAIL_URL)) void openTab("browser", TRAIL_URL);
+          }}
         >
           ⤢
         </button>

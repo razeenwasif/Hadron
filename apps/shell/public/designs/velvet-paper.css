@@ -5727,3 +5727,218 @@
   min-width: 0;
   box-sizing: border-box;
 }
+
+/* All other Flux native pages hosted inside the tab bar (TabModePanel). */
+:root[data-design="velvet-paper"] .pages-chip.active {
+  background: var(--vp-wash);
+  color: rgb(var(--accent-rgb));
+  box-shadow: inset 0 0 0 1px rgba(var(--vp-lilac-rgb, 201, 181, 255), 0.2);
+}
+:root[data-design="velvet-paper"] .tab-mode-panel .mode-body:has(> .mode-native:not([hidden])) {
+  overflow: hidden;
+}
+:root[data-design="velvet-paper"] .tab-mode-panel .mode-page.mode-native {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+:root[data-design="velvet-paper"] .mode-native-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 2px 6px;
+  border-bottom: 1px solid var(--glass-rim-soft);
+  flex: none;
+}
+:root[data-design="velvet-paper"] .mode-native-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--flux-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+:root[data-design="velvet-paper"] .mode-native-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+}
+:root[data-design="velvet-paper"] .mode-native-btn {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--flux-text-dim);
+  font-size: 15px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+:root[data-design="velvet-paper"] .mode-native-btn:hover {
+  background: var(--flux-surface);
+  color: var(--flux-text);
+}
+:root[data-design="velvet-paper"] .mode-native-body {
+  flex: 1 1 0;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+:root[data-design="velvet-paper"] .mode-native-body .internal-page > * {
+  padding: 6px 2px 24px;
+  max-width: none;
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  background-image: none;
+  box-sizing: border-box;
+}
+:root[data-design="velvet-paper"] .mode-native-body .hist-page,
+:root[data-design="velvet-paper"] .mode-native-body .vault-page,
+:root[data-design="velvet-paper"] .mode-native-body .trail {
+  height: 100%;
+  min-height: 0;
+}
+:root[data-design="velvet-paper"] .mode-native-body .hist-head,
+:root[data-design="velvet-paper"] .mode-native-body .vault-head,
+:root[data-design="velvet-paper"] .mode-native-body .nb-head,
+:root[data-design="velvet-paper"] .mode-native-body .tm-head,
+:root[data-design="velvet-paper"] .mode-native-body .td-head,
+:root[data-design="velvet-paper"] .mode-native-body .omni-head,
+:root[data-design="velvet-paper"] .mode-native-body .trail-head {
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+:root[data-design="velvet-paper"] .mode-native-body .hist-head > .hist-title {
+  display: none;
+}
+:root[data-design="velvet-paper"] .mode-native-body .hist-search,
+:root[data-design="velvet-paper"] .mode-native-body .arch-search,
+:root[data-design="velvet-paper"] .mode-native-body .feeds-add {
+  max-width: none;
+  min-width: 0;
+}
+:root[data-design="velvet-paper"] .mode-native-body .arch-body {
+  grid-template-columns: minmax(0, 1fr);
+}
+:root[data-design="velvet-paper"] .mode-native-body .arch-list {
+  max-height: 220px;
+}
+:root[data-design="velvet-paper"] .mode-native-body .arch-read {
+  border-left: none;
+  border-top: 1px solid var(--glass-rim-soft);
+  padding: 12px 0 0;
+}
+:root[data-design="velvet-paper"] .mode-native-body .vault-body {
+  flex-direction: column;
+  gap: 12px;
+}
+:root[data-design="velvet-paper"] .mode-native-body .vault-search {
+  flex: 1 0 100%;
+  max-width: none;
+}
+:root[data-design="velvet-paper"] .mode-native-body .vault-head-actions {
+  margin-left: 0;
+  flex-wrap: wrap;
+  width: 100%;
+}
+:root[data-design="velvet-paper"] .mode-native-body .vault-btn {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+:root[data-design="velvet-paper"] .mode-native-body .vault-list {
+  width: 100%;
+  max-height: 220px;
+}
+:root[data-design="velvet-paper"] .mode-native-body .vault-detail {
+  border-left: none;
+  border-top: 1px solid var(--glass-rim-soft);
+  padding: 12px 0 0;
+}
+:root[data-design="velvet-paper"] .mode-native-body .trail-body {
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 0;
+}
+:root[data-design="velvet-paper"] .mode-native-body .trail-body::before,
+:root[data-design="velvet-paper"] .mode-native-body .trail-body::after,
+:root[data-design="velvet-paper"] .mode-native-body .trail-scrub::after {
+  display: none;
+}
+:root[data-design="velvet-paper"] .mode-native-body .trail-graph {
+  min-height: 240px;
+}
+:root[data-design="velvet-paper"] .mode-native-body .trail-detail {
+  flex: none;
+  width: 100%;
+  max-height: 280px;
+}
+:root[data-design="velvet-paper"] .mode-native-body .trail-scrub {
+  flex-wrap: wrap;
+  padding: 8px 10px;
+  margin: 0 0 10px;
+}
+:root[data-design="velvet-paper"] .mode-native-body .trail-scrub-track {
+  flex: 1 0 100%;
+}
+:root[data-design="velvet-paper"] .mode-native-body .trail-controls {
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+:root[data-design="velvet-paper"] .mode-native-body .tm-graphs,
+:root[data-design="velvet-paper"] .mode-native-body .tm-grid {
+  grid-template-columns: 1fr;
+}
+:root[data-design="velvet-paper"] .mode-native-body .tm-verdict {
+  flex-direction: column;
+  align-items: stretch;
+}
+:root[data-design="velvet-paper"] .mode-native-body .td-head h1,
+:root[data-design="velvet-paper"] .mode-native-body .td-hint {
+  display: none;
+}
+:root[data-design="velvet-paper"] .mode-native-body .td-sub {
+  margin-top: 0;
+  font-size: 13px;
+}
+:root[data-design="velvet-paper"] .mode-native-body .td-capture {
+  padding: 10px 12px;
+  gap: 8px;
+}
+:root[data-design="velvet-paper"] .mode-native-body .td-mirror,
+:root[data-design="velvet-paper"] .mode-native-body .td-field input {
+  font-size: 14.5px;
+}
+:root[data-design="velvet-paper"] .mode-native-body .td-cols {
+  grid-template-columns: minmax(0, 1fr);
+}
+:root[data-design="velvet-paper"] .mode-native-body .omni-cards {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+:root[data-design="velvet-paper"] .mode-native-body .omni-sites {
+  grid-template-columns: minmax(0, 1fr);
+}
+:root[data-design="velvet-paper"] .mode-native-body .nb-ask {
+  flex-direction: column;
+  align-items: stretch;
+}
+:root[data-design="velvet-paper"] .mode-native-body .nb-fix {
+  flex-wrap: wrap;
+}
+:root[data-design="velvet-paper"] .mode-native-body .st-gauges {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}

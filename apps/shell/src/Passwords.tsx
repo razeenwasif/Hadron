@@ -26,6 +26,7 @@ import {
   type VaultStatus,
 } from "./ipc";
 import { activeId, activeTab, openTab } from "./store";
+import { openSidePage } from "./tabMode";
 
 function hostOf(url: string): string | null {
   try {
@@ -172,7 +173,7 @@ const Passwords: Component<{ initialOpen?: boolean }> = (props) => {
   };
   const openManager = () => {
     setOpen(false);
-    void openTab("browser", VAULT_URL);
+    if (!openSidePage(VAULT_URL)) void openTab("browser", VAULT_URL);
   };
 
   return (

@@ -111,7 +111,7 @@ import {
 } from "./store";
 import Icon from "./Icon";
 import { cardLayout, design } from "./design";
-import { mailUnread, setTabMode, tabMode, SIDE_PANELS, TAB_MODES, type TabMode } from "./tabMode";
+import { mailUnread, panePageUrl, setTabMode, tabMode, SIDE_PANELS, TAB_MODES, type TabMode } from "./tabMode";
 import { visibleInterval } from "./poll";
 import { attachHScroll } from "./hscroll";
 import RailTip, { hideTip, showTip } from "./RailTip";
@@ -188,6 +188,7 @@ interface SidebarProps {
   onToggleFilesPanel: () => void;
   onOpenPlayground: () => void;
   onOpenNotebook: () => void;
+  onSleepBackground: () => void;
 }
 
 // NB: full-page destinations (bookmarks/history/sessions/…) live on the
@@ -344,6 +345,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
     agent: { label: "Agent", icon: "agent", key: "toggle-agent" },
     terminal: { label: "Terminal", icon: "terminal", key: "toggle-terminal" },
     settings: { label: "Settings", icon: "settings" },
+    page: { label: "Page", icon: "tabs" },
   };
   /** Liquid Silk: the agent and terminal are modes of this pane (tabMode.ts). */
   const sideDock = () => design() === "liquid-silk";
@@ -360,6 +362,10 @@ const Sidebar: Component<SidebarProps> = (props) => {
     if (m === "agent") return "Flux Agent";
     if (m === "terminal") return "Terminal";
     if (m === "settings") return "Settings";
+    if (m === "page") {
+      const s = panePageUrl()?.slice(7).split(/[?#]/)[0] ?? "";
+      return s ? s[0]!.toUpperCase() + s.slice(1) : "Page";
+    }
     return `Calendar · ${new Date().toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}`;
   };
   // The switch's thumb travels to the picked segment, measured once it's laid out.
@@ -2648,6 +2654,8 @@ const Sidebar: Component<SidebarProps> = (props) => {
             onNavigate={props.onNavigate}
             connectOpen={props.connectOpen}
             onToggleConnect={props.onToggleConnect}
+            onToggleAgent={props.onToggleAgent}
+            onSleepBackground={props.onSleepBackground}
           />
         </Suspense>
       </Show>

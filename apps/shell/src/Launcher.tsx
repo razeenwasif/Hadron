@@ -68,6 +68,7 @@ import {
   setTile,
   tabs,
 } from "./store";
+import { openSidePage } from "./tabMode";
 import TerminalAppsEditor from "./TerminalAppsEditor";
 import { MAX_PANES, layoutsFor } from "./tiles";
 import "./Launcher.css";
@@ -447,7 +448,10 @@ const Launcher: Component<{
         meta: "Flux page",
         marks: true,
         url: p.url,
-        run: (how) => (how === "open" ? (done(), void openTab("browser", p.url)) : openUrl(p.url, how)),
+        run: (how) =>
+          how === "open"
+            ? (done(), void (openSidePage(p.url) || openTab("browser", p.url)))
+            : openUrl(p.url, how),
         more: [pin(`page:${p.url}`)],
       });
     }
