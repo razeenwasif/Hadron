@@ -222,6 +222,40 @@ const AgentPanel: Component = () => {
   };
   const [chats, setChats] = createSignal<ChatSession[]>(loadChats());
   const [chatsMenu, setChatsMenu] = createSignal(false);
+  const FAIRY_MODELS = [
+    ["auto", "Auto (Hydrogen / Neon)"],
+    ["gemini-4-hydrogen", "Gemini 4 Hydrogen"],
+    ["gemini-4-neon", "Gemini 4 Neon"],
+    ["gemini-4-carbon", "Gemini 4 Carbon"],
+    ["gemini-4-argon", "Gemini 4 Argon"],
+    ["gemini-3.8-flash", "Gemini 3.8 Flash"],
+    ["claude-sonnet-5-5", "Claude Sonnet 5.5"],
+    ["claude-opus-5-5", "Claude Opus 5.5"],
+  ] as const;
+  const FAIRY_EFFORTS = [
+    ["auto", "Auto effort"],
+    ["low", "Low"],
+    ["medium", "Medium"],
+    ["high", "High"],
+    ["xhigh", "XHigh"],
+  ] as const;
+  const [fairyModel, setFairyModelRaw] = createSignal(localStorage.getItem("flux.fairy.model") || "auto");
+  const [fairyEffort, setFairyEffortRaw] = createSignal(localStorage.getItem("flux.fairy.effort") || "auto");
+  const [fairyMenu, setFairyMenu] = createSignal<"model" | "effort" | null>(null);
+  let modelBtn: HTMLButtonElement | undefined;
+  let effortBtn: HTMLButtonElement | undefined;
+  const pickFairyPref = (kind: "model" | "effort", id: string) => {
+    localStorage.setItem(`flux.fairy.${kind}`, id);
+    if (kind === "model") setFairyModelRaw(id);
+    else setFairyEffortRaw(id);
+    setFairyMenu(null);
+  };
+  const fairyTip = (kind: "model" | "effort") => {
+    const id = kind === "model" ? fairyModel() : fairyEffort();
+    const list = kind === "model" ? FAIRY_MODELS : FAIRY_EFFORTS;
+    const label = list.find(([k]) => k === id)?.[1] ?? id;
+    return `${kind === "model" ? "Model" : "Effort"}: ${label}`;
+  };
   let currentId = "";
   let currentOffRecord = false;
   let seq = 0;
@@ -316,6 +350,7 @@ const AgentPanel: Component = () => {
   let replyGen = 0;
   const cancelReply = () => {
     replyGen++;
+    fairySpeak = { gen: 0, text: "", missed: false };
     // Fairy: stops her writing or acting, and quiets her if she's saying it.
     if (fairyAsking || fairySpeaking()) void import("./fairy").then((m) => m.fairyStop()).catch(() => {});
     setFairySpeaking(false);
@@ -411,10 +446,22 @@ const AgentPanel: Component = () => {
   const [fairyWorking, setFairyWorking] = createSignal(false);
   // Fairy is saying her answer in her own voice (fairy.rs): Stop stays up until she's done.
   const [fairySpeaking, setFairySpeaking] = createSignal(false);
+  let fairySpeak = { gen: 0, text: "", missed: false };
   onMount(() => {
     const offs = [
       listen("flux://fairy-speaking", () => setFairySpeaking(true)),
-      listen("flux://fairy-spoken", () => setFairySpeaking(false)),
+      listen<boolean | null>("flux://fairy-spoken", (e) => {
+        setFairySpeaking(false);
+        if (e.payload === false && fairySpeak.gen === replyGen) {
+          if (fairySpeak.text) {
+            const t = fairySpeak.text;
+            fairySpeak.text = "";
+            void speak(t);
+          } else {
+            fairySpeak.missed = true;
+          }
+        }
+      }),
     ];
     onCleanup(() => offs.forEach((o) => void o.then((u) => u())));
   });
@@ -442,19 +489,30 @@ const AgentPanel: Component = () => {
   };
   // Tell App to hide the active page webview while a dropdown is open (it's an OS
   // layer above the chrome, otherwise the menu is behind it — unclickable).
-  createEffect(() => setAgentMenuOpen(chatsMenu()));
+  createEffect(() => setAgentMenuOpen(chatsMenu() || fairyMenu() !== null));
   // Dropdowns render via a <Portal> to <body> with fixed position, so no agent-panel
   // stacking context (z-index, transform, backdrop-filter) can trap them behind.
   let chatsBtn: HTMLButtonElement | undefined;
-  const menuPos = (btn?: HTMLElement): JSX.CSSProperties => {
+  const menuPos = (btn?: HTMLElement, up = false): JSX.CSSProperties => {
     const r = btn?.getBoundingClientRect();
     if (!r) return { position: "fixed", top: "56px", right: "14px", "z-index": "9999" };
-    return {
-      position: "fixed",
-      top: `${Math.round(r.bottom + 5)}px`,
-      right: `${Math.round(Math.max(8, window.innerWidth - r.right))}px`,
-      "z-index": "9999",
-    };
+    return up
+      ? {
+          position: "fixed",
+          top: "auto",
+          right: "auto",
+          bottom: `${Math.round(window.innerHeight - r.top + 6)}px`,
+          left: `${Math.round(Math.max(8, Math.min(r.left, window.innerWidth - 224)))}px`,
+          "max-height": "60vh",
+          "overflow-y": "auto",
+          "z-index": "9999",
+        }
+      : {
+          position: "fixed",
+          top: `${Math.round(r.bottom + 5)}px`,
+          right: `${Math.round(Math.max(8, window.innerWidth - r.right))}px`,
+          "z-index": "9999",
+        };
   };
   let feedEl: HTMLDivElement | undefined;
 
@@ -2245,9 +2303,21 @@ const AgentPanel: Component = () => {
         }),
       );
       await fairyTools;
-      await (
+      fairySpeak = { gen, text: "", missed: false };
+      const reply = await (
         await import("./fairy")
-      ).askInFeed(q, fairyName(), activeId() ?? null, setFeed, () => gen === replyGen);
+      ).askInFeed(q, fairyName(), activeId() ?? null, setFeed, () => gen === replyGen, {
+        model: fairyModel() === "auto" ? undefined : fairyModel(),
+        effort: fairyEffort() === "auto" ? undefined : fairyEffort(),
+      });
+      if (gen === replyGen && reply) {
+        if (fairySpeak.missed) {
+          fairySpeak.missed = false;
+          void speak(reply);
+        } else {
+          fairySpeak.text = reply;
+        }
+      }
     } finally {
       fairyAsking = false;
       stepResolver = null;
@@ -3239,7 +3309,10 @@ const AgentPanel: Component = () => {
               data-tip-at="below"
               data-tip-align="end"
               aria-label="Past chats"
-              onClick={() => setChatsMenu(!chatsMenu())}
+              onClick={() => {
+                setFairyMenu(null);
+                setChatsMenu(!chatsMenu());
+              }}
             >
               <AgentIcon name="history" />
             </button>
@@ -3566,6 +3639,62 @@ const AgentPanel: Component = () => {
               </button>
             </Show>
           </div>
+          <Show when={scope() === "fairy" && fairyHere()}>
+            <div class="agent-seg" role="group" aria-label="Fairy model and effort">
+              <button
+                ref={modelBtn}
+                class="agent-tool"
+                classList={{ on: fairyModel() !== "auto" }}
+                data-tip={fairyTip("model")}
+                aria-label={fairyTip("model")}
+                aria-expanded={fairyMenu() === "model"}
+                onClick={() => {
+                  setChatsMenu(false);
+                  setFairyMenu(fairyMenu() === "model" ? null : "model");
+                }}
+              >
+                <AgentIcon name="model" />
+              </button>
+              <button
+                ref={effortBtn}
+                class="agent-tool"
+                classList={{ on: fairyEffort() !== "auto" }}
+                data-tip={fairyTip("effort")}
+                aria-label={fairyTip("effort")}
+                aria-expanded={fairyMenu() === "effort"}
+                onClick={() => {
+                  setChatsMenu(false);
+                  setFairyMenu(fairyMenu() === "effort" ? null : "effort");
+                }}
+              >
+                <AgentIcon name="effort" />
+              </button>
+            </div>
+            <Show when={fairyMenu()}>
+              {(kind) => {
+                const items = () => (kind() === "model" ? FAIRY_MODELS : FAIRY_EFFORTS);
+                const cur = () => (kind() === "model" ? fairyModel() : fairyEffort());
+                const btn = () => (kind() === "model" ? modelBtn : effortBtn);
+                return (
+                  <Portal>
+                    <div class="agent-menu-backdrop" onClick={() => setFairyMenu(null)} />
+                    <div class="agent-model-menu" style={menuPos(btn(), true)}>
+                      <For each={items()}>
+                        {([id, label]) => (
+                          <button
+                            classList={{ "agent-model-item": true, on: cur() === id }}
+                            onClick={() => pickFairyPref(kind(), id)}
+                          >
+                            <span>{label}</span>
+                          </button>
+                        )}
+                      </For>
+                    </div>
+                  </Portal>
+                );
+              }}
+            </Show>
+          </Show>
           <div class="agent-quick" role="group" aria-label="Quick prompts">
             <button
               class="agent-tool"

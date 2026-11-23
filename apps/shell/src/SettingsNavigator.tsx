@@ -167,11 +167,12 @@ export const Section: Component<{ title: string; sub?: string; children: JSX.Ele
 };
 
 /** Hide, rather than remount, sections so searching preserves unsaved form values. */
-const SettingsNavigator: Component<{ children: JSX.Element }> = (props) => {
+const SettingsNavigator: Component<{ inPane?: boolean; children: JSX.Element }> = (props) => {
   let body!: HTMLDivElement;
   let input!: HTMLInputElement;
   const [query, setQuery] = createSignal("");
   const [selected, setSelected] = createSignal("Appearance");
+  const [drilled, setDrilled] = createSignal<string | null>(null);
   const [sections, setSections] = createSignal<HTMLElement[]>([]);
   const [matches, setMatches] = createSignal(0);
   const normalize = (s: string) =>
@@ -225,21 +226,19 @@ const SettingsNavigator: Component<{ children: JSX.Element }> = (props) => {
     if (list.length > 0 && selected() !== "All settings" && !list.some((s) => s.dataset.section === selected())) {
       setSelected(list[0]?.dataset.section ?? "All settings");
     }
-    // Velvet Paper lays the sections out as a two-column grid in 4px rows, each
-    // spanning its own height plus the gap under it, so short cards stack under
-    // short ones. (CSS columns did that by themselves, but WebKit split cards'
-    // paper and shadows across columns and left whole columns unpainted.)
-    // Classic's body is a plain column, where the spans mean nothing.
-    const ROW = 4;
-    const GAP = 36;
-    const spans = new ResizeObserver((entries) => {
-      for (const { target } of entries) {
-        const el = target as HTMLElement;
-        el.style.gridRowEnd = el.offsetHeight ? `span ${Math.ceil((el.offsetHeight + GAP) / ROW)}` : "";
-      }
-    });
-    for (const s of list) spans.observe(s);
-    onCleanup(() => spans.disconnect());
+    // Desktop full-page Velvet Paper lays sections in a two-column grid.
+    if (!props.inPane) {
+      const ROW = 4;
+      const GAP = 36;
+      const spans = new ResizeObserver((entries) => {
+        for (const { target } of entries) {
+          const el = target as HTMLElement;
+          el.style.gridRowEnd = el.offsetHeight ? `span ${Math.ceil((el.offsetHeight + GAP) / ROW)}` : "";
+        }
+      });
+      for (const s of list) spans.observe(s);
+      onCleanup(() => spans.disconnect());
+    }
     // Conditional provider controls can appear while the page is filtered.
     const observer = new MutationObserver(filter);
     observer.observe(body, { childList: true, subtree: true });
@@ -254,10 +253,13 @@ const SettingsNavigator: Component<{ children: JSX.Element }> = (props) => {
   const select = (title: string) => {
     setQuery("");
     setSelected(title);
+    if (props.inPane) setDrilled(title);
     toTop();
   };
+  const showResults = () => !props.inPane || !!query().trim() || drilled() !== null;
+  const showNav = () => !props.inPane || (!query().trim() && drilled() === null);
   return (
-    <div class="set-layout">
+    <div classList={{ "set-layout": true, "has-results": showResults() }}>
       <aside class="set-rail">
         <div class="set-search-bar">
           <div class="set-search-box">
@@ -305,7 +307,7 @@ const SettingsNavigator: Component<{ children: JSX.Element }> = (props) => {
             </button>
           </Show>
         </div>
-        <nav class="set-nav" aria-label="Settings categories" data-legend="Settings">
+        <nav class="set-nav" aria-label="Settings categories" data-legend="Settings" hidden={!showNav()}>
           <For each={navGroups()}>
             {(group) => (
               <div class="set-nav-group">
@@ -327,7 +329,15 @@ const SettingsNavigator: Component<{ children: JSX.Element }> = (props) => {
           </For>
         </nav>
       </aside>
-      <div class="set-results">
+      <div class="set-results" hidden={!showResults()}>
+        <Show when={props.inPane && drilled() && !query().trim()}>
+          <div class="set-pane-subhead">
+            <button class="set-back-btn" type="button" onClick={() => setDrilled(null)}>
+              ← Settings
+            </button>
+            <span class="set-pane-cat">{drilled()}</span>
+          </div>
+        </Show>
         <Show when={query()}>
           <div class="set-search-status" role="status">
             {matches() ? `${matches()} matching settings` : "No settings found. Try another search."}

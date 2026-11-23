@@ -1798,18 +1798,24 @@ body.resizing .panel-edge-resize::after {
   background: rgba(var(--accent-rgb), 0.18);
 }
 
+/* ── Sidebar + separated pinned web-app rail wrapper ── */
+.side-wrap {
+  grid-area: side;
+  display: flex;
+  flex-direction: row;
+  min-width: 0;
+  min-height: 0;
+}
+
 /* ── Sidebar (liquid glass over velvet) ── */
 .sidebar {
-  grid-area: side;
   display: flex;
   flex-direction: column;
   gap: 11px;
-  /* The 22px right gutter here used to be reserved for the workspace dot rail
-     (#44). That rail is gone (#151 — the footer button owns workspaces now), and
-     the gutter it charged down the sidebar's whole height went with it. Left
-     gutter is still added by .with-apps for the app rail (#48). */
+  flex: 1 1 0;
   padding: 10px 10px 12px;
   min-width: 0;
+  min-height: 0;
   overflow: hidden;
   position: relative;
   background: var(--glass-fill-soft);
@@ -1818,20 +1824,27 @@ body.resizing .panel-edge-resize::after {
   border-right: 1px solid var(--glass-rim-soft);
   box-shadow: inset -1px 0 0 0 rgba(255, 255, 255, 0.04);
 }
-.sidebar.with-apps {
-  padding-left: 42px;
-}
 
-/* App rail (#48) — Opera-style web-app launcher on the left edge, vertically
-   centered (capped so it never collides with the nav row / footer). */
+/* Pinned web-app rail (#48) — own vertical rail between .bars-col and .sidebar. */
+.app-rail-col {
+  flex: 0 0 46px;
+  width: 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 6px;
+  min-height: 0;
+  background: var(--glass-fill-soft);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-right: 1px solid var(--glass-rim-soft);
+  box-sizing: border-box;
+}
 .app-rail {
-  position: absolute;
-  left: 4px;
-  top: 50%;
-  transform: translateY(-50%);
-  max-height: calc(100% - 150px);
-  width: 34px;
-  z-index: 6;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1910,15 +1923,12 @@ body.resizing .panel-edge-resize::after {
   color: var(--flux-teal);
   border-color: var(--flux-teal);
 }
-/* The rail's fold toggle, while the rail is out: lifted out of the nav row into
-   the top of the rail's own gutter, where the icons start. Folded, it's an
-   ordinary nav-row button (no class), because the gutter is gone. */
-.sidebar.with-apps .app-rail-toggle {
-  position: absolute;
-  left: 4px;
-  top: 11px;
+/* Fold toggle at the top of the pinned web-app rail. */
+.app-rail-toggle {
+  flex: none;
   width: 30px;
-  z-index: 7;
+  height: 30px;
+  border-radius: 50%;
 }
 
 /* Wraps. Eight tools + the fold caret don't fit 252px in a single row, and the
@@ -4596,8 +4606,10 @@ body.resizing .panel-edge-resize::after {
   position: relative;
   z-index: 1;
 }
-.agent-inner > header {
-  z-index: 8;
+.agent-inner > header:not(.agent-fx) {
+  z-index: 30;
+  transform: translateZ(0);
+  flex-shrink: 0;
   overflow: visible;
 }
 
@@ -9429,8 +9441,10 @@ body.busy .start-card {
     padding: 8px 14px 10px 8px;
     gap: 8px;
   }
-  .sidebar.with-apps {
-    padding-left: 34px;
+  .app-rail-col {
+    flex: 0 0 40px;
+    width: 40px;
+    padding: 8px 4px;
   }
 }
 @media (pointer: coarse) {
@@ -9458,6 +9472,7 @@ body.busy .start-card {
 .shell.mobile .titlebar,
 .shell.mobile .resize-h,
 .shell.mobile .bars-col,
+.shell.mobile .app-rail-col,
 .shell.mobile .bookmark-bar,
 .shell.mobile .terminal-col,
 .shell.mobile .connect-rail,

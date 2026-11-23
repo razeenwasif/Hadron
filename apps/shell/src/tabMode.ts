@@ -13,7 +13,7 @@
  */
 import { createSignal } from "solid-js";
 
-export type TabMode = "tabs" | "calendar" | "mail" | "notes" | "time" | "context" | "agent" | "terminal";
+export type TabMode = "tabs" | "calendar" | "mail" | "notes" | "time" | "context" | "agent" | "terminal" | "settings";
 export const TAB_MODES: TabMode[] = ["tabs", "calendar", "mail", "notes", "time", "context"];
 /** Liquid Silk's extra modes, after the others. */
 export const SIDE_PANELS: TabMode[] = ["agent", "terminal"];

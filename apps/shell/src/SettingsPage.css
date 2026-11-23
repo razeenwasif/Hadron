@@ -653,3 +653,137 @@ html[data-density="comfortable"] .set-row {
   height: 42px;
   padding-left: 36px;
 }
+
+/* ── Settings hosted inside the sidebar tab bar (TabModePanel) ─────────────── */
+:root .set-page.in-pane,
+:root .set-page.in-pane * {
+  box-sizing: border-box;
+}
+:root .set-page.in-pane {
+  padding: 2px 0 8px;
+  gap: 8px;
+  background: transparent;
+  overflow: hidden;
+}
+:root .set-page.in-pane > .set-pane-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 0;
+  padding: 0 2px;
+}
+:root .set-page.in-pane .hist-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+:root .set-page.in-pane .set-pane-close {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--flux-text-dim);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+:root .set-page.in-pane .set-pane-close:hover {
+  background: var(--flux-surface);
+  color: var(--flux-text);
+}
+:root .set-page.in-pane > .set-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 0;
+  min-height: 0;
+}
+:root .set-page.in-pane .set-layout:not(.has-results) > .set-rail {
+  flex: 1 1 0;
+  width: 100%;
+  min-height: 0;
+}
+:root .set-page.in-pane .set-layout.has-results > .set-rail {
+  flex: none;
+  width: 100%;
+}
+:root .set-page.in-pane .set-layout.has-results > .set-results {
+  flex: 1 1 0;
+  min-height: 0;
+}
+:root .set-page.in-pane .set-rail > .set-nav {
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 10px;
+  padding: 2px 0 8px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+:root .set-page.in-pane .set-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+:root .set-page.in-pane .set-nav-group-label {
+  display: block;
+}
+:root .set-page.in-pane .set-nav .set-nav-btn {
+  width: 100%;
+  min-height: 34px;
+  padding: 6px 10px;
+  white-space: normal;
+}
+:root .set-page.in-pane .set-pane-subhead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 2px 8px;
+  border-bottom: 1px solid var(--glass-rim-soft);
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+:root .set-page.in-pane .set-back-btn {
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--flux-text-dim);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+:root .set-page.in-pane .set-back-btn:hover {
+  background: var(--flux-surface);
+  color: var(--flux-text);
+}
+:root .set-page.in-pane .set-pane-cat {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--flux-text);
+  margin-left: auto;
+}
+:root .set-page.in-pane .set-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+  flex: 1 1 0;
+  min-height: 0;
+  max-width: none;
+  margin: 0;
+  padding: 2px 6px 24px 2px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+:root .set-page.in-pane .set-section,
+:root .set-page.in-pane .set-card {
+  width: 100%;
+  min-width: 0;
+}
+:root .set-page.in-pane .set-proxy {
+  align-items: stretch;
+}
+:root .set-page.in-pane .set-proxy-in {
+  width: 100%;
+}

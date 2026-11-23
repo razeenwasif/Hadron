@@ -79,7 +79,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px 8px;
 }
 .agent-seg,
 .agent-quick {
@@ -144,8 +145,8 @@ body:has(.appdock) .agent .agent-input-row {
   letter-spacing: 0.01em;
   white-space: nowrap;
   color: var(--flux-text);
-  background: color-mix(in srgb, var(--flux-bg, #0d0b12) 90%, transparent);
-  border: 1px solid color-mix(in srgb, var(--flux-text) 10%, transparent);
+  background: var(--flux-popover-fill, var(--flux-bg, #141418));
+  border: 1px solid color-mix(in srgb, var(--flux-text) 14%, transparent);
   box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.55);
   opacity: 0;
   transform: translate(-50%, 3px);

@@ -333,6 +333,16 @@ let mockContainers: { id: number; name: string; color: number }[] = [
 // Explicit preview-only fixtures for exercising unsupported platforms and failed writes.
 const previewParams = new URLSearchParams(window.location.search);
 let failNextSave = previewParams.get("previewFailSave") === "once";
+const mockPanels = previewParams.has("previewPanels")
+  ? [
+      { id: 101, url: "https://gemini.google.com", title: "Gemini" },
+      { id: 102, url: "https://chatgpt.com", title: "ChatGPT" },
+      { id: 103, url: "https://claude.ai", title: "Claude" },
+      { id: 104, url: "https://discord.com/app", title: "Discord" },
+      { id: 105, url: "https://notion.so", title: "Notion" },
+      { id: 106, url: "https://github.com", title: "GitHub" },
+    ]
+  : [];
 // `?previewTabs=60` fills the strip with that many web tabs, the last one active,
 // to measure what a tab event costs the sidebar at a realistic tab count.
 for (let n = Number(previewParams.get("previewTabs")) || 0; n > 0; n--) {
@@ -584,7 +594,7 @@ export function invoke<T>(cmd: string, args?: Record<string, unknown>): Promise<
         folders: mockFolders,
         workspaces: mockWorkspaces,
         active_workspace: mockActiveWs,
-        panels: [],
+        panels: mockPanels,
         containers: mockContainers,
       } as T);
     // System stats, for the task manager and the rail's system monitor. Values
@@ -799,7 +809,7 @@ export function invoke<T>(cmd: string, args?: Record<string, unknown>): Promise<
       return Promise.resolve(undefined as T);
     }
     case "panels_list":
-      return Promise.resolve([] as T);
+      return Promise.resolve(mockPanels as T);
     case "panel_add":
       return Promise.resolve({
         id: nextId++,

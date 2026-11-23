@@ -22,7 +22,9 @@ export type AgentIconName =
   | "history"
   | "send"
   | "stop"
-  | "close";
+  | "close"
+  | "model"
+  | "effort";
 
 const DRAW: Record<AgentIconName, () => JSX.Element> = {
   // A page with its corner folded and two lines of text.
@@ -91,6 +93,15 @@ const DRAW: Record<AgentIconName, () => JSX.Element> = {
   // A soft square.
   stop: () => <rect x="7" y="7" width="10" height="10" rx="2.6" fill="currentColor" stroke="none" />,
   close: () => <path d="M7.5 7.5l9 9M16.5 7.5l-9 9" />,
+  // Antigravity model selector (chip) and reasoning effort selector (3 bars).
+  model: () => (
+    <>
+      <rect x="6" y="6" width="12" height="12" rx="2.5" />
+      <path d="M9.5 3.5V6M14.5 3.5V6M9.5 18v2.5M14.5 18v2.5M3.5 9.5H6M3.5 14.5H6M18 9.5h2.5M18 14.5h2.5" />
+      <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+    </>
+  ),
+  effort: () => <path d="M5.5 18.5v-4M12 18.5v-8M18.5 18.5v-13" stroke-width="2" />,
 };
 
 export const AgentIcon: Component<{ name: AgentIconName; size?: number }> = (p) => (

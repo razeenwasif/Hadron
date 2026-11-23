@@ -49,6 +49,7 @@ import {
   commitTabMode,
   paneWide,
   setPaneWide,
+  setTabMode,
   setTabModeChanger,
   tabMode,
   SIDE_PANELS,
@@ -64,6 +65,7 @@ const TabNotes = lazy(() => import("./TabNotes"));
 const TimePane = lazy(() => import("./TimePane"));
 const ConnectionsRail = lazy(() => import("./ConnectionsRail"));
 const VoiceEdge = lazy(() => import("./VoiceEdge"));
+const SettingsPage = lazy(() => import("./SettingsPage"));
 
 // ── Motion ──────────────────────────────────────────────────────────────────
 const FAST = 120;
@@ -83,6 +85,7 @@ const WAVE_K = 2;
  *  sideW); `.shell.side-morph` animates the columns for this long. */
 const WIDEN = 620 * WAVE_K;
 const isDock = (m: TabMode) => SIDE_PANELS.includes(m);
+const isWide = (m: TabMode) => isDock(m) || m === "settings";
 const silk = () => design() === "liquid-silk";
 
 /** What leaves the tabs: the pane's own parts and the rows in view, top to
@@ -791,7 +794,7 @@ const TabModePanel: Component<{
 
   const change = (to: TabMode) => {
     const from = tabMode();
-    if (el.parentElement) widen(el.parentElement, isDock(to));
+    if (el.parentElement) widen(el.parentElement, isWide(to));
     if (to === "tabs") return leave();
     if (from === "tabs") {
       setShown(to);
@@ -860,7 +863,7 @@ const TabModePanel: Component<{
       ro.observe(part);
     // Mounted by the first switch, which the plain setter already committed.
     if (tabMode() !== "tabs") {
-      widen(side, isDock(tabMode()));
+      widen(side, isWide(tabMode()));
       enter();
     }
     onCleanup(() => {
@@ -883,6 +886,7 @@ const TabModePanel: Component<{
           context: "Context",
           agent: "Flux Agent",
           terminal: "Terminal",
+          settings: "Settings",
         }[shown()]
       }
       inert={!open()}
@@ -958,6 +962,13 @@ const TabModePanel: Component<{
           <div class="mode-page" hidden={shown() !== "time"}>
             <Suspense>
               <TimePane />
+            </Suspense>
+          </div>
+        </Show>
+        <Show when={seen().has("settings")}>
+          <div class="mode-page mode-settings" hidden={shown() !== "settings"}>
+            <Suspense>
+              <SettingsPage inPane onNavigate={props.onNavigate} onClose={() => setTabMode("tabs")} />
             </Suspense>
           </div>
         </Show>

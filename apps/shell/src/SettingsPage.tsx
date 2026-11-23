@@ -242,7 +242,9 @@ const setMaxLiveTabs = (n: number) => {
   }
 };
 
-const SettingsPage: Component<{ onNavigate: (url: string) => void }> = (props) => {
+const SettingsPage: Component<{ onNavigate: (url: string) => void; inPane?: boolean; onClose?: () => void }> = (
+  props,
+) => {
   const writer = settingsWriter();
   const [coreReady, setCoreReady] = createSignal(false);
   const [loadError, setLoadError] = createSignal(false);
@@ -715,7 +717,7 @@ const SettingsPage: Component<{ onNavigate: (url: string) => void }> = (props) =
   };
 
   onMount(() => {
-    titleInternalTab(SETTINGS_URL, "Settings");
+    if (!props.inPane) titleInternalTab(SETTINGS_URL, "Settings");
     void loadCore();
     void formHelpSettings()
       .then(setFormHelp)
@@ -812,9 +814,14 @@ const SettingsPage: Component<{ onNavigate: (url: string) => void }> = (props) =
   const hasExceptions = () => sitesOff().length + httpAllow().length + leanOn().length > 0;
 
   return (
-    <div class="hist-page set-page">
-      <header class="hist-head">
-        <div class="hist-title">⚙ Settings</div>
+    <div classList={{ "hist-page": true, "set-page": true, "in-pane": !!props.inPane }}>
+      <header classList={{ "hist-head": true, "set-pane-head": !!props.inPane }}>
+        <div class="hist-title">{props.inPane ? "Settings" : "⚙ Settings"}</div>
+        <Show when={props.inPane && props.onClose}>
+          <button class="set-pane-close" type="button" aria-label="Close settings" onClick={props.onClose}>
+            ×
+          </button>
+        </Show>
       </header>
       <Show when={loadError()}>
         <div class="settings-feedback" role="alert">
@@ -837,7 +844,7 @@ const SettingsPage: Component<{ onNavigate: (url: string) => void }> = (props) =
           Saving…
         </div>
       </Show>
-      <SettingsNavigator>
+      <SettingsNavigator inPane={props.inPane}>
         <Section title="Appearance">
           <Row
             label="Interface density"

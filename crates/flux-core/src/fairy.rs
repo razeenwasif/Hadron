@@ -209,24 +209,20 @@ mod link {
     }
 
     /// After an answer she's saying: wait for her `spoken` (she has finished,
-    /// or skipped it, muted), the connection closing, or `timeout`.
-    pub fn wait_spoken(reader: &mut BufReader<UnixStream>, timeout: Duration) {
+    /// skipped it muted -> true, or had no TTS configured/failed -> false),
+    /// the connection closing, or `timeout`.
+    pub fn wait_spoken(reader: &mut BufReader<UnixStream>, timeout: Duration) -> bool {
         if reader.get_ref().set_read_timeout(Some(timeout)).is_err() {
-            return;
+            return true;
         }
         while let Ok(Some(line)) = next_line(reader) {
-            let spoken = serde_json::from_str::<serde_json::Value>(&line)
-                .ok()
-                .and_then(|m| {
-                    m.get("type")
-                        .and_then(|t| t.as_str())
-                        .map(|t| t == "spoken")
-                })
-                .unwrap_or(false);
-            if spoken {
-                return;
+            if let Ok(m) = serde_json::from_str::<serde_json::Value>(&line) {
+                if m.get("type").and_then(|t| t.as_str()) == Some("spoken") {
+                    return m.get("spoken").and_then(|v| v.as_bool()).unwrap_or(true);
+                }
             }
         }
+        true
     }
 }
 
@@ -505,6 +501,8 @@ pub async fn fairy_ask(
     state: State<'_, FluxState>,
     question: String,
     tab: Option<TabId>,
+    model: Option<String>,
+    effort: Option<String>,
     on_text: Channel<String>,
 ) -> Result<FairyReply, String> {
     let question = cap_chars(question.trim(), 4_000);
@@ -537,6 +535,12 @@ pub async fn fairy_ask(
             // in her own voice (her window does, and stays quiet if she's muted).
             "speak": true,
         });
+        if let Some(m) = model.as_deref().map(str::trim).filter(|s| !s.is_empty()) {
+            ask["model"] = serde_json::json!(m);
+        }
+        if let Some(e) = effort.as_deref().map(str::trim).filter(|s| !s.is_empty()) {
+            ask["effort"] = serde_json::json!(e);
+        }
         if let Some((socket, token)) = grant {
             ask["tools"] = serde_json::json!({ "socket": socket, "token": token });
         }
@@ -558,8 +562,8 @@ pub async fn fairy_ask(
             use tauri::Emitter;
             let _ = app.emit("flux://fairy-speaking", ());
             std::thread::spawn(move || {
-                link::wait_spoken(&mut reader, std::time::Duration::from_secs(6 * 60));
-                let _ = app.emit("flux://fairy-spoken", ());
+                let said = link::wait_spoken(&mut reader, std::time::Duration::from_secs(6 * 60));
+                let _ = app.emit("flux://fairy-spoken", said);
             });
             Ok::<String, String>(text)
         })

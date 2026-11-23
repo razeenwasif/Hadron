@@ -331,7 +331,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
     TabMode,
     {
       label: string;
-      icon: "tabs" | "calendar" | "mail" | "note" | "time" | "trail" | "agent" | "terminal";
+      icon: "tabs" | "calendar" | "mail" | "note" | "time" | "trail" | "agent" | "terminal" | "settings";
       key?: string;
     }
   > = {
@@ -343,6 +343,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
     context: { label: "Context", icon: "trail" },
     agent: { label: "Agent", icon: "agent", key: "toggle-agent" },
     terminal: { label: "Terminal", icon: "terminal", key: "toggle-terminal" },
+    settings: { label: "Settings", icon: "settings" },
   };
   /** Liquid Silk: the agent and terminal are modes of this pane (tabMode.ts). */
   const sideDock = () => design() === "liquid-silk";
@@ -358,6 +359,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
     if (m === "context") return "Context · this page";
     if (m === "agent") return "Flux Agent";
     if (m === "terminal") return "Terminal";
+    if (m === "settings") return "Settings";
     return `Calendar · ${new Date().toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })}`;
   };
   // The switch's thumb travels to the picked segment, measured once it's laid out.
@@ -365,7 +367,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
   const [thumb, setThumb] = createSignal<{ x: number; w: number } | null>(null);
   const placeThumb = () => {
     const b = modesEl?.querySelector<HTMLElement>(".tab-mode.on");
-    if (b) setThumb({ x: b.offsetLeft, w: b.offsetWidth });
+    setThumb(b ? { x: b.offsetLeft, w: b.offsetWidth } : null);
   };
   // After the change has laid out (a timeout, not a frame: a hidden window gets
   // no frames, and the thumb must still be right when it's shown again).
@@ -1047,94 +1049,106 @@ const Sidebar: Component<SidebarProps> = (props) => {
   );
 
   return (
-    <nav
-      ref={navEl}
-      class="sidebar"
-      // Velvet Paper (design.ts) sets this into the pane's top edge.
-      data-legend={legend()}
-      data-mode={vp() && !props.collapsed ? tabMode() : undefined}
-      classList={{
-        "with-apps": !props.collapsed && panels().length > 0 && appRailOpen(),
-        collapsed: props.collapsed,
-      }}
+    <div
+      class="side-wrap"
+      classList={{ "has-app-rail": !props.collapsed && panels().length > 0 && appRailOpen() }}
     >
       {/* The one hover label for every icon-only rail: the pages and TUI bars
           and this sidebar's folder icons. Mounted here because the sidebar is
           always present and the bars column can be hidden. */}
       <RailTip />
-      {/* Left app rail (#48 launcher) — Opera-style: pinned web-app panels as
-          icons on the sidebar's left edge; click toggles the slide-out panel. */}
+      {/* Separate pinned web-app rail (#48 launcher) — sits in its own rail
+          between the tools/pages rail (.bars-col) and the tab bar (.sidebar). */}
       <Show when={!props.collapsed && panels().length > 0 && appRailOpen()}>
-        <div class="app-rail">
-          <For each={panels()}>
-            {(p) => (
-              <button
-                classList={{
-                  "app-rail-icon": true,
-                  active: activePanelId() === p.id,
-                  dragging: dragPanel() === p.id,
-                  "drop-into": dropPanel() === p.id,
-                }}
-                title={p.title || p.url}
-                draggable={true}
-                onClick={() => togglePanel(p.id)}
-                onDragStart={(e) => {
-                  setDragPanel(p.id);
-                  e.dataTransfer!.effectAllowed = "move";
-                }}
-                onDragOver={(e) => {
-                  if (dragPanel() != null) {
-                    e.preventDefault();
-                    setDropPanel(p.id);
-                  }
-                }}
-                onDragLeave={() => {
-                  if (dropPanel() === p.id) setDropPanel(null);
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  dropOnPanel(p.id);
-                }}
-                onDragEnd={() => {
-                  setDragPanel(null);
-                  setDropPanel(null);
-                }}
-              >
-                <PanelIcon url={p.url} />
-                <Show when={(panelBadges[p.id] ?? 0) > 0}>
-                  <span class="app-rail-badge">{panelBadges[p.id]! > 99 ? "99+" : panelBadges[p.id]}</span>
-                </Show>
-              </button>
-            )}
-          </For>
-          <button class="app-rail-add" title="Pin a web app (panels)" onClick={() => openPanel("webpanels")}>
-            +
-          </button>
-        </div>
-      </Show>
-      {/* Nav row. Also a drag region (`deep`) for extra grab area; buttons
-          still click through. Traffic lights live in the title bar now. */}
-      <div class="sidebar-controls" classList={{ collapsed: props.collapsed }} data-tauri-drag-region="deep">
-        <button
-          class="icon-btn"
-          title={withKey("Toggle sidebar", "toggle-sidebar")}
-          onClick={props.onToggleSidebar}
-        >
-          {props.collapsed ? "»" : "«"}
-        </button>
-        {/* Folds the pinned web-app rail. Open, it sits in the rail's own gutter
-            above the icons (see .app-rail-toggle); folded, it's a plain toolbar
-            button here, since the gutter it lived in is gone. */}
-        <Show when={!props.collapsed && panels().length > 0}>
+        <aside class="app-rail-col" aria-label="Pinned web apps">
           <button
-            classList={{ "icon-btn": true, "app-rail-toggle": appRailOpen() }}
-            aria-expanded={appRailOpen()}
-            title={appRailOpen() ? "Hide the web-app rail" : "Show the web-app rail"}
-            onClick={() => setAppRailOpen(!appRailOpen())}
+            class="icon-btn app-rail-toggle"
+            aria-expanded={true}
+            title="Hide the web-app rail"
+            onClick={() => setAppRailOpen(false)}
           >
-            {appRailOpen() ? "‹" : "›"}
+            ‹
           </button>
-        </Show>
+          <div class="app-rail">
+            <For each={panels()}>
+              {(p) => (
+                <button
+                  classList={{
+                    "app-rail-icon": true,
+                    active: activePanelId() === p.id,
+                    dragging: dragPanel() === p.id,
+                    "drop-into": dropPanel() === p.id,
+                  }}
+                  title={p.title || p.url}
+                  draggable={true}
+                  onClick={() => togglePanel(p.id)}
+                  onDragStart={(e) => {
+                    setDragPanel(p.id);
+                    e.dataTransfer!.effectAllowed = "move";
+                  }}
+                  onDragOver={(e) => {
+                    if (dragPanel() != null) {
+                      e.preventDefault();
+                      setDropPanel(p.id);
+                    }
+                  }}
+                  onDragLeave={() => {
+                    if (dropPanel() === p.id) setDropPanel(null);
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    dropOnPanel(p.id);
+                  }}
+                  onDragEnd={() => {
+                    setDragPanel(null);
+                    setDropPanel(null);
+                  }}
+                >
+                  <PanelIcon url={p.url} />
+                  <Show when={(panelBadges[p.id] ?? 0) > 0}>
+                    <span class="app-rail-badge">{panelBadges[p.id]! > 99 ? "99+" : panelBadges[p.id]}</span>
+                  </Show>
+                </button>
+              )}
+            </For>
+            <button class="app-rail-add" title="Pin a web app (panels)" onClick={() => openPanel("webpanels")}>
+              +
+            </button>
+          </div>
+        </aside>
+      </Show>
+      <nav
+        ref={navEl}
+        class="sidebar"
+        // Velvet Paper (design.ts) sets this into the pane's top edge.
+        data-legend={legend()}
+        data-mode={vp() && !props.collapsed ? tabMode() : undefined}
+        classList={{
+          collapsed: props.collapsed,
+        }}
+      >
+        {/* Nav row. Also a drag region (`deep`) for extra grab area; buttons
+            still click through. Traffic lights live in the title bar now. */}
+        <div class="sidebar-controls" classList={{ collapsed: props.collapsed }} data-tauri-drag-region="deep">
+          <button
+            class="icon-btn"
+            title={withKey("Toggle sidebar", "toggle-sidebar")}
+            onClick={props.onToggleSidebar}
+          >
+            {props.collapsed ? "»" : "«"}
+          </button>
+          {/* Unfolds the pinned web-app rail when hidden; its hide button sits at
+              the top of .app-rail-col itself. */}
+          <Show when={!props.collapsed && panels().length > 0 && !appRailOpen()}>
+            <button
+              class="icon-btn"
+              aria-expanded={false}
+              title="Show the web-app rail"
+              onClick={() => setAppRailOpen(true)}
+            >
+              ›
+            </button>
+          </Show>
         <Show when={props.collapsed}>
           <button
             class="icon-btn"
@@ -2554,19 +2568,27 @@ const Sidebar: Component<SidebarProps> = (props) => {
           >
             <Icon name="extensions" />
           </button>
-          <button
-            classList={{ "icon-btn": true, active: panel() === "settings" }}
-            title="Settings"
-            onClick={() => openPanel("settings")}
-          >
-            <Icon name="settings" />
-          </button>
         </Show>
 
-        {/* Always shown, folded or not. Workspaces replaced the dot rail (#151):
-            a strip of colour-only dots said nothing about which workspace was
-            which until you hovered one, and it charged a 22px gutter down the
-            whole sidebar for the privilege. */}
+        {/* Always shown, folded or not. */}
+        <button
+          classList={{
+            "icon-btn": true,
+            active: vp() && !props.collapsed ? tabMode() === "settings" : activeTab()?.url === "flux://settings",
+          }}
+          title="Settings"
+          aria-label="Settings"
+          onClick={() => {
+            if (vp() && !props.collapsed) {
+              setPanel(null);
+              setTabMode(tabMode() === "settings" ? "tabs" : "settings");
+            } else {
+              props.onNavigate("flux://settings");
+            }
+          }}
+        >
+          <Icon name="settings" />
+        </button>
         <button
           classList={{ "icon-btn": true, "ws-btn": true, active: wsPanelOpen() }}
           title={`Workspaces — ${activeWorkspaceName()}`}
@@ -2629,7 +2651,8 @@ const Sidebar: Component<SidebarProps> = (props) => {
           />
         </Suspense>
       </Show>
-    </nav>
+      </nav>
+    </div>
   );
 };
 
