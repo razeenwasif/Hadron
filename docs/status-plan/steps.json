@@ -199,13 +199,19 @@
       "updated": "2026-11-22T23:18:40Z"
     },
     "shields-minimal": {
-      "status": "todo"
+      "status": "done",
+      "note": "Redesigned ShieldsPop.tsx + ShieldsPop.css with compact header (host/blocked count/pill Switch), top 3 blocked domains + Show all, pill quick actions (Hide element, Show hidden, Clear cookies), collapsible More controls details drawer, auto-fit sidebar width (no right-edge clipping), and instant Graphite transitions. Verified in WKWebView (Graphite & Liquid Silk, overflowX: 0).",
+      "updated": "2026-11-22T23:50:44Z"
     },
     "darkmode-refine": {
-      "status": "todo"
+      "status": "done",
+      "note": "Refined crates/flux-core/assets/darkmode.js with isAlreadyDark() check (computed body/html background luminance < 0.28 or dark color-scheme meta), softer invert(0.92) hue-rotate(180deg) contrast(0.96), NATIVE_DARK_CSS color-scheme:dark, double-invert cancellation on media/background-images/fullscreen, and DOMContentLoaded/load/MutationObserver re-evaluation. Verified cargo test -p flux-core --lib darkmode (2/2).",
+      "updated": "2026-11-22T23:50:44Z"
     },
     "settings-redesign": {
-      "status": "todo"
+      "status": "done",
+      "note": "Rebuilt SettingsNavigator.tsx + SettingsPage.css with two-pane .set-rail grouped navigation (Browser, Work, App + inline 15x15 stroke icons, defaulting to Appearance), search bar embedded inside .set-rail, and responsive container/mobile chip rules preserving Classic, Velvet Paper, Liquid Silk, Graphite, and Mobile. Verified vitest (52/52), tsc, perf budgets green, and WKWebView Graphite + Liquid Silk (overflowX: 0).",
+      "updated": "2026-11-22T23:50:44Z"
     },
     "perf-footprint": {
       "status": "todo"

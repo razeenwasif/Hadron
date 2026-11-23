@@ -97,4 +97,13 @@ mod tests {
         assert!(!DarkState::restore(path.clone()).is_on());
         let _ = std::fs::remove_dir_all(&dir);
     }
+
+    #[test]
+    fn darkmode_script_has_dark_detection_and_double_invert_guards() {
+        let js = include_str!("../assets/darkmode.js");
+        assert!(js.contains("window.__fluxDark"));
+        assert!(js.contains("isAlreadyDark"));
+        assert!(js.contains("filter:none!important"));
+        assert!(js.contains(":fullscreen"));
+    }
 }

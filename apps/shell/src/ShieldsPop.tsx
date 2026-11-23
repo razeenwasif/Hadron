@@ -1,9 +1,10 @@
 /**
- * Shields popover body (#57) — split from Shields.tsx so the toggles/status UI
- * loads on first open instead of riding in the boot bundle (ADR 0001). The
- * eager side keeps only the footer icon + blocked-count badge.
+ * Minimal modern Shields popover (#57) — split from Shields.tsx so the toggle
+ * UI loads on first open (ADR 0001). Keeps the primary view focused on site
+ * status, top blocked domains, and quick actions, while tucking extra &
+ * platform-specific controls into "More controls".
  */
-import { For, Show, createSignal, createEffect, on, onMount, type Component } from "solid-js";
+import { For, Show, createEffect, createSignal, on, onMount, type Component } from "solid-js";
 
 import { visibleInterval } from "./poll";
 import {
@@ -48,6 +49,25 @@ function hostOf(url: string): string | null {
   }
 }
 
+const Switch: Component<{
+  checked: boolean;
+  label: string;
+  disabled?: boolean;
+  onToggle: () => void;
+}> = (props) => (
+  <button
+    type="button"
+    role="switch"
+    aria-label={props.label}
+    aria-checked={props.checked}
+    disabled={props.disabled}
+    classList={{ "sp-switch": true, on: props.checked }}
+    onClick={props.onToggle}
+  >
+    <span class="sp-thumb" aria-hidden="true" />
+  </button>
+);
+
 const ShieldsPop: Component<{ onNavigate: (url: string) => void; onClose: () => void }> = (props) => {
   const [status, setStatus] = createSignal<ShieldsStatus | null>(null);
   const [https, setHttps] = createSignal<HttpsStatus | null>(null);
@@ -55,11 +75,13 @@ const ShieldsPop: Component<{ onNavigate: (url: string) => void; onClose: () => 
   const [cookies, setCookies] = createSignal<CookieStatus | null>(null);
   const [blockPerms, setBlockPerms] = createSignal(false);
   const [lean, setLean] = createSignal<LeanStatus | null>(null);
+  const [showAllDomains, setShowAllDomains] = createSignal(false);
 
   const writer = settingsWriter();
   const [loadError, setLoadError] = createSignal(false);
   const [notice, setNotice] = createSignal("");
   let version = 0;
+
   const poll = () => {
     if (writer.pending()) return;
     const request = ++version;
@@ -93,22 +115,19 @@ const ShieldsPop: Component<{ onNavigate: (url: string) => void; onClose: () => 
   createEffect(
     on(activeId, () => {
       setStatus(null);
+      setShowAllDomains(false);
       poll();
     }),
   );
+
   const save = async (label: string, action: () => Promise<unknown>) => {
     version++;
     await writer.run(label, action);
     poll();
   };
-  const requestControls = () => status()?.request_controls === true;
-  // The Shields switches themselves (macOS adds and removes WebKit's rule list).
-  const siteControls = () => status()?.site_controls === true;
-  const togglePerms = () => {
-    const value = !blockPerms();
-    void save("site permissions", () => permissionsSetBlock(value));
-  };
 
+  const requestControls = () => status()?.request_controls === true;
+  const siteControls = () => status()?.site_controls === true;
   const host = () => {
     const t = activeTab();
     return t && t.kind === "browser" ? hostOf(t.url) : null;
@@ -118,7 +137,6 @@ const ShieldsPop: Component<{ onNavigate: (url: string) => void; onClose: () => 
     const s = status();
     return h && s ? !s.sites_off.includes(h) : true;
   };
-  // A switch changes what loads next: reload the page so it shows now.
   const reloadPage = () => {
     const t = activeTab();
     if (t && t.kind === "browser" && host()) void webviewReload(t.id).catch(() => {});
@@ -132,7 +150,6 @@ const ShieldsPop: Component<{ onNavigate: (url: string) => void; onClose: () => 
     const value = !siteOn();
     if (h) void save("site protection", () => shieldsSetSite(h, value)).then(reloadPage);
   };
-  // The picker runs on the page itself, so the popover gets out of its way.
   const pickElement = () => {
     const tab = activeId();
     props.onClose();
@@ -158,6 +175,10 @@ const ShieldsPop: Component<{ onNavigate: (url: string) => void; onClose: () => 
     const value = !siteAllowsHttp();
     if (h) void save("HTTP exception", () => httpsAllowSite(h, value));
   };
+  const togglePerms = () => {
+    const value = !blockPerms();
+    void save("site permissions", () => permissionsSetBlock(value));
+  };
   const leanOn = () => {
     const h = host();
     const l = lean();
@@ -179,26 +200,64 @@ const ShieldsPop: Component<{ onNavigate: (url: string) => void; onClose: () => 
     if (h) void save("cookie preference", () => cookiesSetClearOnClose(h, value));
   };
 
+  const domains = () => status()?.page_domains ?? [];
+  const visibleDomains = () => (showAllDomains() ? domains() : domains().slice(0, 3));
+  const blockedCount = () => status()?.page_blocked ?? 0;
+
   return (
     <>
       <div class="shield-backdrop" onClick={() => props.onClose()} />
       <div class="glass popover shields-pop footer-pop">
-        <div class="shields-stat" role="status">
-          {protectionStatus(status(), host() != null, host())}
-        </div>
-        <Show when={status()?.request_metrics && host() && siteOn() && status()?.enabled}>
-          <div class="shields-page">
-            <div class="shields-row">
-              <span class="shields-label">This page</span>
-              <span class="shields-count">
-                {status()!.page_blocked
-                  ? `${status()!.page_blocked.toLocaleString()} blocked`
-                  : "Nothing blocked"}
-              </span>
+        <Show when={loadError()}>
+          <div role="alert" class="settings-feedback">
+            Couldn't load Shields.<button onClick={poll}>Retry</button>
+          </div>
+        </Show>
+        <Show when={writer.error()}>
+          <div role="alert" class="settings-feedback">
+            {writer.error()}
+            <button onClick={() => void Promise.resolve(writer.retry()).then(poll)}>Retry</button>
+          </div>
+        </Show>
+
+        <fieldset
+          class="sp-fields"
+          disabled={writer.pending() || !status()}
+          aria-label="Protection controls"
+        >
+          <div class="sp-head">
+            <div class="sp-head-meta">
+              <div class="sp-host" title={host() ?? "Shields"}>
+                {host() ?? "Shields"}
+              </div>
+              <div class="sp-sub" role="status">
+                {writer.pending()
+                  ? "Saving…"
+                  : host() && status()?.request_metrics
+                    ? status()?.enabled && siteOn()
+                      ? `${blockedCount().toLocaleString()} blocked on page`
+                      : "Shields paused here"
+                    : protectionStatus(status(), host() != null, host())}
+              </div>
             </div>
-            <Show when={status()!.page_domains.length}>
+            <Show
+              when={siteControls()}
+              fallback={
+                <span class="sp-badge">{status()?.backend === "webkit" ? "Native rules" : "Off"}</span>
+              }
+            >
+              <Switch
+                label={host() ? `Shields for ${host()}` : "Global Shields"}
+                checked={host() ? !!status()?.enabled && siteOn() : !!status()?.enabled}
+                onToggle={host() && status()?.enabled ? toggleSite : toggleGlobal}
+              />
+            </Show>
+          </div>
+
+          <Show when={status()?.request_metrics && host() && siteOn() && status()?.enabled && domains().length > 0}>
+            <div class="sp-section">
               <ul class="shields-domains" aria-label="Blocked domains">
-                <For each={status()!.page_domains}>
+                <For each={visibleDomains()}>
                   {(d) => (
                     <li>
                       <span class="shields-domain" title={d.domain}>
@@ -209,229 +268,150 @@ const ShieldsPop: Component<{ onNavigate: (url: string) => void; onClose: () => 
                   )}
                 </For>
               </ul>
-            </Show>
-          </div>
-        </Show>
-        <Show when={loadError()}>
-          <div role="alert" class="settings-feedback">
-            Could not load protection settings.<button onClick={poll}>Retry loading</button>
-          </div>
-        </Show>
-        <Show when={writer.error()}>
-          <div role="alert" class="settings-feedback">
-            {writer.error()}
-            <button onClick={() => void Promise.resolve(writer.retry()).then(poll)}>Retry save</button>
-          </div>
-        </Show>
-        <Show when={writer.pending()}>
-          <div role="status" class="shields-stat">
-            Saving…
-          </div>
-        </Show>
-        <fieldset
-          class="shields-fields"
-          disabled={writer.pending() || !status()}
-          aria-label="Protection controls"
-        >
-          <div class="shields-row">
-            <span class="shields-label">Shields</span>
-            <Show
-              when={siteControls()}
-              fallback={
-                <span class="shields-stat">
-                  {status()?.backend === "webkit" ? "Native rules" : "Unavailable"}
-                </span>
-              }
-            >
-              <button
-                role="switch"
-                aria-label="Shields"
-                aria-checked={!!status()?.enabled}
-                classList={{ "shields-toggle": true, on: !!status()?.enabled }}
-                onClick={toggleGlobal}
-              >
-                {status()?.enabled ? "On" : "Off"}
-              </button>
-            </Show>
-          </div>
-          <Show when={host() && siteControls()}>
-            <div class="shields-row">
-              <span class="shields-host" title={host()!}>
-                {host()}
-              </span>
-              <button
-                role="switch"
-                aria-label="Shields for this site"
-                aria-checked={siteOn()}
-                classList={{ "shields-toggle": true, on: siteOn() }}
-                onClick={toggleSite}
-              >
-                {siteOn() ? "On" : "Off"}
-              </button>
+              <Show when={domains().length > 3}>
+                <button
+                  type="button"
+                  class="sp-link"
+                  onClick={() => setShowAllDomains(!showAllDomains())}
+                >
+                  {showAllDomains() ? "Show fewer" : `Show all (${domains().length})`}
+                </button>
+              </Show>
             </div>
           </Show>
-          <Show when={status()?.element_picker && host()}>
-            <button class="shields-update" onClick={pickElement}>
-              Hide an element on this page…
-            </button>
-            <Show when={hiddenCount() > 0}>
-              <button class="shields-update" onClick={unhide}>
-                Show {hiddenCount()} hidden element{hiddenCount() === 1 ? "" : "s"} on this site again
-              </button>
-            </Show>
-          </Show>
-          <Show when={status() && !requestControls()}>
-            <div class="shields-stat">{requestControlsHint(status())}</div>
-          </Show>
-          <div class="shields-sep" />
-          <div class="shields-row">
-            <span class="shields-label">Trackers</span>
-            <select
-              class="shields-select"
-              aria-label="Tracking prevention"
-              disabled={!requestControls()}
-              title={
-                requestControls()
-                  ? "Tracking prevention"
-                  : "Tracking-prevention levels are available on Windows only"
-              }
-              value={String(tracking())}
-              onChange={(e) => {
-                const v = Number(e.currentTarget.value);
-                void save("tracking prevention", () => trackingSetLevel(v));
-                e.currentTarget.value = String(tracking());
-              }}
-            >
-              <option value="0">Off</option>
-              <option value="1">Basic</option>
-              <option value="2">Balanced</option>
-              <option value="3">Strict</option>
-            </select>
-          </div>
-          <div class="shields-row">
-            <span class="shields-label">HTTPS-only</span>
-            <button
-              role="switch"
-              aria-label="HTTPS-only"
-              aria-checked={httpsOn()}
-              disabled={!requestControls()}
-              classList={{ "shields-toggle": true, on: httpsOn() }}
-              onClick={toggleHttps}
-            >
-              {httpsOn() ? "On" : "Off"}
-            </button>
-          </div>
-          <Show when={requestControls() && httpsOn() && host()}>
-            <div class="shields-row">
-              <span class="shields-host">Allow HTTP here</span>
-              <button
-                role="switch"
-                aria-label="Allow HTTP on this site"
-                aria-checked={siteAllowsHttp()}
-                classList={{ "shields-toggle": true, on: siteAllowsHttp() }}
-                onClick={toggleSiteHttp}
-              >
-                {siteAllowsHttp() ? "Yes" : "No"}
-              </button>
-            </div>
-          </Show>
-          <div class="shields-row">
-            <span class="shields-label">Block camera/mic/geo</span>
-            {/* Only WebView2's permission handler (permissions.rs) applies this;
-                elsewhere the engine grants these requests itself. */}
-            <button
-              role="switch"
-              aria-label="Block camera, microphone and location"
-              aria-checked={blockPerms()}
-              disabled={!isWindows}
-              title={
-                isWindows
-                  ? "Block camera, microphone and location"
-                  : "Permission blocking is enforced on Windows only"
-              }
-              classList={{ "shields-toggle": true, on: blockPerms() }}
-              onClick={togglePerms}
-            >
-              {blockPerms() ? "On" : "Off"}
-            </button>
-          </div>
-          <button
-            class="shields-update"
-            onClick={() => {
-              props.onClose();
-              props.onNavigate(PERMISSIONS_URL);
-            }}
-          >
-            Manage site permissions…
-          </button>
+
           <Show when={host()}>
-            <div class="shields-row">
-              <span
-                class="shields-host"
-                title="Block heavy third-party scripts (analytics, A/B, chat widgets) on this site. May break live chat / logins."
-              >
-                Lean mode here
-              </span>
+            <div class="sp-actions">
+              <Show when={status()?.element_picker}>
+                <button type="button" class="sp-pill-btn" onClick={pickElement}>
+                  Hide element…
+                </button>
+                <Show when={hiddenCount() > 0}>
+                  <button type="button" class="sp-pill-btn" onClick={unhide}>
+                    Show {hiddenCount()} hidden
+                  </button>
+                </Show>
+              </Show>
               <button
-                disabled={!requestControls()}
-                role="switch"
-                aria-label="Lean mode for this site"
-                aria-checked={leanOn()}
-                classList={{ "shields-toggle": true, on: leanOn() }}
-                onClick={toggleLean}
+                type="button"
+                class="sp-pill-btn"
+                onClick={() => {
+                  const h = host();
+                  if (h) void save("site cookie cleanup", () => cookiesClearSite(h));
+                }}
               >
-                {leanOn() ? "On" : "Off"}
+                Clear cookies
               </button>
             </div>
           </Show>
-          <div class="shields-stat">{protectionMetrics(status())}</div>
-          <button
-            class="shields-update"
-            onClick={() =>
-              void save("filter update", async () => {
-                await shieldsRefresh();
-                setNotice(
-                  status()?.backend === "webkit"
-                    ? "Update requested. Restart Flux to apply refreshed native rules."
-                    : "Filter update requested.",
-                );
-              })
-            }
-          >
-            Update filter lists
-          </button>
-          <Show when={notice()}>
-            <div class="shields-stat" role="status">
-              {notice()}
+
+          <details class="sp-more">
+            <summary>More controls</summary>
+            <div class="sp-more-body">
+              <Show when={host() && siteControls()}>
+                <div class="sp-row">
+                  <span class="sp-row-label">Global Shields</span>
+                  <Switch label="Global Shields" checked={!!status()?.enabled} onToggle={toggleGlobal} />
+                </div>
+              </Show>
+              <Show when={host()}>
+                <div class="sp-row">
+                  <span class="sp-row-label">Clear cookies on close</span>
+                  <Switch
+                    label="Clear cookies on close"
+                    checked={clearOnClose()}
+                    onToggle={toggleClearOnClose}
+                  />
+                </div>
+              </Show>
+              <Show when={requestControls()}>
+                <div class="sp-row">
+                  <span class="sp-row-label">Trackers</span>
+                  <select
+                    class="shields-select"
+                    aria-label="Tracking prevention"
+                    value={String(tracking())}
+                    onChange={(e) => {
+                      const v = Number(e.currentTarget.value);
+                      void save("tracking prevention", () => trackingSetLevel(v));
+                      e.currentTarget.value = String(tracking());
+                    }}
+                  >
+                    <option value="0">Off</option>
+                    <option value="1">Basic</option>
+                    <option value="2">Balanced</option>
+                    <option value="3">Strict</option>
+                  </select>
+                </div>
+                <div class="sp-row">
+                  <span class="sp-row-label">HTTPS-only</span>
+                  <Switch label="HTTPS-only" checked={httpsOn()} onToggle={toggleHttps} />
+                </div>
+                <Show when={httpsOn() && host()}>
+                  <div class="sp-row">
+                    <span class="sp-row-label">Allow HTTP here</span>
+                    <Switch label="Allow HTTP on this site" checked={siteAllowsHttp()} onToggle={toggleSiteHttp} />
+                  </div>
+                </Show>
+                <Show when={host()}>
+                  <div class="sp-row">
+                    <span class="sp-row-label">Lean mode here</span>
+                    <Switch label="Lean mode for this site" checked={leanOn()} onToggle={toggleLean} />
+                  </div>
+                </Show>
+              </Show>
+              <Show when={isWindows}>
+                <div class="sp-row">
+                  <span class="sp-row-label">Block camera/mic/geo</span>
+                  <Switch label="Block camera, microphone and location" checked={blockPerms()} onToggle={togglePerms} />
+                </div>
+              </Show>
+              <Show when={status() && !requestControls()}>
+                <div class="sp-hint">{requestControlsHint(status())}</div>
+              </Show>
+              <div class="sp-hint">{protectionMetrics(status())}</div>
+              <div class="sp-links">
+                <button
+                  type="button"
+                  class="sp-link"
+                  onClick={() => {
+                    props.onClose();
+                    props.onNavigate(PERMISSIONS_URL);
+                  }}
+                >
+                  Permissions…
+                </button>
+                <button
+                  type="button"
+                  class="sp-link"
+                  onClick={() =>
+                    void save("filter update", async () => {
+                      await shieldsRefresh();
+                      setNotice(
+                        status()?.backend === "webkit"
+                          ? "Update requested — restart Flux to refresh rules."
+                          : "Filter update requested.",
+                      );
+                    })
+                  }
+                >
+                  Update filters
+                </button>
+                <button
+                  type="button"
+                  class="sp-link"
+                  onClick={() => void save("cookie cleanup", cookiesClearAll)}
+                >
+                  Clear all cookies
+                </button>
+              </div>
+              <Show when={notice()}>
+                <div class="sp-hint" role="status">
+                  {notice()}
+                </div>
+              </Show>
             </div>
-          </Show>
-          <div class="shields-sep" />
-          <Show when={host()}>
-            <div class="shields-row">
-              <span class="shields-host">Clear cookies on close</span>
-              <button
-                role="switch"
-                aria-label="Clear cookies on close"
-                aria-checked={clearOnClose()}
-                classList={{ "shields-toggle": true, on: clearOnClose() }}
-                onClick={toggleClearOnClose}
-              >
-                {clearOnClose() ? "Yes" : "No"}
-              </button>
-            </div>
-            <button
-              class="shields-update"
-              onClick={() => {
-                const h = host();
-                if (h) void save("site cookie cleanup", () => cookiesClearSite(h));
-              }}
-            >
-              Clear cookies for this site
-            </button>
-          </Show>
-          <button class="shields-update" onClick={() => void save("cookie cleanup", cookiesClearAll)}>
-            Clear all cookies
-          </button>
+          </details>
         </fieldset>
       </div>
     </>

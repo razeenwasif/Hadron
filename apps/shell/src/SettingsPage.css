@@ -48,18 +48,37 @@
 }
 .set-search-bar {
   display: flex;
+  align-items: center;
   gap: 8px;
   flex-shrink: 0;
+}
+.set-search-box {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.set-search-ico {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--flux-text-dim);
+  pointer-events: none;
 }
 .set-search-bar input {
   width: 100%;
   min-width: 0;
-  padding: 10px 12px;
+  padding: 9px 12px 9px 32px;
   border: 1px solid var(--flux-border);
   border-radius: 10px;
   color: var(--flux-text);
   background: var(--flux-bg-raise);
   font: inherit;
+}
+:root .set-page .set-rail .set-search-bar .set-search-box input {
+  height: 38px;
+  padding: 0 12px 0 34px;
+  font-size: 13px;
 }
 .set-search-bar input::placeholder {
   color: var(--flux-text-dim);
@@ -70,16 +89,45 @@
   flex: 1;
   min-height: 0;
 }
+:root .set-page .set-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 0 0 236px;
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+}
 .set-nav {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  flex: 0 0 156px;
+  gap: 10px;
   overflow: auto;
+}
+:root .set-page .set-rail > .set-nav {
+  flex: 0 1 auto;
+  width: 100%;
+  min-height: 0;
+  align-self: stretch;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.set-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.set-nav-group-label {
+  padding: 6px 10px 3px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--flux-text-dim);
+  user-select: none;
 }
 .set-nav button {
   flex-shrink: 0;
-  padding: 9px 10px;
+  padding: 7px 10px;
   border: 1px solid transparent;
   border-radius: 8px;
   color: var(--flux-text-dim);
@@ -87,6 +135,24 @@
   text-align: left;
   font: inherit;
   cursor: pointer;
+}
+:root .set-page .set-nav .set-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 34px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.2;
+}
+.set-nav-ico {
+  flex-shrink: 0;
+  opacity: 0.78;
+}
+.set-nav button[aria-current] .set-nav-ico {
+  opacity: 1;
 }
 .set-nav button:hover {
   background: var(--flux-surface);
@@ -195,12 +261,31 @@
     flex-direction: column;
     gap: 12px;
   }
-  .set-nav {
+  :root .set-page .set-rail {
+    flex: none;
+    width: 100%;
+    max-height: none;
+    gap: 10px;
+  }
+  :root .set-page .set-rail > .set-nav {
     flex: none;
     flex-direction: row;
-    padding-bottom: 4px;
+    padding: 0 0 4px;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
-  .set-nav button {
+  .set-nav-group {
+    display: contents;
+  }
+  .set-nav-group-label {
+    display: none;
+  }
+  :root .set-page .set-nav .set-nav-btn {
+    width: auto;
+    flex: none;
+    min-height: 34px;
+    padding: 0 12px;
     white-space: nowrap;
   }
 }
@@ -505,7 +590,14 @@ html[data-density="comfortable"] .set-row {
 :root.mobile.mobile .set-layout {
   gap: 12px;
 }
-:root.mobile.mobile .set-nav {
+:root.mobile.mobile .set-rail {
+  flex: none;
+  width: 100%;
+  max-height: none;
+  gap: 10px;
+}
+:root.mobile.mobile .set-rail > .set-nav {
+  flex: none;
   flex-direction: row;
   align-self: stretch;
   gap: 8px;
@@ -515,11 +607,21 @@ html[data-density="comfortable"] .set-row {
   box-shadow: none;
   scrollbar-width: none;
 }
+:root.mobile.mobile .set-nav-group {
+  display: contents;
+}
+:root.mobile.mobile .set-nav-group-label {
+  display: none;
+}
 :root.mobile.mobile .set-nav::before,
 :root.mobile.mobile .set-nav::after {
   display: none;
 }
-:root.mobile.mobile .set-nav button {
+:root.mobile.mobile .set-nav .set-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: auto;
   flex: none;
   min-height: 36px;
   padding: 0 14px;
@@ -540,9 +642,14 @@ html[data-density="comfortable"] .set-row {
 :root.mobile.mobile .set-row {
   padding: 14px 16px;
 }
+:root.mobile.mobile .set-search-box input,
 :root.mobile.mobile .set-search-bar input,
 :root.mobile.mobile
   .set-page
   :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea) {
   font-size: 16px;
+}
+:root.mobile.mobile .set-search-box input {
+  height: 42px;
+  padding-left: 36px;
 }
