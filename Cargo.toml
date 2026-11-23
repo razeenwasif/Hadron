@@ -89,6 +89,52 @@ opt-level = "z"
 opt-level = "z"
 [profile.release.package.csv]
 opt-level = "z"
+[profile.release.package.flux-import]
+opt-level = "z"
+[profile.release.package.flux-vault]
+opt-level = "z"
+[profile.release.package.imap]
+opt-level = "z"
+[profile.release.package.imap-proto]
+opt-level = "z"
+[profile.release.package.ureq]
+opt-level = "z"
+[profile.release.package.rustls]
+opt-level = "z"
+[profile.release.package.rustls-webpki]
+opt-level = "z"
+[profile.release.package.argon2]
+opt-level = "z"
+[profile.release.package.aes-gcm]
+opt-level = "z"
+[profile.release.package.portable-pty]
+opt-level = "z"
+[profile.release.package.notify]
+opt-level = "z"
+[profile.release.package.sysinfo]
+opt-level = "z"
+[profile.release.package.tauri-plugin-updater]
+opt-level = "z"
+[profile.release.package.reqwest]
+opt-level = "z"
+[profile.release.package.hyper]
+opt-level = "z"
+[profile.release.package.hyper-util]
+opt-level = "z"
+[profile.release.package.specta]
+opt-level = "z"
+[profile.release.package.tracing-subscriber]
+opt-level = "z"
+[profile.release.package.rusqlite]
+opt-level = "z"
+[profile.release.package.html5ever]
+opt-level = "z"
+[profile.release.package.flate2]
+opt-level = "z"
+[profile.release.package.miniz_oxide]
+opt-level = "z"
+[profile.release.package.regex-automata]
+opt-level = "z"
 
 # Fast iteration build (install-windows.ps1 -Fast / `cargo build --profile
 # release-fast`). The shipping `release` above uses fat LTO + a single codegen unit

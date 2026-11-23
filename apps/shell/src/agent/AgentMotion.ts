@@ -521,8 +521,9 @@ const AgentMotion: Component<{
         gctx.clearRect(0, 0, GW, GH);
       }
     };
+    const isGraphite = () => document.documentElement.dataset.theme === "graphite";
     const sync = () => {
-      const run = visible && !reduce.matches && !document.hidden && document.hasFocus();
+      const run = visible && !reduce.matches && !isGraphite() && !document.hidden && document.hasFocus();
       host.hidden = dotsCv.hidden = !visible;
       if (visible) place();
       if (run && !raf) {

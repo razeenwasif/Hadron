@@ -90,7 +90,12 @@ export function dayKey(d: Date): string {
 }
 
 const [clock, setClock] = createSignal(Date.now());
-setInterval(() => setClock(Date.now()), 30_000);
+setInterval(() => {
+  if (!document.hidden) setClock(Date.now());
+}, 30_000);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) setClock(Date.now());
+});
 
 /** How soon a meeting has to be to take the lip. */
 export const SOON_MIN = 15;

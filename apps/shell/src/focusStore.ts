@@ -7,7 +7,7 @@
  * A tab is covered while a session runs and either its page is on a blocked
  * site, or a navigation to one was stopped there (Rust says which).
  */
-import { createEffect, createRoot, createSignal } from "solid-js";
+import { createEffect, createRoot, createSignal, onCleanup } from "solid-js";
 
 import { focusStatus, onFocusBlocked, onFocusChanged } from "./focusIpc";
 import { installFocusGate, type Cover } from "./focusGate";
@@ -116,12 +116,17 @@ export function startFocusWatch(tabs: () => TabMeta[], live: (id: number) => boo
     setStopped((s) => ({ ...s, [tab]: { url, site } }));
     void refreshFocus();
   });
-  // The countdown and "Allow 5 minutes" run out on their own: tick while a
-  // session runs, and ask again now and then.
-  let n = 0;
-  setInterval(() => {
-    if (!status()?.running) return;
-    setNow(Date.now());
-    if (++n % 30 === 0 || focusLeft() === 0) void refreshFocus();
-  }, 1000);
+  // The countdown and "Allow 5 minutes" run out on their own: tick only while a
+  // session runs, so an idle browser wakes up zero times a minute.
+  createRoot(() => {
+    createEffect(() => {
+      if (!status()?.running) return;
+      let n = 0;
+      const iv = window.setInterval(() => {
+        setNow(Date.now());
+        if (++n % 30 === 0 || focusLeft() === 0) void refreshFocus();
+      }, 1000);
+      onCleanup(() => clearInterval(iv));
+    });
+  });
 }

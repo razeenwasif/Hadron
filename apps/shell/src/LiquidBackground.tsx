@@ -325,6 +325,7 @@ const LiquidBackground: Component<{ active: () => boolean; onFallback?: () => vo
     const shouldRun = () =>
       props.active() &&
       !reduce &&
+      document.documentElement.dataset.theme !== "graphite" &&
       !document.hidden &&
       document.hasFocus() &&
       !document.body.classList.contains("resizing");

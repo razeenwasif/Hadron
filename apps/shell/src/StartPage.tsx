@@ -410,7 +410,7 @@ const StartPage: Component<{
   };
 
   onMount(async () => {
-    visibleInterval(() => setNow(new Date()), 1000);
+    visibleInterval(() => setNow(new Date()), 15_000);
     // The welcome's pinned sites write the tiles; pick them up.
     const onShortcuts = () => setShortcuts(loadShortcuts());
     window.addEventListener("flux:shortcuts-changed", onShortcuts);

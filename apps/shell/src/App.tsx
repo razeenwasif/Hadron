@@ -271,13 +271,15 @@ const App: Component = () => {
   // Android WebView can report a wide innerWidth before layout, so key off isMobile.
   const savedLayout = parseLayout(localStorage.getItem("flux.layout.current"));
   const narrow = isMobile || window.innerWidth < 760;
+  const startSilk = design() === "liquid-silk";
   const [sidebarOpen, setSidebarOpen] = createSignal(!narrow && (savedLayout?.sidebar ?? true));
   // The phone's full-screen views over the page: search and the tab grid
   // (MobileChrome, ADR 0012).
   const [mobileSheet, setMobileSheet] = createSignal<"search" | "tabs" | null>(null);
-  // Terminal column open by default (persisted — toggling off sticks).
+  // Terminal column open by default in Classic/Velvet Paper (Liquid Silk starts
+  // on Tabs and mounts Terminal/Agent lazily when switched in Sidebar).
   const [terminalOpen, setTerminalOpen] = createSignal(
-    !narrow && (savedLayout?.terminal ?? localStorage.getItem("flux.term.open") !== "0"),
+    !narrow && !startSilk && (savedLayout?.terminal ?? localStorage.getItem("flux.term.open") !== "0"),
   );
   // Persist only on real toggles — the initial run would otherwise write the
   // narrow-screen collapse back and poison the desktop default.
@@ -292,14 +294,14 @@ const App: Component = () => {
   // The Trail (ADR 0011 step 1): snapshot + embed a page once it's been engaged
   // past the dwell threshold. Owned by this component's lifetime.
   installDwellCapture();
-  const [agentOpen, setAgentOpen] = createSignal(!narrow && (savedLayout?.agent ?? true));
+  const [agentOpen, setAgentOpen] = createSignal(!narrow && !startSilk && (savedLayout?.agent ?? true));
   // Ambient connections rail (#123) — on by default; toggled via the palette.
   // Liquid Silk keeps its contents in the sidebar's Context panel, so a fresh
   // install in that design (the default) starts with the rail closed.
   const [connectOpen, setConnectOpen] = createSignal(
     !narrow &&
       (savedLayout?.connect ??
-        (localStorage.getItem("flux.connect.open") ?? (design() === "liquid-silk" ? "0" : "1")) !== "0"),
+        (localStorage.getItem("flux.connect.open") ?? (startSilk ? "0" : "1")) !== "0"),
   );
   let connPersist = false;
   createEffect(() => {
