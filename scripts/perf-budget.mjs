@@ -74,7 +74,9 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 // bundle (55.5 → 43.5 KB). The eager floor is ~43.5 KB.
 // Raised 46 → 47 KB on 2026-11-08 (a loosening, approved by the maintainer): the
 // terminal, agent and Liquid Silk work since had filled it to 46.0 KB.
-const CHROME_JS_GZIP_BUDGET = 47 * 1024; // bytes
+// Raised 47 → 48 KB on 2026-11-25 (a loosening, approved by the maintainer):
+// entry preload table + left-rail carousel wiring reached 48,224 B.
+const CHROME_JS_GZIP_BUDGET = 48 * 1024; // bytes
 // New independent gate: entry + desktopChrome registry, baselined in batch 3.
 // This is a lower bound, excluding other conditionally rendered lazy features.
 // Ratcheted 84 → 72 KB on 2026-10-13 with the entry diet above (81.5 → 70.1 KB).
@@ -96,7 +98,10 @@ const DESKTOP_PRELOAD_BUDGET = 73 * 1024;
 // Silk's Agent and Terminal modes in the sidebar: the mode buttons, keeping the
 // agent and terminal toggles in step with the modes, and the sidebar-first
 // layout. The morphs themselves are in the lazy TabModePanel.
-const DEFAULT_BOOT_BUDGET = 245 * 1024;
+// Raised 245 → 248 KB on 2026-11-25 (approved by the maintainer) for the shared
+// VerticalCarousel module (`VerticalCarousel.tsx`, ~1.5 KB gzipped) driving both
+// left icon rails on startup.
+const DEFAULT_BOOT_BUDGET = 248 * 1024;
 // The lazy chunks the default layout loads at startup on a window wide enough to
 // show all of it (sidebar, editor column, bookmark bar, agent + terminal stack,
 // launcher and connections columns, the Indexer orb), beyond the entry and the

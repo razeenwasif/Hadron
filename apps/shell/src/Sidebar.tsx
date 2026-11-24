@@ -146,6 +146,7 @@ const Passwords = lazy(() => import("./Passwords"));
 const FindBar = lazy(() => import("./FindBar"));
 const CalendarPop = lazy(() => import("./CalendarPop"));
 const Downloads = lazy(() => import("./Downloads"));
+const VerticalCarousel = lazy(() => import("./VerticalCarousel"));
 
 // The pinned web-app rail folds away like the toolbar and footer (#150), giving
 // its 32px gutter back to the tab list. Persisted, default open. Kept here
@@ -1075,52 +1076,54 @@ const Sidebar: Component<SidebarProps> = (props) => {
           >
             ‹
           </button>
-          <div class="app-rail">
-            <For each={panels()}>
-              {(p) => (
-                <button
-                  classList={{
-                    "app-rail-icon": true,
-                    active: activePanelId() === p.id,
-                    dragging: dragPanel() === p.id,
-                    "drop-into": dropPanel() === p.id,
-                  }}
-                  title={p.title || p.url}
-                  draggable={true}
-                  onClick={() => togglePanel(p.id)}
-                  onDragStart={(e) => {
-                    setDragPanel(p.id);
-                    e.dataTransfer!.effectAllowed = "move";
-                  }}
-                  onDragOver={(e) => {
-                    if (dragPanel() != null) {
+          <Suspense>
+            <VerticalCarousel class="app-rail" itemHeight={30} gap={8} speed={16} count={panels().length}>
+              <For each={panels()}>
+                {(p) => (
+                  <button
+                    classList={{
+                      "app-rail-icon": true,
+                      active: activePanelId() === p.id,
+                      dragging: dragPanel() === p.id,
+                      "drop-into": dropPanel() === p.id,
+                    }}
+                    title={p.title || p.url}
+                    draggable={true}
+                    onClick={() => togglePanel(p.id)}
+                    onDragStart={(e) => {
+                      setDragPanel(p.id);
+                      e.dataTransfer!.effectAllowed = "move";
+                    }}
+                    onDragOver={(e) => {
+                      if (dragPanel() != null) {
+                        e.preventDefault();
+                        setDropPanel(p.id);
+                      }
+                    }}
+                    onDragLeave={() => {
+                      if (dropPanel() === p.id) setDropPanel(null);
+                    }}
+                    onDrop={(e) => {
                       e.preventDefault();
-                      setDropPanel(p.id);
-                    }
-                  }}
-                  onDragLeave={() => {
-                    if (dropPanel() === p.id) setDropPanel(null);
-                  }}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    dropOnPanel(p.id);
-                  }}
-                  onDragEnd={() => {
-                    setDragPanel(null);
-                    setDropPanel(null);
-                  }}
-                >
-                  <PanelIcon url={p.url} />
-                  <Show when={(panelBadges[p.id] ?? 0) > 0}>
-                    <span class="app-rail-badge">{panelBadges[p.id]! > 99 ? "99+" : panelBadges[p.id]}</span>
-                  </Show>
-                </button>
-              )}
-            </For>
-            <button class="app-rail-add" title="Pin a web app (panels)" onClick={() => openPanel("webpanels")}>
-              +
-            </button>
-          </div>
+                      dropOnPanel(p.id);
+                    }}
+                    onDragEnd={() => {
+                      setDragPanel(null);
+                      setDropPanel(null);
+                    }}
+                  >
+                    <PanelIcon url={p.url} />
+                    <Show when={(panelBadges[p.id] ?? 0) > 0}>
+                      <span class="app-rail-badge">{panelBadges[p.id]! > 99 ? "99+" : panelBadges[p.id]}</span>
+                    </Show>
+                  </button>
+                )}
+              </For>
+            </VerticalCarousel>
+          </Suspense>
+          <button class="app-rail-add" title="Pin a web app (panels)" onClick={() => openPanel("webpanels")}>
+            +
+          </button>
         </aside>
       </Show>
       <nav

@@ -1845,15 +1845,7 @@ body.resizing .panel-edge-resize::after {
   flex: 1 1 auto;
   min-height: 0;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 7px;
-  overflow-y: auto;
-  scrollbar-width: none;
-}
-.app-rail::-webkit-scrollbar {
-  display: none;
+  overflow: hidden;
 }
 .app-rail-icon {
   position: relative;
@@ -3383,8 +3375,7 @@ body.resizing .panel-edge-resize::after {
   align-items: stretch;
   gap: 3px;
   padding: 6px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   border: 1px solid var(--glass-rim-soft);
   border-radius: 10px;
   background: var(--velvet-800);
@@ -3393,7 +3384,9 @@ body.resizing .panel-edge-resize::after {
   flex: none;
   display: grid;
   place-items: center;
+  width: 32px;
   height: 32px;
+  align-self: center;
   border-radius: 8px;
   cursor: pointer;
   color: var(--flux-text-dim);
@@ -3403,6 +3396,41 @@ body.resizing .panel-edge-resize::after {
 .pages-chip:hover {
   background: var(--flux-surface);
   color: var(--flux-text);
+}
+.vcarousel {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+.vcarousel-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.vcarousel[data-loop="1"] .vcarousel-track {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 26px, #000 calc(100% - 26px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 26px, #000 calc(100% - 26px), transparent 100%);
+}
+.vcarousel[data-loop="0"] .vcarousel-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  height: auto;
+}
+.vcarousel[data-loop="1"] .vcarousel-track > * {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  will-change: transform, opacity;
+  transform-origin: center center;
 }
 .pages-chip-ico {
   flex: none;

@@ -696,12 +696,6 @@
   box-shadow: none;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  /* With no panel behind it, the scrollbar would be a stray line down the
-     wallpaper; the rail still scrolls with the wheel or trackpad. */
-  scrollbar-width: none;
-}
-:root[data-design][data-silk] .pages-bar::-webkit-scrollbar {
-  display: none;
 }
 :root[data-design][data-silk] .pages-bar .pages-chip {
   color: var(--flux-text);
