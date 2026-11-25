@@ -462,3 +462,9 @@ Claude Code, Codex and Antigravity subscriptions and the DeepSeek API.
 | 227 | ✅ | **Ask Fairy about the page** (done 2026-11-11): a scope chip with her eye (`FairyEye.tsx`) in the agent panel; `fairy.rs` talks to `flux.sock` in Fairy's data folder (Lyra's `desktop/flux-link.mjs`, on the `chat-link.mjs` protocol Tachyon also uses). Conversation only; private and Tor pages never sent. |
 | 228 | ✅ | **Fairy drives Flux** (first version done 2026-11-11: `fairy.rs` `tools`, `fairyTools.ts`, Lyra's `desktop/flux-tools.mjs` and `flux-agent.mjs`; per-site permissions #208 and the network mode #209 still to come). Was the goal: Flux offers Fairy browser tools through her tool registry (`desktop/tool-registry.mjs`): read a page, find on it, open a tab, click and type. Every action goes through Flux's own checks: `steps::classify`, the sensitive-site refusal, the committed-URL binding and an approval for commits, shown in Fairy's approval card (`desktop/approvals.mjs`) or Flux's. Needs: a tool socket separate from the chat socket (tools are not conversation), per-call tab binding, a per-site policy (#208), and private and Tor tabs kept out (#209). |
 
+
+## Epic: Rebrand (Hadron)
+
+| # | P | Item |
+|---|---|---|
+| 230 | P2 | **Full rebrand from Flux to Hadron** — follow-up to the lightweight app-name rename (`productName`/window/menu/`Hadron.app`): migrate bundle identifier (`dev.flux.browser` → `dev.hadron.browser`) with app-data & Keychain migration (`vault.rs`, `trace/sealed.rs`), rename CLI binary (`flux` → `hadron`), migrate `flux://` internal URL scheme, rename Rust crates & repo, update iOS `project.pbxproj` (`PRODUCT_NAME`), cut over GitHub release/updater endpoints, design a custom Hadron app icon, and sweep remaining in-app copy strings. |

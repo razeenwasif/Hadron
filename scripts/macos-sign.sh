@@ -25,13 +25,13 @@ sign_app() {
       awk '/"Apple Development: /{print $2; exit}')"
   fi
   if [ -z "$id" ] || [ "$id" = "-" ]; then
-    echo "note: Flux.app keeps an ad-hoc signature, so macOS may ask again for what it allowed Flux after each install (FLUX_SIGN_IDENTITY signs it)." >&2
+    echo "note: Hadron.app keeps an ad-hoc signature, so macOS may ask again for what it allowed Hadron after each install (FLUX_SIGN_IDENTITY signs it)." >&2
     return 0
   fi
-  say "Signing Flux.app (macOS keeps what it has allowed Flux across rebuilds)"
+  say "Signing Hadron.app (macOS keeps what it has allowed Hadron across rebuilds)"
   # The first time, macOS asks to let codesign use the certificate's key:
   # "Always Allow" stops it asking on every install.
   # ${a[@]+"${a[@]}"}: an empty array is "unbound" to the bash 3.2 macOS ships.
   codesign --force --sign "$id" --timestamp=none ${hardened[@]+"${hardened[@]}"} "$app" ||
-    echo "warn: signing failed; Flux.app keeps its ad-hoc signature." >&2
+    echo "warn: signing failed; Hadron.app keeps its ad-hoc signature." >&2
 }

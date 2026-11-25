@@ -7,6 +7,6 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Flux connects to machines on your network that you add in Settings, such as a model server on another computer.</string>
+	<string>Hadron connects to machines on your network that you add in Settings, such as a model server on another computer.</string>
 </dict>
 </plist>

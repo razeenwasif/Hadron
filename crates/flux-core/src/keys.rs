@@ -599,7 +599,7 @@ mod menubar {
 
     const MENUS: &[(&str, &[Item])] = &[
         (
-            "Flux",
+            "Hadron",
             &[
                 About,
                 Sep,
@@ -749,23 +749,23 @@ mod menubar {
                     Sep => MenuItemKind::Predefined(PredefinedMenuItem::separator(app)?),
                     About => MenuItemKind::Predefined(PredefinedMenuItem::about(
                         app,
-                        Some("About Flux"),
+                        Some("About Hadron"),
                         Some(AboutMetadata {
-                            name: Some("Flux".into()),
+                            name: Some("Hadron".into()),
                             version: Some(env!("CARGO_PKG_VERSION").into()),
                             ..Default::default()
                         }),
                     )?),
                     Services => MenuItemKind::Predefined(PredefinedMenuItem::services(app, None)?),
                     Hide => {
-                        MenuItemKind::Predefined(PredefinedMenuItem::hide(app, Some("Hide Flux"))?)
+                        MenuItemKind::Predefined(PredefinedMenuItem::hide(app, Some("Hide Hadron"))?)
                     }
                     HideOthers => {
                         MenuItemKind::Predefined(PredefinedMenuItem::hide_others(app, None)?)
                     }
                     ShowAll => MenuItemKind::Predefined(PredefinedMenuItem::show_all(app, None)?),
                     Quit => {
-                        MenuItemKind::Predefined(PredefinedMenuItem::quit(app, Some("Quit Flux"))?)
+                        MenuItemKind::Predefined(PredefinedMenuItem::quit(app, Some("Quit Hadron"))?)
                     }
                     Undo => MenuItemKind::Predefined(PredefinedMenuItem::undo(app, None)?),
                     Redo => MenuItemKind::Predefined(PredefinedMenuItem::redo(app, None)?),

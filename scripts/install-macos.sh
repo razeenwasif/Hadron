@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Build Flux on macOS and install BOTH:
-#   • /Applications/Flux.app   — the double-clickable app (uses the Flux icon)
+# Build Hadron on macOS and install BOTH:
+#   • /Applications/Hadron.app — the double-clickable app (uses the current icon)
 #   • ~/.cargo/bin/flux        — the `flux` command (on PATH), for terminal launches:
 #                                a shim that runs the app's own binary, so updates reach it
 #
@@ -42,10 +42,10 @@ if [ ! -d node_modules ]; then
   npm ci
 fi
 
-say "Building Flux.app + the flux binary (release, LTO — takes a few minutes)"
+say "Building Hadron.app + the flux binary (release, LTO — takes a few minutes)"
 # `npm run build` == `tauri build`: it runs the frontend build itself (embeds it)
 # and produces BOTH <target>/release/flux (the CLI, custom-protocol on) and the
-# macOS bundle under <target>/release/bundle/macos/Flux.app. Only the .app: the
+# macOS bundle under <target>/release/bundle/macos/Hadron.app. Only the .app: the
 # .dmg isn't installed, and making one drives Finder through AppleScript, which
 # can fail and leave its image mounted, stopping the install.
 npm run build -- --bundles app
@@ -63,29 +63,29 @@ TARGET_DIR="$(cargo metadata --format-version 1 --no-deps 2>/dev/null |
 . "$ROOT/scripts/macos-sign.sh"
 
 # ── Install the app bundle ───────────────────────────────────────────────────
-APP_SRC="$TARGET_DIR/release/bundle/macos/Flux.app"
+APP_SRC="$TARGET_DIR/release/bundle/macos/Hadron.app"
 if [ -d "$APP_SRC" ]; then
   NEUTRON_HELPER="$(ls -t "$TARGET_DIR"/release/build/neutron-shell-*/out/neutron-macos 2>/dev/null | head -n 1 || true)"
   if [ -n "$NEUTRON_HELPER" ] && [ -x "$NEUTRON_HELPER" ]; then
     install -m 755 "$NEUTRON_HELPER" "$APP_SRC/Contents/MacOS/neutron-macos"
   fi
   sign_app "$APP_SRC"
-  rm -rf "/Applications/Flux.app"
-  cp -R "$APP_SRC" "/Applications/Flux.app"
+  rm -rf "/Applications/Hadron.app"
+  cp -R "$APP_SRC" "/Applications/Hadron.app"
   # Local unsigned build: clear the quarantine flag so Gatekeeper won't block it.
-  xattr -dr com.apple.quarantine "/Applications/Flux.app" 2>/dev/null || true
-  say "Installed app: /Applications/Flux.app"
+  xattr -dr com.apple.quarantine "/Applications/Hadron.app" 2>/dev/null || true
+  say "Installed app: /Applications/Hadron.app"
 else
   echo "warn: $APP_SRC not found — the .app bundle didn't build; the CLI is still installed." >&2
 fi
 
 # ── Install the CLI ──────────────────────────────────────────────────────────
-# A shim that runs the binary inside Flux.app, rather than a copy of it: an
-# update replaces Flux.app (update.rs), and the `flux` command should run
+# A shim that runs the binary inside Hadron.app, rather than a copy of it: an
+# update replaces Hadron.app (update.rs), and the `flux` command should run
 # whatever that now is. Without the app, the binary itself.
 DEST="${CARGO_HOME:-$HOME/.cargo}/bin"
 mkdir -p "$DEST"
-APP_BIN="/Applications/Flux.app/Contents/MacOS/flux"
+APP_BIN="/Applications/Hadron.app/Contents/MacOS/flux"
 rm -f "$DEST/flux"
 if [ -x "$APP_BIN" ]; then
   printf '#!/bin/sh\nexec "%s" "$@"\n' "$APP_BIN" >"$DEST/flux"
@@ -98,8 +98,8 @@ say "Installed CLI: $DEST/flux"
 echo
 if command -v flux >/dev/null 2>&1; then
   flux --version || true
-  echo "Done — launch Flux.app from Applications, or run 'flux' from any directory (flux example.com · flux -t)."
+  echo "Done — launch Hadron.app from Applications, or run 'flux' from any directory (flux example.com · flux -t)."
 else
-  echo "Done. Flux.app is in /Applications. To use the 'flux' command, add ~/.cargo/bin to PATH:"
+  echo "Done. Hadron.app is in /Applications. To use the 'flux' command, add ~/.cargo/bin to PATH:"
   echo "    echo 'export PATH=\"$DEST:\$PATH\"' >> ~/.zshrc && source ~/.zshrc"
 fi

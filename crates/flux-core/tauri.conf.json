@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Flux",
+  "productName": "Hadron",
   "version": "0.3.0",
   "identifier": "dev.flux.browser",
   "build": {
@@ -14,7 +14,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Flux",
+        "title": "Hadron",
         "width": 1440,
         "height": 900,
         "minWidth": 720,

@@ -162,11 +162,11 @@ sed -i '' "/^\[workspace.package\]/,/^\[/s/^version = \".*\"/version = \"$VERSIO
 grep -q "^version = \"$VERSION\"" "$CARGO_TOML" || die "couldn't set the version in $CARGO_TOML"
 cargo update -q --workspace --offline
 
-say "Building Flux.app (release, LTO — takes a few minutes)"
+say "Building Hadron.app (release, LTO — takes a few minutes)"
 npm run build -- --bundles app
 TARGET_DIR="$(cargo metadata --format-version 1 --no-deps 2>/dev/null |
   sed -n 's/.*"target_directory":"\([^"]*\)".*/\1/p')"
-APP="${TARGET_DIR:-target}/release/bundle/macos/Flux.app"
+APP="${TARGET_DIR:-target}/release/bundle/macos/Hadron.app"
 [ -d "$APP" ] || die "the build made no $APP"
 
 # shellcheck source=macos-sign.sh
@@ -178,7 +178,7 @@ sign_app "$APP"
 # pipefail the codesign it cut off would fail the check.
 SIGNED_BY="$(codesign -dvv "$APP" 2>&1 || true)"
 grep -q "^Authority=Apple Development" <<<"$SIGNED_BY" ||
-  die "Flux.app isn't signed with your certificate; not publishing it."
+  die "Hadron.app isn't signed with your certificate; not publishing it."
 
 OUT="$(mktemp -d)"
 pack "$APP" "$VERSION" "$OUT" "https://github.com/$REPO/releases/download/v$VERSION" "$NOTES"
