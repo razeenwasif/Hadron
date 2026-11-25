@@ -17,6 +17,8 @@ members = [
     "crates/flux-import",
     "crates/flux-search",
     "crates/flux-filter",
+    "crates/flux-neutron",
+    "crates/flux-tachyon",
     "crates/flux-vault",
 ]
 
@@ -64,6 +66,8 @@ flux-embed = { path = "crates/flux-embed" }
 flux-import = { path = "crates/flux-import" }
 flux-search = { path = "crates/flux-search" }
 flux-filter = { path = "crates/flux-filter" }
+flux-neutron = { path = "crates/flux-neutron" }
+flux-tachyon = { path = "crates/flux-tachyon" }
 flux-vault = { path = "crates/flux-vault" }
 
 # ── Performance profiles ─────────────────────────────────────────────────────
@@ -81,6 +85,26 @@ strip = true
 # and occasional favicon transcode (image). Build them for size, not speed: this
 # shrinks the binary without affecting the hot browsing/render path (which stays
 # opt-level 3 above). Their runtime latency is irrelevant (one-shot operations).
+[profile.release.package.tachyon]
+opt-level = 3
+
+[profile.release.package.neutron-core]
+opt-level = 3
+[profile.release.package.neutron-fuzzy]
+opt-level = 3
+[profile.release.package.neutron-shell]
+opt-level = "z"
+[profile.release.package.neutron-archive]
+opt-level = "z"
+[profile.release.package.neutron-remote]
+opt-level = "z"
+[profile.release.package.russh]
+opt-level = "z"
+[profile.release.package.russh-sftp]
+opt-level = "z"
+[profile.release.package.suppaftp]
+opt-level = "z"
+
 [profile.release.package.pgp]
 opt-level = "z"
 [profile.release.package.image]

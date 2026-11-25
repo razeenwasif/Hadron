@@ -1732,55 +1732,6 @@ export const TERM_PERSIST_KEY = "flux.term.persist";
 export const termPersist = (): TermPersist =>
   (localStorage.getItem(TERM_PERSIST_KEY) as TermPersist | null) ?? "off";
 
-/** Find dtach/tmux (through the login shell) off the main thread, before a
- *  persistent terminal is spawned: `terminal_spawn` runs on the main thread. */
-export const terminalPrepareLive = () => invoke<void>("terminal_prepare_live");
-/** Spawn a PTY for `session`; `onData` streams raw output bytes in batches,
- *  each an ArrayBuffer, paced by `terminalAck` (termflow.ts). */
-export const terminalSpawn = (
-  session: number,
-  cols: number,
-  rows: number,
-  onData: Channel<ArrayBuffer>,
-  persist: TermPersist = termPersist(),
-  px?: { width: number; height: number },
-) =>
-  invoke<void>("terminal_spawn", {
-    session,
-    cols,
-    rows,
-    onData,
-    persist,
-    pixelWidth: px?.width ?? null,
-    pixelHeight: px?.height ?? null,
-  });
-
-/** Write input bytes (encoded keystrokes/paste) to the session's stdin. */
-export const terminalWrite = (session: number, data: Uint8Array) =>
-  invoke<void>("terminal_write", { session, data: Array.from(data) });
-
-/** `px`: the text area in pixels, so programs that place images (tmux, chafa)
- *  can size them. */
-export const terminalResize = (
-  session: number,
-  cols: number,
-  rows: number,
-  px?: { width: number; height: number },
-) =>
-  invoke<void>("terminal_resize", {
-    session,
-    cols,
-    rows,
-    pixelWidth: px?.width ?? null,
-    pixelHeight: px?.height ?? null,
-  });
-
-export const terminalKill = (session: number) => invoke<void>("terminal_kill", { session });
-
-/** Fires when a session's shell exits (EOF). */
-export const onTermExit = (cb: (session: number) => void): Promise<UnlistenFn> =>
-  listen<number>("flux://term-exit", (e) => cb(e.payload));
-
 /** Text the agent will type, as you should read it before approving (audit
  *  S9): quoted, capped, and with line breaks and control or direction
  *  characters made visible, so what you see is all of what's typed. */

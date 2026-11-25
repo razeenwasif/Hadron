@@ -1,12 +1,17 @@
-// Registry of live xterm instances by session, so the agent can read the active
-// terminal's scrollback ("read the terminal" → into Gemma's context). TerminalView
-// registers/unregisters its term and flags itself active.
+// Registry of live Tachyon terminal panes by session id, so the agent can
+// read scrollback ("read the terminal") and type commands into an active shell.
 
-import type { Terminal as XTerm } from "@xterm/xterm";
+export interface TerminalHandle {
+  host: string;
+  blockId: string;
+  write(bytes: Uint8Array): Promise<void> | void;
+  getLines(maxLines?: number): string[];
+  getCursorAbsoluteRow(): number;
+  getLinesFrom(startLine: number, maxLines?: number): string[];
+  focus(): void;
+}
 
-import { terminalWrite } from "./ipc";
-
-const registry = new Map<number, XTerm>();
+const registry = new Map<number, TerminalHandle>();
 let activeSession: number | null = null;
 
 // App registers how to open/show the terminal column, so the agent can bring a
@@ -16,9 +21,9 @@ export function setTerminalOpener(fn: () => void): void {
   openTerminalFn = fn;
 }
 
-// A command to auto-run once a freshly-opened terminal's PTY is spawned (TUI app
-// launcher). Set before the tab mounts; TerminalView consumes it after spawn so
-// there's no race against the PTY being ready.
+// A command to auto-run once a freshly-opened terminal attaches (TUI app
+// launcher). Set before the tab mounts; TachyonView consumes it after attach so
+// there is no race against the shell being ready.
 const pendingCommand = new Map<number, string>();
 export function setPendingCommand(session: number, cmd: string): void {
   pendingCommand.set(session, cmd);
@@ -30,24 +35,28 @@ export function takePendingCommand(session: number): string | null {
 }
 
 /**
- * Add a terminal to the registry.
+ * Add a terminal handle to the registry.
  *
- * `claimActive` decides whether mounting also makes this the agent's "read the
- * terminal" target. It used to be unconditional, which quietly broke once a
- * terminal could mount without the user opening it: the editor column (#174)
- * boots with the window and remounts on every `:q`, so each relaunch stole the
- * read target from whatever shell the user was actually debugging in. Focus
- * still switches it — see `setActiveTerminal` — so an editor you click into
- * becomes readable, which is the part that should depend on you.
+ * `claimActive` controls whether mounting makes this the agent's "read the
+ * terminal" target so background/auto-booted panes (e.g. EditorColumn) do not
+ * steal focus from the user's active shell.
  */
-export function registerTerminal(session: number, term: XTerm, claimActive = true): void {
-  registry.set(session, term);
+export function registerTerminal(
+  session: number,
+  handle: TerminalHandle,
+  claimActive = true,
+): void {
+  registry.set(session, handle);
   if (claimActive) activeSession = session;
 }
+
 export function unregisterTerminal(session: number): void {
   registry.delete(session);
-  if (activeSession === session) activeSession = registry.size ? [...registry.keys()].pop()! : null;
+  if (activeSession === session) {
+    activeSession = registry.size ? [...registry.keys()].pop()! : null;
+  }
 }
+
 export function setActiveTerminal(session: number): void {
   if (registry.has(session)) activeSession = session;
 }
@@ -56,15 +65,11 @@ function targetSession(): number | null {
   return activeSession ?? (registry.size ? [...registry.keys()].pop()! : null);
 }
 
-/** PTYs that run a program, not a prompt: the nvim column (0xd0000000+,
- *  editorboot) and floating TUI panes (0xe0000000+, store). Readable, but a key
- *  typed there is that program's command. The terminal column's split shells
- *  start at 0xf0000000 and stay writable. */
+/** Sessions that run a program rather than an interactive prompt: the nvim
+ *  column (0xd0000000+, editorboot) and floating TUI panes (0xe0000000+, store).
+ *  TerminalColumn splits start at 0xf0000000 and remain writable shells. */
 const runsProgram = (s: number) => s >= 0xd000_0000 && s < 0xf000_0000;
 
-/** Where a shell command may be typed: the read target when it's a shell, else
- *  the most recently registered shell — never nvim or a TUI app, which are in
- *  the registry (and can be the read target) too. */
 function shellSession(): number | null {
   const s = targetSession();
   if (s != null && !runsProgram(s)) return s;
@@ -76,49 +81,32 @@ function shellSession(): number | null {
 export function activeTerminalText(maxLines = 400): { session: number; text: string } | null {
   const session = targetSession();
   if (session == null) return null;
-  const term = registry.get(session);
-  if (!term) return null;
-  const buf = term.buffer.active;
-  const total = buf.length;
-  const start = Math.max(0, total - maxLines);
-  const lines: string[] = [];
-  for (let i = start; i < total; i++) lines.push(buf.getLine(i)?.translateToString(true) ?? "");
+  const handle = registry.get(session);
+  if (!handle) return null;
+  const lines = [...handle.getLines(maxLines)];
   while (lines.length && !lines[lines.length - 1]!.trim()) lines.pop();
   return { session, text: lines.join("\n") };
 }
 
-/** Absolute buffer row of the cursor (where the prompt sits) — the baseline to read
- *  only a command's new output. NOT buffer length: on a fresh terminal the prompt is
- *  near the top with empty rows below, so length-1 points below the output. Read
- *  from the shell `runInActiveTerminal` types into, not an editor or TUI pane. */
+/** Absolute row of the cursor in the active shell for incremental reads. */
 export function activeTerminalCursorLine(): number {
   const s = shellSession();
-  const term = s != null ? registry.get(s) : null;
-  if (!term) return 0;
-  const buf = term.buffer.active;
-  return buf.baseY + buf.cursorY;
+  const handle = s != null ? registry.get(s) : null;
+  return handle ? handle.getCursorAbsoluteRow() : 0;
 }
 
-/** Active shell's lines from `startLine` to the end (capped, trailing blanks trimmed). */
+/** Active shell lines from `startLine` to the end (capped, trailing blanks trimmed). */
 export function activeTerminalLinesFrom(startLine: number, maxLines = 200): string {
   const s = shellSession();
-  const term = s != null ? registry.get(s) : null;
-  if (!term) return "";
-  const buf = term.buffer.active;
-  const total = buf.length;
-  const from = Math.max(0, Math.max(startLine, total - maxLines));
-  const lines: string[] = [];
-  for (let i = from; i < total; i++) lines.push(buf.getLine(i)?.translateToString(true) ?? "");
+  const handle = s != null ? registry.get(s) : null;
+  if (!handle) return "";
+  const lines = [...handle.getLinesFrom(startLine, maxLines)];
   while (lines.length && !lines[lines.length - 1]!.trim()) lines.pop();
   return lines.join("\n");
 }
 
-/** A finished command's rows (prompt, command, output) as text for the agent,
- *  within `max` characters. Over budget it keeps the first rows AND the end:
- *  compilers, test runners and tracebacks print the decisive error last, so the
- *  head alone gave Explain/Fix the warnings but not the failure. Three rows, not
- *  one: the OSC 133 A mark lands before PS1 prints, so a multi-line prompt
- *  (starship's default, p10k) puts the command on the 2nd or 3rd row. */
+/** Format a finished command block within `max` characters, keeping the prompt
+ *  head and decisive tail errors when truncated. */
 export function clipBlock(lines: string[], max = 4000): string {
   const text = lines.join("\n");
   if (text.length <= max) return text;
@@ -126,37 +114,35 @@ export function clipBlock(lines: string[], max = 4000): string {
   return `${head}\n…\n${text.slice(-(max - head.length - 3))}`;
 }
 
-/** Type a command into the active shell and run it (Enter = `\r`). Opens a
- *  terminal first if no shell is live — the nvim column or a TUI pane doesn't
- *  count: typed there, the command's letters are that program's keys. Returns
- *  the session it ran in, or null if no terminal could be brought up. */
+/** Type a command into the active shell and press Enter (`\r`). */
 export async function runInActiveTerminal(cmd: string): Promise<number | null> {
   const wasOpen = shellSession() != null;
   if (!wasOpen) openTerminalFn?.();
-  // The terminal mounts, then spawns its PTY asynchronously (registerTerminal runs
-  // before terminalSpawn resolves), so wait for a live term, then let the backend
-  // PTY settle before the first write if we had to open it.
-  for (let i = 0; i < 30 && shellSession() == null; i++) await new Promise((r) => setTimeout(r, 100));
-  if (shellSession() == null) return null;
-  if (!wasOpen) await new Promise((r) => setTimeout(r, 500));
+  for (let i = 0; i < 30 && shellSession() == null; i++) {
+    await new Promise((r) => setTimeout(r, 100));
+  }
   const s = shellSession();
   if (s == null) return null;
-  await terminalWrite(s, new TextEncoder().encode(cmd + "\r"));
+  if (!wasOpen) await new Promise((r) => setTimeout(r, 500));
+  const handle = registry.get(s);
+  if (!handle) return null;
+  await handle.write(new TextEncoder().encode(cmd + "\r"));
   return s;
 }
 
-/** Insert a command at the active shell's prompt WITHOUT running it (no `\r`),
- *  so the user can review/edit before pressing Enter. Opens a terminal if no
- *  shell is live. Returns the session, or null if no terminal could be brought up. */
+/** Insert a command at the active shell prompt without pressing Enter. */
 export async function insertInActiveTerminal(cmd: string): Promise<number | null> {
   const wasOpen = shellSession() != null;
   if (!wasOpen) openTerminalFn?.();
-  for (let i = 0; i < 30 && shellSession() == null; i++) await new Promise((r) => setTimeout(r, 100));
-  if (shellSession() == null) return null;
-  if (!wasOpen) await new Promise((r) => setTimeout(r, 500));
+  for (let i = 0; i < 30 && shellSession() == null; i++) {
+    await new Promise((r) => setTimeout(r, 100));
+  }
   const s = shellSession();
   if (s == null) return null;
-  await terminalWrite(s, new TextEncoder().encode(cmd));
+  if (!wasOpen) await new Promise((r) => setTimeout(r, 500));
+  const handle = registry.get(s);
+  if (!handle) return null;
+  await handle.write(new TextEncoder().encode(cmd));
   return s;
 }
 

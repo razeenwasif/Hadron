@@ -88,9 +88,9 @@ const UpdateBar = lazy(() => import("./UpdateBar"));
 const VaultFillBar = lazy(() => import("./VaultFillBar"));
 const ClockAlarm = lazy(() => import("./ClockAlarm")); // mounted once App has loaded the clocks
 // Lazy like the other heavy surfaces: a session with no terminal open shouldn't
-// pay for xterm's host component in the eager chrome bundle. Once loaded it stays
+// pay for Tachyon's host component in the eager chrome bundle. Once loaded it stays
 // resident, so the keep-alive contract (#73) is unaffected.
-const TerminalView = lazy(() => import("./TerminalView"));
+const TachyonView = lazy(() => import("./TachyonView"));
 const EditorColumn = lazy(() => import("./EditorColumn")); // the permanent nvim split (#174)
 import InternalPage from "./InternalPage";
 import { cardLayout, design } from "./design";
@@ -403,7 +403,7 @@ const ContentArea: Component<{
                 {/* Only the *active* terminal draws the WebGL backdrop, even when
                 several are tiled — each context costs, and too many white out
                 other GPU-composited glass surfaces (#75). */}
-                <TerminalView
+                <TachyonView
                   session={id}
                   active={activeTab()?.id === id}
                   visible={termSlot(id) != null}

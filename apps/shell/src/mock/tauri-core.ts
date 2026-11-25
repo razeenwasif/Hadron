@@ -875,24 +875,189 @@ export function invoke<T>(cmd: string, args?: Record<string, unknown>): Promise<
       if (i >= 0) tabs.splice(i, 1);
       return Promise.resolve(undefined as T);
     }
-    case "terminal_spawn": {
-      // Echo a styled banner + prompt through the channel so the preview shows
-      // a real-looking terminal (no PTY in preview).
-      const ch = args?.onData as Channel<ArrayBuffer> | undefined;
+    case "tachyon_hosts":
+      return Promise.resolve([
+        { alias: "local", kind: "local", address: null, reachable: true },
+      ] as T);
+    case "tachyon_state":
+      return Promise.resolve({
+        host: {
+          hostname: "preview",
+          os: "macos",
+          arch: "arm64",
+          version: "0.1.0",
+          protocol: 2,
+          pid: 1,
+          build: null,
+          capabilities: [],
+          auth_enabled: null,
+          listen_addr: null,
+        },
+        sessions: [
+          {
+            id: "sess-1",
+            name: "flux",
+            windows: ["win-1"],
+            active_window: "win-1",
+            created_at: 0,
+          },
+        ],
+        windows: [
+          {
+            id: "win-1",
+            session_id: "sess-1",
+            name: "main",
+            layout: { type: "leaf", block_id: "blk-1" },
+            focused_block: "blk-1",
+            zoomed: false,
+            created_at: 0,
+          },
+        ],
+        blocks: [
+          {
+            id: "blk-1",
+            session_id: "sess-1",
+            window_id: "win-1",
+            label: "zsh",
+            title: "flux",
+            cwd: "~/Flux",
+            command: "zsh",
+            command_running: false,
+            pid: 101,
+            cols: 80,
+            rows: 24,
+            alive: true,
+            exit_code: null,
+            awake: false,
+            attached_clients: 1,
+            created_at: 0,
+            status: null,
+            status_inferred: false,
+            last_receipt: null,
+          },
+        ],
+        clients: [],
+      } as T);
+    case "tachyon_session_new":
+      return Promise.resolve({
+        session: {
+          id: "sess-1",
+          name: (args?.name as string) ?? "flux",
+          windows: ["win-1"],
+          active_window: "win-1",
+          created_at: 0,
+        },
+        window: {
+          id: "win-1",
+          session_id: "sess-1",
+          name: "main",
+          layout: { type: "leaf", block_id: "blk-1" },
+          focused_block: "blk-1",
+          zoomed: false,
+          created_at: 0,
+        },
+        block: {
+          id: "blk-1",
+          session_id: "sess-1",
+          window_id: "win-1",
+          label: "zsh",
+          title: "flux",
+          cwd: "~/Flux",
+          command: "zsh",
+          command_running: false,
+          pid: 101,
+          cols: 80,
+          rows: 24,
+          alive: true,
+          exit_code: null,
+          awake: false,
+          attached_clients: 1,
+          created_at: 0,
+          status: null,
+          status_inferred: false,
+          last_receipt: null,
+        },
+      } as T);
+    case "tachyon_window_new":
+    case "tachyon_split":
+      return Promise.resolve({
+        window: {
+          id: "win-1",
+          session_id: "sess-1",
+          name: "main",
+          layout: { type: "leaf", block_id: "blk-2" },
+          focused_block: "blk-2",
+          zoomed: false,
+          created_at: 0,
+        },
+        block: {
+          id: "blk-2",
+          session_id: "sess-1",
+          window_id: "win-1",
+          label: "zsh",
+          title: "flux",
+          cwd: "~/Flux",
+          command: "zsh",
+          command_running: false,
+          pid: 102,
+          cols: 80,
+          rows: 24,
+          alive: true,
+          exit_code: null,
+          awake: false,
+          attached_clients: 1,
+          created_at: 0,
+          status: null,
+          status_inferred: false,
+          last_receipt: null,
+        },
+      } as T);
+    case "tachyon_attach": {
+      const ch = args?.onFrame as Channel<ArrayBuffer> | undefined;
       if (ch) {
-        const banner =
-          "\x1b[38;2;47;243;255m flux\x1b[0m \x1b[38;2;157;141;241mterminal\x1b[0m — local dev shell\r\n" +
-          "\x1b[38;2;106;111;150m $FLUX_TAB_URL, $FLUX_TAB_DIR injected · powered by a real PTY\x1b[0m\r\n\r\n" +
-          "\x1b[38;2;124;245;176m➜\x1b[0m \x1b[38;2;47;243;255m~/Flux\x1b[0m $ ";
-        // Raw bytes, as the real core sends them (an ArrayBuffer per batch).
-        setTimeout(() => ch.onmessage(new TextEncoder().encode(banner).buffer as ArrayBuffer), 60);
+        const text = new TextEncoder().encode("flux · tachyon mux — local dev shell");
+        const buf = new ArrayBuffer(24 + 4 + 16 + text.byteLength);
+        const dv = new DataView(buf);
+        dv.setUint16(0, Number(args?.cols ?? 80), true);
+        dv.setUint16(2, Number(args?.rows ?? 24), true);
+        dv.setUint16(4, text.byteLength + 1, true);
+        dv.setUint16(6, 0, true);
+        dv.setUint8(8, 2);
+        dv.setUint8(9, 1);
+        dv.setUint8(10, 0);
+        dv.setUint8(11, 1); // FLAG_FULL_REPAINT
+        dv.setUint32(12, 0, true);
+        dv.setUint32(16, 0, true);
+        dv.setUint16(20, 1, true);
+        dv.setUint16(24, 0, true); // y = 0
+        dv.setUint16(26, 1, true); // 1 span
+        dv.setUint16(28, 0, true);
+        dv.setUint16(30, text.byteLength, true);
+        dv.setUint32(32, 0x022f_f3ff, true);
+        dv.setUint32(36, 0, true);
+        dv.setUint16(40, 0, true);
+        dv.setUint16(42, text.byteLength, true);
+        new Uint8Array(buf, 44).set(text);
+        setTimeout(() => ch.onmessage(buf), 40);
       }
-      return Promise.resolve(undefined as T);
+      return Promise.resolve(1 as T);
     }
-    case "terminal_write":
-    case "terminal_ack":
-    case "terminal_resize":
-    case "terminal_kill":
+    case "tachyon_select_text":
+    case "tachyon_capture":
+      return Promise.resolve("" as T);
+    case "tachyon_receipts":
+    case "tachyon_rewind_list":
+      return Promise.resolve([] as T);
+    case "tachyon_detach":
+    case "tachyon_write":
+    case "tachyon_send":
+    case "tachyon_resize":
+    case "tachyon_scroll":
+    case "tachyon_resize_ratio":
+    case "tachyon_focus":
+    case "tachyon_rename":
+    case "tachyon_kill":
+    case "tachyon_subscribe":
     case "webview_stop":
     case "webview_find":
     case "webview_hibernate":
@@ -1217,6 +1382,133 @@ export function invoke<T>(cmd: string, args?: Record<string, unknown>): Promise<
     case "fs_watch":
     case "fs_unwatch":
       return Promise.resolve(undefined as T); // no live watch in the preview
+    case "neutron_places":
+      return Promise.resolve({
+        known: [
+          {
+            name: "Home",
+            path: "/home/amaterasu",
+            kind: "known",
+            site: null,
+            capacity_total: null,
+            capacity_free: null,
+            ejectable: false,
+          },
+          {
+            name: "Downloads",
+            path: "/home/amaterasu/Downloads",
+            kind: "known",
+            site: null,
+            capacity_total: null,
+            capacity_free: null,
+            ejectable: false,
+          },
+        ],
+        pins: [],
+        drives: [
+          {
+            name: "Macintosh HD",
+            path: "/",
+            kind: "drive",
+            site: null,
+            capacity_total: 1_000_000_000_000,
+            capacity_free: 420_000_000_000,
+            ejectable: false,
+          },
+        ],
+        cloud: [],
+        servers: [],
+      } as T);
+    case "neutron_recent":
+      return Promise.resolve(
+        mockEntries
+          .filter((e) => !e.is_dir)
+          .slice(0, 6)
+          .map((e) => ({
+            name: e.name,
+            path: `/home/amaterasu/${e.name}`,
+            parent: "/home/amaterasu",
+            at_ms: e.modified,
+            exists: true,
+            ext: e.name.split(".").pop() ?? "",
+          })) as T,
+      );
+    case "neutron_list": {
+      const loc = String(args?.location ?? "/home/amaterasu") || "/home/amaterasu";
+      return Promise.resolve({
+        location: loc,
+        display_path: loc,
+        parent: loc === "/" ? null : "/home",
+        scheme: "local",
+        site: null,
+        total_count: mockEntries.length,
+        hidden_count: 0,
+        entries: mockEntries.map((e) => ({
+          name: e.name,
+          path: `${loc.replace(/\/$/, "")}/${e.name}`,
+          kind: e.is_dir ? "dir" : "file",
+          size: e.size,
+          modified_ms: e.modified,
+          created_ms: e.modified,
+          hidden: false,
+          readonly: false,
+          is_alias: false,
+          sync: "none",
+          tag_mask: 0,
+          ext: e.is_dir ? "" : e.name.split(".").pop() ?? "",
+          kind_label: e.is_dir ? "Folder" : "File",
+        })),
+      } as T);
+    }
+    case "neutron_fuzzy":
+      return Promise.resolve(
+        mockEntries.slice(0, 12).map((e) => ({
+          name: e.name,
+          path: `/home/amaterasu/${e.name}`,
+          is_dir: e.is_dir,
+          score: 100,
+          positions: [],
+          parent: "/home/amaterasu",
+        })) as T,
+      );
+    case "neutron_preview":
+      return Promise.resolve({
+        kind: "text",
+        text: "// Neutron preview in browser shell",
+        data_url: null,
+        mime: "text/plain",
+        size: 128,
+        modified_ms: mockNow(),
+        created_ms: mockNow(),
+        readonly: false,
+        tags: [],
+        child_count: null,
+        truncated: false,
+      } as T);
+    case "neutron_watch":
+      return Promise.resolve(1 as T);
+    case "neutron_pin_toggle":
+      return Promise.resolve(true as T);
+    case "neutron_mkdir":
+    case "neutron_create_file":
+    case "neutron_rename":
+      return Promise.resolve("/home/amaterasu/item" as T);
+    case "neutron_batch_rename":
+      return Promise.resolve({ renamed: 0, errors: [] } as T);
+    case "neutron_undo":
+      return Promise.resolve(null as T);
+    case "neutron_archive_extract":
+    case "neutron_archive_create":
+      return Promise.resolve({ destination: "/home/amaterasu/Archive.zip", files: 0, bytes: 0, refused: [] } as T);
+    case "neutron_unwatch":
+    case "neutron_copy":
+    case "neutron_move":
+    case "neutron_trash":
+    case "neutron_delete":
+    case "neutron_open":
+    case "neutron_reveal":
+    case "neutron_tag_toggle":
+      return Promise.resolve(undefined as T);
     case "omni_stats":
       return Promise.resolve(
         JSON.stringify({

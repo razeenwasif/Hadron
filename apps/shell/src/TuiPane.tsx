@@ -24,7 +24,7 @@ import {
   type TuiPane as TuiPaneRec,
 } from "./store";
 
-const TerminalView = lazy(() => import("./TerminalView"));
+const TachyonView = lazy(() => import("./TachyonView"));
 
 const TuiPane: Component<{ pane: TuiPaneRec; index: number }> = (props) => {
   const [pos, setPos] = createSignal({ x: 140, y: 100 });
@@ -98,7 +98,7 @@ const TuiPane: Component<{ pane: TuiPaneRec; index: number }> = (props) => {
               previous run's app and the queued command was typed into it — the
               EditorColumn rule. */}
           <Suspense>
-            <TerminalView
+            <TachyonView
               session={props.pane.session}
               active={isFocused()}
               background={false}

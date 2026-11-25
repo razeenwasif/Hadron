@@ -106,6 +106,8 @@ rustls-connector = { version = "0.23.6", default-features = false, features = ["
 # mobile (ADR 0012). Their code paths are `#[cfg(desktop)]`-gated to match.
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 portable-pty = "0.8"
+flux-neutron.workspace = true
+flux-tachyon.workspace = true
 tauri-plugin-single-instance = "2"
 tauri-plugin-window-state = "2"
 trash = "5"

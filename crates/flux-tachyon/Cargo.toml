@@ -1,0 +1,17 @@
+[package]
+name = "flux-tachyon"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Tachyon Mux v2 client bridge and binary cell-diff frame encoder for Flux"
+
+[lints]
+workspace = true
+
+[dependencies]
+tachyon = { git = "https://github.com/razeenwasif/Tachyon.git", rev = "4309a844a86d190cd80a2502d35f97a6dc2acf8c", default-features = false }
+serde.workspace = true
+serde_json.workspace = true
+parking_lot.workspace = true
+tracing.workspace = true
+thiserror.workspace = true

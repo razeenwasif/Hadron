@@ -65,6 +65,10 @@ TARGET_DIR="$(cargo metadata --format-version 1 --no-deps 2>/dev/null |
 # ── Install the app bundle ───────────────────────────────────────────────────
 APP_SRC="$TARGET_DIR/release/bundle/macos/Flux.app"
 if [ -d "$APP_SRC" ]; then
+  NEUTRON_HELPER="$(ls -t "$TARGET_DIR"/release/build/neutron-shell-*/out/neutron-macos 2>/dev/null | head -n 1 || true)"
+  if [ -n "$NEUTRON_HELPER" ] && [ -x "$NEUTRON_HELPER" ]; then
+    install -m 755 "$NEUTRON_HELPER" "$APP_SRC/Contents/MacOS/neutron-macos"
+  fi
   sign_app "$APP_SRC"
   rm -rf "/Applications/Flux.app"
   cp -R "$APP_SRC" "/Applications/Flux.app"

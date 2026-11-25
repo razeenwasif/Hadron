@@ -46,7 +46,7 @@ const AppsPage = lazy(() => import("./AppsPage"));
 const ArchivePage = lazy(() => import("./ArchivePage"));
 const BookmarksPage = lazy(() => import("./BookmarksPage"));
 const FeedsPage = lazy(() => import("./FeedsPage"));
-const FilesView = lazy(() => import("./FilesView"));
+const NeutronView = lazy(() => import("./NeutronView"));
 const HistoryPage = lazy(() => import("./HistoryPage"));
 const NotebookPage = lazy(() => import("./NotebookPage"));
 const OmniDashboard = lazy(() => import("./OmniDashboard"));
@@ -211,10 +211,10 @@ const InternalPage: Component<InternalPageProps> = (props) => {
         </Match>
         <Match when={tab()?.kind === "files"}>
           {/* Key on the tab id (stable) so navigation patching the tab object doesn't
-          remount FilesView into a reload loop — only a tab switch should. */}
+          remount NeutronView into a reload loop — only a tab switch should. */}
           <Show when={tab()?.id} keyed>
             {(id) => (
-              <FilesView
+              <NeutronView
                 id={id}
                 path={tabs().find((t) => t.id === id)?.url ?? ""}
                 onPathChange={(p) => {

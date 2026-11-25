@@ -155,7 +155,7 @@ import type { PaletteContext } from "./paletteActions";
 import { LinkMenu } from "./linkMenu";
 // Lazy-loaded: not shown on a fresh window, so they stay out of the boot bundle
 // and load on first use (instant — assets are local/embedded). #startup
-const FilesView = lazy(() => import("./FilesView"));
+const NeutronView = lazy(() => import("./NeutronView"));
 const Playground = lazy(() => import("./playground/Playground"));
 const NotebookPage = lazy(() => import("./NotebookPage"));
 const ConnectionsRail = lazy(() => import("./ConnectionsRail"));
@@ -2216,14 +2216,14 @@ const App: Component = () => {
         <div class="files-panel-backdrop" onClick={() => closeFilesPanel()}>
           <div class="files-panel glass" onClick={(e) => e.stopPropagation()}>
             <div class="files-panel-head">
-              <span class="files-panel-title">🗁 Files</span>
+              <span class="files-panel-title">Neutron</span>
               <button class="files-panel-x" title="Close (Esc)" onClick={() => closeFilesPanel()}>
                 ✕
               </button>
             </div>
             <div class="files-panel-body">
               <Suspense>
-                <FilesView
+                <NeutronView
                   id={FILES_PANEL_ID}
                   path={filesPanelPath() || ""}
                   onPathChange={setFilesPanelPath}

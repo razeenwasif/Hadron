@@ -30,10 +30,9 @@ import {
   setEditorSession,
   socketPath,
 } from "./editorboot";
-import { onTermExit } from "./ipc";
 import { setPendingCommand } from "./terminals";
 
-const TerminalView = lazy(() => import("./TerminalView"));
+const TachyonView = lazy(() => import("./TachyonView"));
 
 const EditorColumn: Component<{ visible: boolean }> = (props) => {
   // Each relaunch gets a *new* session id rather than reusing the old one: the
@@ -91,30 +90,17 @@ const EditorColumn: Component<{ visible: boolean }> = (props) => {
   createEffect(() => setEditorSession(session()));
   onCleanup(() => setEditorSession(null));
 
-  createEffect(() => {
-    const mine = session();
-    let disposed = false;
-    const sub = onTermExit((exited) => {
-      // Only this generation's exit counts. A relaunch has already moved
-      // `session()` on, so the dying PTY's own exit event can't retrigger one.
-      if (disposed || exited !== mine) return;
-      const uptime = Date.now() - spawnedAt;
-      const action = exitAction(uptime, quickExits);
-      quickExits = action === "relaunch" && uptime < QUICK_EXIT_MS ? quickExits + 1 : 0;
-      if (action === "fail") {
-        setFailed(`\`${BOOT_CMD}\` exited right after starting — is it on the terminal shell's PATH?`);
-        return;
-      }
-      // Quitting from inside the column should hand the caret straight back to
-      // the fresh editor; a process that died while the user was elsewhere
-      // should not pull focus across the window.
-      relaunch(focused());
-    });
-    onCleanup(() => {
-      disposed = true;
-      void sub.then((un) => un()).catch(() => {});
-    });
-  });
+  const handleExit = (mine: number) => {
+    if (session() !== mine) return;
+    const uptime = Date.now() - spawnedAt;
+    const action = exitAction(uptime, quickExits);
+    quickExits = action === "relaunch" && uptime < QUICK_EXIT_MS ? quickExits + 1 : 0;
+    if (action === "fail") {
+      setFailed(`\`${BOOT_CMD}\` exited right after starting — is it on the terminal shell's PATH?`);
+      return;
+    }
+    relaunch(focused());
+  };
 
   return (
     <section
@@ -146,13 +132,14 @@ const EditorColumn: Component<{ visible: boolean }> = (props) => {
                     backdrop is not worth it for a pane that is always on screen
                     (the same rule the split panes follow). persist="off" so a
                     broker never reattaches a session that is already in nvim. */}
-                <TerminalView
+                <TachyonView
                   session={s}
                   active={props.visible && focused()}
                   visible={props.visible}
                   background={false}
                   persist="off"
                   autoFocus={grabCaret()}
+                  onExit={() => handleExit(s)}
                 />
               </Suspense>
             </div>

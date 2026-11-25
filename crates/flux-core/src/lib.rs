@@ -62,6 +62,7 @@ pub mod memory;
 #[cfg(windows)]
 pub mod msys;
 pub mod nav;
+pub mod neutron;
 pub mod phonelink;
 pub mod net;
 pub mod netfilter;
@@ -103,8 +104,8 @@ pub mod storage;
 pub mod stt;
 pub mod sync;
 pub mod tabsleep;
+pub mod tachyon;
 pub mod taskmgr;
-pub mod terminal;
 pub mod todos;
 pub mod tombstone;
 pub mod trace;
@@ -331,8 +332,10 @@ fn init_core_state(app: &tauri::App, intent: cli::LaunchIntent, boot_started: st
     }));
     // CLI launch intent — consumed once by the shell on mount.
     app.manage(intent);
-    // Live PTY sessions for the embedded terminal.
-    app.manage(terminal::TerminalManager::new());
+    // Tachyon Mux v2 terminal backend.
+    app.manage(tachyon::TachyonManager::new());
+    // Headless Neutron file explorer backend.
+    app.manage(neutron::NeutronManager::new());
     // Pluggable search config (persisted to the app config dir).
     app.manage(boot_phase("search.load", boot_started, || {
         search::SearchState::load(app.handle())
@@ -1054,8 +1057,27 @@ fn finish_boot(app: &tauri::App, boot_started: std::time::Instant) {
     tracing::info!(target: "flux::boot", dev = tauri::is_dev(), total_ms = boot_started.elapsed().as_millis(), "state managed, window up");
 }
 
+#[cfg(target_os = "macos")]
+fn raise_nofile_limit() {
+    unsafe {
+        let mut lim = libc::rlimit {
+            rlim_cur: 0,
+            rlim_max: 0,
+        };
+        if libc::getrlimit(libc::RLIMIT_NOFILE, &mut lim) == 0 {
+            let target = lim.rlim_max.min(8192);
+            if lim.rlim_cur < target {
+                lim.rlim_cur = target;
+                let _ = libc::setrlimit(libc::RLIMIT_NOFILE, &lim);
+            }
+        }
+    }
+}
+
 /// Build the Tauri application. Split from `main` for testability.
 pub fn run(intent: cli::LaunchIntent) {
+    #[cfg(target_os = "macos")]
+    raise_nofile_limit();
     boot::start_clock();
     let context = tauri::generate_context!();
     #[cfg(feature = "native-smoke")]
@@ -1331,12 +1353,27 @@ pub fn run(intent: cli::LaunchIntent) {
             agent::agent_unload,
             agent::omni_search,
             commands::tabs_recluster,
-            terminal::terminal_spawn,
-            terminal::terminal_write,
-            terminal::terminal_ack,
-            terminal::terminal_prepare_live,
-            terminal::terminal_resize,
-            terminal::terminal_kill,
+            tachyon::tachyon_hosts,
+            tachyon::tachyon_state,
+            tachyon::tachyon_session_new,
+            tachyon::tachyon_window_new,
+            tachyon::tachyon_split,
+            tachyon::tachyon_resize_ratio,
+            tachyon::tachyon_focus,
+            tachyon::tachyon_rename,
+            tachyon::tachyon_kill,
+            tachyon::tachyon_attach,
+            tachyon::tachyon_detach,
+            tachyon::tachyon_write,
+            tachyon::tachyon_send,
+            tachyon::tachyon_resize,
+            tachyon::tachyon_scroll,
+            tachyon::tachyon_select_text,
+            tachyon::tachyon_capture,
+            tachyon::tachyon_receipts,
+            tachyon::tachyon_rewind_list,
+            tachyon::tachyon_rewind_frame,
+            tachyon::tachyon_subscribe,
             webview::webview_open,
             webview::webview_set_bounds,
             webview::webview_set_corner_radius,
@@ -1772,6 +1809,28 @@ pub fn run(intent: cli::LaunchIntent) {
             files::fs_undo,
             files::fs_watch,
             files::fs_unwatch,
+            neutron::neutron_places,
+            neutron::neutron_recent,
+            neutron::neutron_pin_toggle,
+            neutron::neutron_list,
+            neutron::neutron_fuzzy,
+            neutron::neutron_preview,
+            neutron::neutron_watch,
+            neutron::neutron_unwatch,
+            neutron::neutron_mkdir,
+            neutron::neutron_create_file,
+            neutron::neutron_rename,
+            neutron::neutron_batch_rename,
+            neutron::neutron_copy,
+            neutron::neutron_move,
+            neutron::neutron_trash,
+            neutron::neutron_delete,
+            neutron::neutron_undo,
+            neutron::neutron_open,
+            neutron::neutron_reveal,
+            neutron::neutron_tag_toggle,
+            neutron::neutron_archive_extract,
+            neutron::neutron_archive_create,
         ])
         .build(context)
         .expect("error while building Flux");

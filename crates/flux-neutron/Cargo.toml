@@ -1,0 +1,23 @@
+[package]
+name = "flux-neutron"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Headless Neutron file engine, fuzzy finder, archives, and SFTP/FTP bridge for Flux"
+
+[lints]
+workspace = true
+
+[dependencies]
+neutron-core = { git = "https://github.com/razeenwasif/Neutron.git", rev = "3f4bd960c703688fef20beb8fd5f2d5e1dc6b452" }
+neutron-shell = { git = "https://github.com/razeenwasif/Neutron.git", rev = "3f4bd960c703688fef20beb8fd5f2d5e1dc6b452" }
+neutron-fuzzy = { git = "https://github.com/razeenwasif/Neutron.git", rev = "3f4bd960c703688fef20beb8fd5f2d5e1dc6b452" }
+neutron-archive = { git = "https://github.com/razeenwasif/Neutron.git", rev = "3f4bd960c703688fef20beb8fd5f2d5e1dc6b452" }
+neutron-remote = { git = "https://github.com/razeenwasif/Neutron.git", rev = "3f4bd960c703688fef20beb8fd5f2d5e1dc6b452" }
+serde.workspace = true
+serde_json.workspace = true
+parking_lot.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
+rayon.workspace = true
+base64 = "0.22"
