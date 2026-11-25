@@ -7,8 +7,10 @@ import {
   createEffect,
   createMemo,
   createSignal,
+  on,
   onCleanup,
   onMount,
+  untrack,
 } from "solid-js";
 import { Portal } from "solid-js/web";
 
@@ -207,6 +209,8 @@ const NeutronView: Component<NeutronViewProps> = (props) => {
   let activeWatchId: number | null = null;
   let watchPath: string | null = null;
   let watchGen = 0;
+  let loadGen = 0;
+  let lastReportedPath = "";
   let disposed = false;
   let previewTimer: number | null = null;
 
@@ -304,6 +308,7 @@ const NeutronView: Component<NeutronViewProps> = (props) => {
     opts?: { pushHistory?: boolean; focusPath?: string },
   ) => {
     const loc = targetLoc.trim() || "~";
+    const gen = ++loadGen;
     const prevLoc = listing()?.location;
     setShowDashboard(false);
     setLoading(true);
@@ -318,13 +323,14 @@ const NeutronView: Component<NeutronViewProps> = (props) => {
         showHidden: showHidden(),
         filter: filter(),
       });
-      if (disposed) return;
+      if (disposed || gen !== loadGen) return;
 
       if (opts?.pushHistory && prevLoc && prevLoc !== res.location) {
         setBackStack((s) => [...s.slice(-49), prevLoc]);
         setFwdStack([]);
       }
 
+      lastReportedPath = res.location;
       setListing(res);
       if (res.location !== props.path) {
         props.onPathChange(res.location);
@@ -341,11 +347,11 @@ const NeutronView: Component<NeutronViewProps> = (props) => {
 
       void syncWatch(res.location, res.scheme);
     } catch (e) {
-      if (!disposed) {
+      if (!disposed && gen === loadGen) {
         setErr(e instanceof Error ? e.message : String(e));
       }
     } finally {
-      if (!disposed) setLoading(false);
+      if (!disposed && gen === loadGen) setLoading(false);
     }
   };
 
@@ -356,7 +362,7 @@ const NeutronView: Component<NeutronViewProps> = (props) => {
   // Load Miller column chain whenever in Miller mode and listing changes.
   createEffect(() => {
     const l = listing();
-    if (viewMode() !== "miller" || !l) return;
+    if (viewMode() !== "miller" || showDashboard() || !l) return;
     const crumbs = parseBreadcrumbs(l.location, l.scheme, l.site);
     const tail = crumbs.slice(-4);
     let cancelled = false;
@@ -394,7 +400,7 @@ const NeutronView: Component<NeutronViewProps> = (props) => {
 
   // Load preview for active item when Inspector is open.
   createEffect(() => {
-    if (!showInspector()) return;
+    if (!showInspector() || showDashboard()) return;
     const item = primarySelected();
     const target = item?.path ?? currentLocation();
     if (previewTimer !== null) clearTimeout(previewTimer);
@@ -408,28 +414,34 @@ const NeutronView: Component<NeutronViewProps> = (props) => {
     }, 60);
   });
 
-  // React to sort / hidden / filter changes without pushing history.
-  let initialized = false;
-  createEffect(() => {
-    sortBy();
-    sortDir();
-    showHidden();
-    filter();
-    if (!initialized || showDashboard()) return;
-    void loadDirectory(currentLocation());
-  });
+  // React to sort / hidden / filter changes without tracking listing() or pushing history.
+  createEffect(
+    on(
+      [sortBy, sortDir, showHidden, filter],
+      () => {
+        if (untrack(showDashboard)) return;
+        void loadDirectory(untrack(currentLocation));
+      },
+      { defer: true },
+    ),
+  );
 
-  // React to external prop navigation (when user pastes/navigates tab URL).
-  createEffect(() => {
-    const nextPath = props.path?.trim();
-    if (!initialized || !nextPath) return;
-    if (nextPath !== listing()?.location) {
-      void loadDirectory(nextPath);
-    }
-  });
+  // React only to external prop navigation (when user pastes/navigates tab URL).
+  createEffect(
+    on(
+      () => props.path?.trim() ?? "",
+      (nextPath) => {
+        if (!nextPath) return;
+        if (nextPath === lastReportedPath || nextPath === untrack(() => listing()?.location)) {
+          return;
+        }
+        void loadDirectory(nextPath);
+      },
+      { defer: true },
+    ),
+  );
 
   onMount(() => {
-    initialized = true;
     void refreshPlaces();
     const initial = props.path?.trim() || places().known[0]?.path || "~";
     void loadDirectory(initial);
