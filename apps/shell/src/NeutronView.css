@@ -1074,3 +1074,170 @@
   color: #6b7280;
   font-size: 12px;
 }
+
+
+/* Stratus T3 Graphite theme overrides */
+:root[data-theme="graphite"] .nv-root,
+:root[data-theme="graphite"] .nv-main {
+  background: #000000;
+  color: #f4f4f6;
+}
+
+:root[data-theme="graphite"] .nv-bar,
+:root[data-theme="graphite"] .nv-side,
+:root[data-theme="graphite"] .nv-inspector,
+:root[data-theme="graphite"] .nv-status {
+  background: #070709;
+  border-color: rgba(255, 255, 255, 0.035);
+}
+
+:root[data-theme="graphite"] .nv-crumbs,
+:root[data-theme="graphite"] .nv-filter-wrap,
+:root[data-theme="graphite"] .nv-seg,
+:root[data-theme="graphite"] .nv-chip-btn,
+:root[data-theme="graphite"] .nv-path-input,
+:root[data-theme="graphite"] .nv-inline-input,
+:root[data-theme="graphite"] .nv-batch-field input {
+  background: #111114;
+  border-color: transparent;
+  color: #f4f4f6;
+}
+
+:root[data-theme="graphite"] .nv-filter-wrap:focus-within,
+:root[data-theme="graphite"] .nv-path-input:focus,
+:root[data-theme="graphite"] .nv-inline-input:focus,
+:root[data-theme="graphite"] .nv-batch-field input:focus {
+  background: #151519;
+  border-color: rgba(232, 130, 85, 0.35);
+}
+
+:root[data-theme="graphite"] .nv-icon-btn,
+:root[data-theme="graphite"] .nv-crumb,
+:root[data-theme="graphite"] .nv-seg-btn {
+  color: #8e8e99;
+}
+
+:root[data-theme="graphite"] .nv-icon-btn:hover:not(:disabled),
+:root[data-theme="graphite"] .nv-crumb:hover,
+:root[data-theme="graphite"] .nv-seg-btn:hover,
+:root[data-theme="graphite"] .nv-chip-btn:hover {
+  background: #111114;
+  color: #f4f4f6;
+}
+
+:root[data-theme="graphite"] .nv-icon-btn.active,
+:root[data-theme="graphite"] .nv-seg-btn.active {
+  background: #16161b;
+  border-color: transparent;
+  color: #f4f4f6;
+}
+
+:root[data-theme="graphite"] .nv-place:hover,
+:root[data-theme="graphite"] .nv-row:hover,
+:root[data-theme="graphite"] .nv-tile:hover,
+:root[data-theme="graphite"] .nv-miller-item:hover,
+:root[data-theme="graphite"] .nv-fuzzy-hit:hover {
+  background: #111114;
+}
+
+:root[data-theme="graphite"] .nv-place.active,
+:root[data-theme="graphite"] .nv-row.selected,
+:root[data-theme="graphite"] .nv-tile.selected,
+:root[data-theme="graphite"] .nv-miller-item.active,
+:root[data-theme="graphite"] .nv-fuzzy-hit.active {
+  background: #16161b;
+  border-color: transparent;
+  color: #f4f4f6;
+}
+
+:root[data-theme="graphite"] .nv-cap-track {
+  background: #16161b;
+}
+
+:root[data-theme="graphite"] .nv-cap-fill {
+  background: #e88255;
+}
+
+:root[data-theme="graphite"] .nv-cols-head {
+  border-bottom-color: rgba(255, 255, 255, 0.035);
+  color: #585862;
+}
+
+:root[data-theme="graphite"] .nv-col-btn.sorted {
+  color: #e88255;
+}
+
+:root[data-theme="graphite"] .nv-side-head,
+:root[data-theme="graphite"] .nv-dash-sec-head,
+:root[data-theme="graphite"] .nv-meta-k,
+:root[data-theme="graphite"] .nv-cell-muted,
+:root[data-theme="graphite"] .nv-insp-sub,
+:root[data-theme="graphite"] .nv-dash-sub,
+:root[data-theme="graphite"] .nv-dash-recent-path,
+:root[data-theme="graphite"] .nv-status,
+:root[data-theme="graphite"] .nv-crumb-sep {
+  color: #585862;
+}
+
+:root[data-theme="graphite"] .nv-name-text,
+:root[data-theme="graphite"] .nv-row.dir .nv-name-text,
+:root[data-theme="graphite"] .nv-tile-name,
+:root[data-theme="graphite"] .nv-insp-title,
+:root[data-theme="graphite"] .nv-dash-title,
+:root[data-theme="graphite"] .nv-dash-card-name,
+:root[data-theme="graphite"] .nv-dash-recent-name,
+:root[data-theme="graphite"] .nv-crumb.current {
+  color: #f4f4f6;
+}
+
+:root[data-theme="graphite"] .nv-preview-box,
+:root[data-theme="graphite"] .nv-dash-card,
+:root[data-theme="graphite"] .nv-dash-recent,
+:root[data-theme="graphite"] .nv-dash-empty {
+  background: #0a0a0d;
+  border-color: rgba(255, 255, 255, 0.03);
+}
+
+:root[data-theme="graphite"] .nv-dash-card:hover,
+:root[data-theme="graphite"] .nv-dash-recent-row:hover {
+  background: #111114;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+:root[data-theme="graphite"] .nv-dash-recent-row {
+  border-bottom-color: rgba(255, 255, 255, 0.03);
+}
+
+:root[data-theme="graphite"] .nv-miller-col,
+:root[data-theme="graphite"] .nv-modal-head,
+:root[data-theme="graphite"] .nv-modal-foot,
+:root[data-theme="graphite"] .nv-batch-fields {
+  border-color: rgba(255, 255, 255, 0.035);
+}
+
+:root[data-theme="graphite"] .nv-inline-prompt {
+  background: #0b0b0f;
+  border-color: rgba(255, 255, 255, 0.035);
+}
+
+:root[data-theme="graphite"] .nv-menu,
+:root[data-theme="graphite"] .nv-modal {
+  background: #0b0b0f;
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.78);
+}
+
+:root[data-theme="graphite"] .nv-menu-item:hover {
+  background: #16161b;
+}
+
+:root[data-theme="graphite"] .nv-btn-primary {
+  background: #e88255;
+  border-color: transparent;
+  color: #000000;
+  font-weight: 600;
+}
+
+:root[data-theme="graphite"] .nv-fuzzy-match {
+  color: #e88255;
+}

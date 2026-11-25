@@ -1681,13 +1681,13 @@
    them catch the few surfaces Silk tints with a literal.
    Last in the sheet, so on equal weight these beat each wallpaper's palette. */
 :root[data-design][data-silk][data-theme="graphite"] {
-  --silk-tint: 18, 18, 20; /* = --gr-chrome */
+  --silk-tint: 7, 7, 9; /* = --vp-paper */
   --silk-glass: 1;
   --silk-fill: var(--gr-chrome);
   --silk-blur: none;
   --silk-home-fill: var(--gr-raised);
   --silk-home-blur: none;
-  --silk-edge: var(--gr-edge);
+  --silk-edge: rgba(255, 255, 255, 0.035);
   --silk-lift: 0 0 0 0 transparent;
   --silk-sheen: inset 0 0 0 0 transparent;
   --silk-image: none;
@@ -1695,13 +1695,13 @@
   --silk-accent-ink: var(--gr-ink);
   --silk-ai-ink: var(--gr-ink);
   /* The agent backdrop's first colour (silkBackdrop.ts). */
-  --silk-grain-base: #ff4f79;
+  --silk-grain-base: #e56b6f;
 
-  --accent-rgb: 255, 153, 72;
-  --accent-ai-rgb: 255, 107, 87;
-  --accent-ai2-rgb: 255, 190, 110;
-  --accent-hot-rgb: 255, 79, 121;
-  --neutral-rgb: 160, 160, 168;
+  --accent-rgb: 232, 130, 85;
+  --accent-ai-rgb: 122, 137, 255;
+  --accent-ai2-rgb: 75, 195, 247;
+  --accent-hot-rgb: 248, 113, 113;
+  --neutral-rgb: 142, 142, 153;
   --rim-rgb: 255, 255, 255;
 
   --velvet-900: var(--gr-page);
@@ -1710,49 +1710,48 @@
   --velvet-600: var(--gr-control);
   --velvet-500: var(--gr-selected);
 
-  --flux-text: #ececf0;
-  --flux-text-dim: #a4a4ab;
-  --flux-text-mute: #6c6c74;
-  --flux-ok: #7ee2a8;
+  --flux-text: #f4f4f6;
+  --flux-text-dim: #8e8e99;
+  --flux-text-mute: #585862;
+  --flux-ok: #34d399;
   --flux-warn: #ffffff;
   --flux-surface: var(--gr-control);
   --flux-surface-2: var(--gr-selected);
-  --flux-border: var(--gr-edge);
+  --flux-border: rgba(255, 255, 255, 0.035);
   --flux-teal-dim: var(--gr-selected);
   --flux-popover-fill: var(--gr-popover);
-  --flux-ai-gradient: linear-gradient(115deg, #ffc46b 0%, #ff9948 34%, #ff6b57 68%, #ff4f79 100%);
+  --flux-ai-gradient: linear-gradient(115deg, #f09c67 0%, #e88255 38%, #7a89ff 100%);
 
-  --vp-paper: var(--gr-chrome);
-  --vp-paper-2: var(--gr-page);
-  --vp-raise: var(--gr-control);
-  --vp-chip: var(--gr-selected);
-  --vp-edge: var(--gr-edge);
+  --vp-paper: #070709;
+  --vp-paper-2: #0a0a0d;
+  --vp-raise: #111114;
+  --vp-chip: #151519;
+  --vp-edge: rgba(255, 255, 255, 0.035);
   --vp-shadow: 0 0 0 0 transparent;
-  --vp-foil: linear-gradient(var(--gr-edge), var(--gr-edge));
-  --vp-foil-line: linear-gradient(var(--gr-edge), var(--gr-edge));
+  --vp-foil: linear-gradient(rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.035));
+  --vp-foil-line: linear-gradient(rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.035));
   --vp-wash: linear-gradient(var(--gr-selected), var(--gr-selected));
   --vp-satin: var(--graphite-warm);
-  --vp-pearl: #ececf0;
-  /* Velvet Paper rings and haloes chosen items in its lilac at low alpha;
-     Silk points that at the accent, which over grey reads brown. Graphite
-     rings them in plain grey (solid lilac, --vp-lilac, stays the accent). */
-  --vp-lilac-rgb: 200, 200, 210;
+  --vp-pearl: #f4f4f6;
+  --vp-rose: #e88255;
+  --vp-rose-rgb: 232, 130, 85;
+  --vp-lilac-rgb: 122, 137, 255;
   --vp-well: var(--gr-page);
   --vp-well-2: var(--gr-page);
   --vp-bar: var(--gr-chrome);
-  --vp-track: var(--gr-selected);
+  --vp-track: #1a1a20;
 
   --glass-fill: var(--gr-chrome);
   --glass-fill-soft: var(--gr-chrome);
   --glass-blur: none;
-  --glass-rim: var(--gr-edge);
-  --glass-rim-soft: var(--gr-edge);
+  --glass-rim: rgba(255, 255, 255, 0.035);
+  --glass-rim-soft: rgba(255, 255, 255, 0.035);
   --glass-shadow: 0 0 0 0 transparent;
   --glass-inset: inset 0 0 0 0 transparent;
 
-  --flux-scroll-thumb: #313136;
-  --flux-scroll-thumb-hover: #46464c;
-  --flux-scroll-thumb-active: #ff9948;
+  --flux-scroll-thumb: #222228;
+  --flux-scroll-thumb-hover: #35353e;
+  --flux-scroll-thumb-active: #e88255;
 }
 
 /* No wallpaper: the window is the chrome's grey (theme.css), and the moving
@@ -1797,6 +1796,15 @@
 :root[data-design][data-silk][data-theme="graphite"] .glass.cal-pane:not(.docked) {
   background: var(--gr-chrome);
 }
+:root[data-design][data-silk][data-theme="graphite"] .files-panel {
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.045);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8);
+}
+:root[data-design][data-silk][data-theme="graphite"] .files-panel-head {
+  background: #070709;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
+}
 
 /* Silk's literal tints, made solid. */
 :root[data-design][data-silk][data-theme="graphite"] .tab-modes-thumb,
@@ -1834,12 +1842,12 @@
   color: var(--gr-ink);
 }
 :root[data-design][data-silk][data-theme="graphite"] .pages-bar .pages-chip:hover {
-  background: var(--gr-control);
+  background: #111114;
 }
 :root[data-design][data-silk][data-theme="graphite"] .pages-bar .pages-chip.active {
-  background: var(--gr-selected);
-  color: rgb(var(--accent-rgb));
-  box-shadow: inset 0 0 0 1px var(--gr-edge);
+  background: #16161b;
+  color: #e88255;
+  box-shadow: none;
 }
 :root[data-design][data-silk][data-theme="graphite"] .tab-modes .tab-mode-agent::before {
   background: var(--gr-edge);
@@ -1854,16 +1862,14 @@
   background: linear-gradient(
     180deg,
     transparent,
-    rgba(255, 153, 72, 0.35) 38%,
+    rgba(240, 156, 103, 0.35) 38%,
     rgba(255, 220, 190, 0.5) 50%,
-    rgba(255, 79, 121, 0.4) 62%,
+    rgba(229, 107, 111, 0.4) 62%,
     transparent 92%
   );
 }
 
-/* Home: the clock, shortcuts, cards and dock where Silk puts them, on black.
-   The search and cards are solid grey; the shortcuts and dock stay bare icons
-   as in Silk, with a solid grey under the hovered one. */
+/* Home: Stratus T3 restraint on pitch black while preserving Silk's layout. */
 :root[data-design][data-silk][data-theme="graphite"] .silk-home .start-search,
 :root[data-design][data-silk][data-theme="graphite"] .silk-home,
 :root[data-design][data-silk][data-theme="graphite"] .silk-pill,
@@ -1872,48 +1878,235 @@
 :root[data-design][data-silk][data-theme="graphite"] .silk-date {
   text-shadow: none;
 }
+:root[data-design][data-silk][data-theme="graphite"] .silk-date {
+  font-family: var(--vp-mono);
+  font-size: 11px;
+  color: #6e6e77;
+}
 :root[data-design][data-silk][data-theme="graphite"] .silk-clock {
-  color: #f4f4f7;
+  color: #f4f4f6;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-clock-period {
+  color: #8e8e99;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-greet {
+  font-weight: 500;
+  color: #f4f4f6;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-greet-line {
+  color: #6e6e77;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-home .start-search {
+  background: #111114;
+  border-color: transparent;
+  border-radius: 12px;
+  box-shadow: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-home .start-search:focus-within {
+  background: #151519;
 }
 :root[data-design][data-silk][data-theme="graphite"] .silk-pill {
+  border-radius: 10px;
+  border-color: transparent;
   background: transparent;
 }
-:root[data-design][data-silk][data-theme="graphite"] .silk-pill:hover,
+:root[data-design][data-silk][data-theme="graphite"] .silk-pill:hover {
+  background: #111114;
+  border-color: transparent;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-dock {
+  background: #0a0a0d;
+  border-radius: 12px;
+  padding: 5px 8px;
+}
 :root[data-design][data-silk][data-theme="graphite"] .silk-dock-btn:hover {
-  background: var(--gr-control);
+  background: #111114;
 }
 :root[data-design][data-silk][data-theme="graphite"] .silk-pill-icon,
 :root[data-design][data-silk][data-theme="graphite"] .silk-dock-btn.app {
-  background: var(--gr-control);
+  background: #111114;
 }
 :root[data-design][data-silk][data-theme="graphite"] .silk-glyph,
 :root[data-design][data-silk][data-theme="graphite"] .silk-dock-btn svg,
 :root[data-design][data-silk][data-theme="graphite"] .pages-bar .pages-chip {
   filter: none;
 }
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .start-card {
+  background: #0a0a0d;
+  border: 1px solid rgba(255, 255, 255, 0.028);
+  border-radius: 14px;
+  box-shadow: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-hour {
+  background: #1a1a20;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-hour-busy {
+  background: #7a89ff;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-hour-now {
+  background: #e88255;
+  box-shadow: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-day-event {
+  background: transparent;
+  border-radius: 8px;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-day-event:hover {
+  background: #111114;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-day-time {
+  color: #6e6e77;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-focus-track {
+  stroke: #16161b;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-focus-arc {
+  stroke: #e88255;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-pill-satin,
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-focus-card .vp-pill-satin {
+  background: #e88255;
+  color: #000000;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-mail-row:hover {
+  background: #111114;
+}
+:root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-mail-dot {
+  background: #e88255;
+}
 :root[data-design][data-silk][data-theme="graphite"] .silk-cards .start-card-link,
 :root[data-design][data-silk][data-theme="graphite"] .silk-cards .vp-pill:not(.vp-pill-satin) {
-  background: var(--gr-control);
+  background: #151519;
+  color: #e88255;
 }
 :root[data-design][data-silk][data-theme="graphite"] .silk-cards {
-  scrollbar-color: #313136 transparent;
+  scrollbar-color: #222228 transparent;
 }
 :root[data-design][data-silk][data-theme="graphite"] .silk-cards::-webkit-scrollbar-thumb {
-  background: #313136;
+  background: #222228;
 }
 
-/* The tab pane: a darker grey than the window round it, so it reads as its
-   own card (the controls in it keep their lighter greys). */
+/* Tab bar & left rails: Stratus #070709 chrome surface, borderless tonal lift. */
 :root[data-design][data-silk][data-theme="graphite"] .sidebar {
-  --vp-paper: #0c0c0e;
+  --vp-paper: #070709;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar::before {
+  background: #070709;
+  border: 1px solid rgba(255, 255, 255, 0.035);
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar::after {
+  border: none;
+  background: #000000;
+  color: #585862;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .icon-btn {
+  background: transparent;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .icon-btn:hover {
+  background: #111114;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .icon-btn.active {
+  background: #16161b;
+  box-shadow: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .address,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .find-bar {
+  border-color: transparent;
+  background: #111114;
+  border-radius: 10px;
+  box-shadow: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .address:focus,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .find-bar:focus-within {
+  background: #151519;
+  box-shadow: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .ws-chip {
+  background: #151519;
+  box-shadow: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .ws-chip:hover {
+  background: #16161b;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .ws-chip.on {
+  background: #e88255;
+  color: #000000;
+  box-shadow: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .pin-tile {
+  background: #111114;
+  box-shadow: none;
+  border-radius: 10px;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .pin-tile:hover {
+  background: #16161b;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .folder-chip,
+:root[data-design][data-silk][data-theme="graphite"] .bookmark-chip {
+  background: #151519;
+  border-color: transparent;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .folder-chip:hover,
+:root[data-design][data-silk][data-theme="graphite"] .bookmark-chip:hover {
+  background: #16161b;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .new-tab-primary,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .new-tab-options {
+  background: #111114;
+  border: none;
+  color: #8e8e99;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .new-tab-primary:hover,
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .new-tab-options:hover {
+  background: #16161b;
+  color: #f4f4f6;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .tab-row {
+  border-radius: 10px;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .tab-row:hover {
+  background: #111114;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .tab-row.active {
+  background: #16161b;
+  box-shadow: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar .tab-row.active .tab-favicon {
+  background: #1d1d23;
+  color: #e88255;
+}
+:root[data-design][data-silk][data-theme="graphite"] .sidebar-footer {
+  border-top-color: rgba(255, 255, 255, 0.04);
 }
 :root[data-design][data-silk][data-theme="graphite"] .app-rail-col {
-  background: #0c0c0e;
+  background: #070709;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
-  border-color: var(--gr-edge);
+  border-color: rgba(255, 255, 255, 0.035);
   box-shadow: none;
   transition: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .app-rail-col .app-rail-toggle {
+  background: #151519;
+}
+:root[data-design][data-silk][data-theme="graphite"] .app-rail-col .app-rail-icon {
+  border-color: transparent;
+  background: #111114;
+}
+:root[data-design][data-silk][data-theme="graphite"] .app-rail-col .app-rail-icon:hover {
+  background: #16161b;
+  border-color: transparent;
+}
+:root[data-design][data-silk][data-theme="graphite"] .app-rail-col .app-rail-icon.active {
+  background: #16161b;
+  border-color: rgba(232, 130, 85, 0.5);
+  box-shadow: none;
+}
+:root[data-design][data-silk][data-theme="graphite"] .app-rail-col .app-rail-add {
+  border-color: rgba(255, 255, 255, 0.09);
+  background: transparent;
 }
 :root[data-design][data-silk][data-theme="graphite"] .app-rail-col button {
   transition: none;

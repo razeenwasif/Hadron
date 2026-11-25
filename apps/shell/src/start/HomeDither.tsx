@@ -21,14 +21,14 @@ const BAYER = [
 const DOT = 2;
 /** The glow's colours, left to right (Graphite's accents). */
 const STOPS: [number, number, number][] = [
-  [255, 179, 92],
-  [255, 122, 80],
-  [255, 79, 121],
+  [240, 156, 103],
+  [232, 130, 85],
+  [229, 107, 111],
 ];
 /** How bright a lit dot is: dim enough to sit behind the cards and text. */
-const LEVEL = 0.42;
+const LEVEL = 0.34;
 /** Peak dot density, at the foot of the page. */
-const PEAK = 0.62;
+const PEAK = 0.48;
 
 const colourAt = (x: number): [number, number, number] => {
   const t = Math.min(Math.max(x, 0), 1) * (STOPS.length - 1);

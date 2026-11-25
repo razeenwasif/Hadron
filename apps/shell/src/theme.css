@@ -232,15 +232,15 @@
    accents a true grey already reads brown. Picked from Antigravity's own
    window (chrome #111015, page near-black). */
 :root[data-theme="graphite"] {
-  --gr-chrome: #121214; /* titlebar, sidebar, the frame */
+  --gr-chrome: #000000; /* titlebar, sidebar, the frame */
   --gr-page: #000000; /* the page, home included */
-  --gr-raised: #151518; /* cards and fields on the page */
-  --gr-control: #1e1e22; /* hover, chips */
-  --gr-selected: #2a2a2f; /* the current tab, the chosen segment */
-  --gr-edge: #26262b; /* hairlines */
-  --gr-popover: #19191c;
-  --gr-ink: #1a1008; /* text on the warm gradient */
-  --graphite-warm: linear-gradient(115deg, #ffb35c, #ff7a50 55%, #ff4f79);
+  --gr-raised: #0a0a0d; /* cards and fields on the page */
+  --gr-control: #111114; /* hover, chips */
+  --gr-selected: #16161b; /* the current tab, the chosen segment */
+  --gr-edge: rgba(255, 255, 255, 0.04); /* hairlines */
+  --gr-popover: #0b0b0f;
+  --gr-ink: #000000; /* text on the warm gradient */
+  --graphite-warm: linear-gradient(115deg, #f09c67, #e88255 55%, #e56b6f);
 }
 /* Classic's tokens. (Liquid Silk sets its own, from the same scale.) */
 :root[data-theme="graphite"]:not([data-design]) {
