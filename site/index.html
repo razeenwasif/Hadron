@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hadron — Native Rust Browser, Terminal &amp; Local Memory</title>
+    <meta
+      name="description"
+      content="Hadron is a fast, native AI-ready browser built with Rust and Tauri v2 — featuring native OS webviews, the Tachyon GPU terminal, Neutron file explorer, and local-first memory."
+    />
+    <meta property="og:title" content="Hadron — Native Rust Browser" />
+    <meta
+      property="og:description"
+      content="Native OS webviews, built-in Tachyon terminal, Neutron file explorer, and local-first AI memory."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hadron-browser.web.app/" />
+    <meta property="og:image" content="https://hadron-browser.web.app/assets/hadron-home.png" />
+    <link rel="icon" type="image/png" href="./assets/hadron-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-row">
+        <a class="brand" href="#top" aria-label="Hadron Home">
+          <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.75" />
+            <circle cx="8.5" cy="10.2" r="2.1" fill="currentColor" />
+            <circle cx="15.5" cy="10.2" r="2.1" fill="#7a89ff" />
+            <circle cx="12" cy="15.8" r="2.1" fill="#4bc3f7" />
+          </svg>
+          <span>Hadron</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Primary navigation">
+          <a href="#features">Features</a>
+          <a href="#open-core">Open Core</a>
+          <a href="#download">Download</a>
+          <a href="https://github.com/razeenwasif/Hadron" target="_blank" rel="noopener">GitHub</a>
+        </nav>
+
+        <div class="nav-actions">
+          <a
+            id="navReleasePill"
+            class="version-pill mono"
+            href="https://github.com/razeenwasif/Hadron/releases"
+            target="_blank"
+            rel="noopener"
+          >
+            <span class="status-dot pulse" aria-hidden="true"></span>
+            <span id="navTag">v0.3.0</span>
+          </a>
+          <a
+            id="navDownloadBtn"
+            class="btn btn-primary"
+            href="https://github.com/razeenwasif/Hadron/releases/latest"
+            target="_blank"
+            rel="noopener"
+          >
+            Download
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- Hero + Interactive Showcase -->
+      <section class="hero">
+        <div class="container">
+          <div class="hero-top">
+            <div class="eyebrow mono">
+              <span class="status-dot pulse" aria-hidden="true"></span>
+              <span>macOS Apple Silicon &middot; Rust + Tauri v2 &middot; Open Core</span>
+            </div>
+
+            <h1 class="hero-title">A native browser built like a precision instrument.</h1>
+
+            <p class="hero-sub">
+              Hadron pairs native OS webviews with a built-in GPU terminal, local file explorer, and
+              private semantic memory — inside a pitch-black shell that boots fast and never sends
+              your browsing to someone else&rsquo;s cloud.
+            </p>
+
+            <div class="hero-ctas">
+              <a
+                id="heroReleaseBtn"
+                class="btn btn-primary btn-lg"
+                href="https://github.com/razeenwasif/Hadron/releases/latest"
+                target="_blank"
+                rel="noopener"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                <span>Download on GitHub Releases</span>
+              </a>
+              <a
+                class="btn btn-secondary btn-lg"
+                href="https://github.com/razeenwasif/Hadron/releases"
+                target="_blank"
+                rel="noopener"
+              >
+                <span>All Releases</span>
+              </a>
+              <a
+                class="btn btn-ghost btn-lg"
+                href="https://github.com/razeenwasif/Hadron"
+                target="_blank"
+                rel="noopener"
+              >
+                <span>View Source</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="hero-dither-wrap">
+            <canvas id="heroDither" class="hero-dither" aria-hidden="true"></canvas>
+
+            <div class="showcase">
+              <div class="showcase-bar">
+                <div class="showcase-tabs" role="tablist" aria-label="Hadron workspace views">
+                  <button
+                    class="showcase-tab"
+                    type="button"
+                    role="tab"
+                    aria-selected="true"
+                    data-shot="./assets/hadron-home.png"
+                    data-alt="Hadron Home view showing vertical carousel rails, Stratus-styled tab bar, icon-only shortcuts, and subtle warm dither"
+                    data-caption="Stratus Graphite UI &middot; Moving carousel rails &middot; Local widgets"
+                  >
+                    Home &amp; Rails
+                  </button>
+                  <button
+                    class="showcase-tab"
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                    data-shot="./assets/hadron-files.png"
+                    data-alt="Hadron Neutron File Explorer view in pitch-black Stratus Graphite styling"
+                    data-caption="Neutron Explorer &middot; List, Grid, Miller columns &amp; Inspector"
+                  >
+                    Neutron Files
+                  </button>
+                </div>
+                <span id="showcaseCaption" class="showcase-caption mono">
+                  Stratus Graphite UI &middot; Moving carousel rails &middot; Local widgets
+                </span>
+              </div>
+
+              <div class="showcase-media">
+                <img
+                  id="showcaseImg"
+                  src="./assets/hadron-home.png"
+                  width="1440"
+                  height="900"
+                  alt="Hadron Home view showing vertical carousel rails, Stratus-styled tab bar, icon-only shortcuts, and subtle warm dither"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Telemetry Bar -->
+      <section class="metrics" aria-label="Architecture metrics">
+        <div class="container metrics-grid">
+          <div class="metric-col">
+            <span class="metric-label">Entry JS (gzip)</span>
+            <span class="metric-value tabular">47.6 KB</span>
+            <span class="metric-sub mono">CI perf-budget gated</span>
+          </div>
+          <div class="metric-col">
+            <span class="metric-label">Rendering Engine</span>
+            <span class="metric-value">Native Webviews</span>
+            <span class="metric-sub mono">WKWebView / WebView2</span>
+          </div>
+          <div class="metric-col">
+            <span class="metric-label">Workspace Stack</span>
+            <span class="metric-value">Tachyon + Neutron</span>
+            <span class="metric-sub mono">Terminal, Files &amp; Notes</span>
+          </div>
+          <div class="metric-col">
+            <span class="metric-label">License Model</span>
+            <span class="metric-value">MPL-2.0 Core</span>
+            <span class="metric-sub mono">Free privacy, local-first</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Capabilities Bento Grid -->
+      <section id="features" class="section">
+        <div class="container">
+          <div class="section-head">
+            <span class="kicker mono">Built Inside the Browser</span>
+            <h2 class="section-title">Everything your workflow reaches for, already fused in.</h2>
+            <p class="section-desc">
+              Instead of bolting browser extensions onto Electron bloat, Hadron keeps tabs,
+              shells, files, and local research corpora inside one lean Rust + SolidJS shell.
+            </p>
+          </div>
+
+          <div class="bento-grid">
+            <article class="bento-card wide">
+              <div class="card-kicker">
+                <span class="card-tag mono">
+                  <span class="card-dot" style="background: var(--accent)"></span>
+                  <span>TERMINAL</span>
+                </span>
+                <span class="mini-pill mono">Tachyon</span>
+              </div>
+              <h3 class="card-title">GPU-backed terminal right beside your tabs</h3>
+              <p class="card-body">
+                Dock a persistent Tachyon terminal column next to any web page or open full-pane
+                terminal tabs with split panes, OSC 133 prompt navigation, clickable URLs into
+                Hadron tabs, and session persistence.
+              </p>
+              <div class="card-meta mono">
+                <span class="mini-pill">Split panes</span>
+                <span class="mini-pill">OSC 133 &amp; 8</span>
+                <span class="mini-pill">TUI launcher</span>
+              </div>
+            </article>
+
+            <article class="bento-card wide">
+              <div class="card-kicker">
+                <span class="card-tag mono">
+                  <span class="card-dot" style="background: var(--indigo)"></span>
+                  <span>FILE EXPLORER</span>
+                </span>
+                <span class="mini-pill mono">Neutron</span>
+              </div>
+              <h3 class="card-title">First-class file management in List, Grid, or Miller columns</h3>
+              <p class="card-body">
+                Browse projects, preview code and images inline, search fuzzily with &#8984;P,
+                batch rename, or jump straight into your active folder inside Tachyon without
+                leaving your workspace.
+              </p>
+              <div class="card-meta mono">
+                <span class="mini-pill">Miller columns</span>
+                <span class="mini-pill">Inline preview</span>
+                <span class="mini-pill">Fuzzy find</span>
+              </div>
+            </article>
+
+            <article class="bento-card">
+              <div class="card-kicker">
+                <span class="card-tag mono">
+                  <span class="card-dot" style="background: var(--sky)"></span>
+                  <span>PROVENANCE</span>
+                </span>
+              </div>
+              <h3 class="card-title">Trail &amp; Local Memory</h3>
+              <p class="card-body">
+                Capture semantic dwell snapshots and connect browsing with your Markdown vault and
+                feeds. Private and Tor tabs leave zero trace on disk.
+              </p>
+              <div class="card-meta mono">
+                <span class="mini-pill">AES-256-GCM sealed</span>
+              </div>
+            </article>
+
+            <article class="bento-card">
+              <div class="card-kicker">
+                <span class="card-tag mono">
+                  <span class="card-dot" style="background: var(--mint)"></span>
+                  <span>PRIVACY</span>
+                </span>
+              </div>
+              <h3 class="card-title">Shields &amp; Local Vault</h3>
+              <p class="card-body">
+                Native content blocking, per-session fingerprint defense, isolated private &amp; Tor
+                modes, and an encrypted local credential vault backed by macOS Keychain.
+              </p>
+              <div class="card-meta mono">
+                <span class="mini-pill">WKContentRuleList</span>
+              </div>
+            </article>
+
+            <article class="bento-card">
+              <div class="card-kicker">
+                <span class="card-tag mono">
+                  <span class="card-dot" style="background: var(--accent)"></span>
+                  <span>AI &amp; BYOK</span>
+                </span>
+              </div>
+              <h3 class="card-title">Local-first agent with citations</h3>
+              <p class="card-body">
+                Bring local Ollama models, Claude, OpenAI, or Fairy. Highlight cited spans right on
+                the page, summarize docs, or automate site workflows cleanly.
+              </p>
+              <div class="card-meta mono">
+                <span class="mini-pill">Cited highlights</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Open Core Philosophy -->
+      <section id="open-core" class="section">
+        <div class="container">
+          <div class="section-head">
+            <span class="kicker mono">Open-Core Architecture</span>
+            <h2 class="section-title">Local workflows stay free forever. Pay only for servers.</h2>
+            <p class="section-desc">
+              Privacy protections, native performance, Shields, Vault, and BYOK local AI belong in
+              Hadron Core under MPL-2.0.
+            </p>
+          </div>
+
+          <div class="split-2">
+            <div class="panel-card core">
+              <div class="panel-head">
+                <h3 class="card-title">Hadron Core</h3>
+                <span class="badge-free mono">FREE &middot; MPL-2.0</span>
+              </div>
+              <p class="card-body">
+                The complete native Rust browser and local research stack — no telemetry, no
+                accounts required, and no locked privacy toggles.
+              </p>
+              <ul class="check-list">
+                <li>Native WKWebView / WebView2 multi-webview engine</li>
+                <li>Shields tracking defense, Tor &amp; Private containers</li>
+                <li>Tachyon GPU terminal &amp; Neutron file browser</li>
+                <li>Local Notebook RAG, Trail graph, &amp; encrypted Vault</li>
+                <li>Bring-Your-Own-Key AI (Ollama / Claude / OpenAI / Fairy)</li>
+                <li>Encrypted folder sync via iCloud Drive, Syncthing, or NAS</li>
+              </ul>
+            </div>
+
+            <div class="panel-card plus">
+              <div class="panel-head">
+                <h3 class="card-title">Hadron+</h3>
+                <span class="badge-planned mono">OPTIONAL CLOUD</span>
+              </div>
+              <p class="card-body">
+                Optional server-backed infrastructure for people who want hosted convenience across
+                macOS, iOS, and Android.
+              </p>
+              <ul class="check-list">
+                <li>Zero-knowledge multi-device Cloud Sync (Desktop + iOS)</li>
+                <li>Per-workspace Privacy Relay &amp; continuity handoff</li>
+                <li>One-click <code>@hadron.id</code> masked email aliases</li>
+                <li>Background cloud page-watchers while devices sleep</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Download & GitHub Releases -->
+      <section id="download" class="section">
+        <div class="container">
+          <div class="section-head">
+            <span class="kicker mono">Get Hadron</span>
+            <h2 class="section-title">Download from GitHub Releases or build from source.</h2>
+            <p class="section-desc">
+              Pre-built signed macOS Apple Silicon archives ship on GitHub Releases alongside an
+              automated updater manifest.
+            </p>
+          </div>
+
+          <div class="download-grid">
+            <div class="release-box">
+              <div class="release-top">
+                <div class="eyebrow mono" style="margin: 0">
+                  <span class="status-dot pulse" aria-hidden="true"></span>
+                  <span>Latest GitHub Release</span>
+                </div>
+                <span id="releaseTag" class="version-pill mono">v0.3.0</span>
+              </div>
+
+              <div>
+                <h3 id="releaseTitle" class="card-title">Hadron Desktop for macOS</h3>
+                <p id="releaseNotes" class="card-body" style="margin-top: 8px">
+                  Signed <code>.app.tar.gz</code> bundle built with Rust + Tauri v2 for Apple
+                  Silicon (<code>aarch64</code>). Note: builds tagged under <code>v0.3.0</code>
+                  shipped just prior to the Flux &rarr; Hadron rename as
+                  <code>Flux_0.3.0_aarch64.app.tar.gz</code>; upcoming releases package as
+                  <code>Hadron.app</code>.
+                </p>
+              </div>
+
+              <div class="release-meta mono">
+                <span id="releaseAssetName">Asset: Flux_0.3.0_aarch64.app.tar.gz</span>
+                <span id="releaseSize">Size: 13.9 MB</span>
+                <span id="releaseDate">Published: Nov 2026</span>
+              </div>
+
+              <div class="release-actions">
+                <a
+                  id="downloadAssetBtn"
+                  class="btn btn-primary btn-lg"
+                  href="https://github.com/razeenwasif/Hadron/releases/latest"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <span>Go to Latest GitHub Release</span>
+                </a>
+                <a
+                  class="btn btn-secondary btn-lg"
+                  href="https://github.com/razeenwasif/Hadron/releases"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <span>Browse All Releases</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="code-card">
+              <div class="code-head">
+                <div>
+                  <h3 class="card-title">Build from source on macOS</h3>
+                  <p class="card-body" style="margin-top: 4px">
+                    Installs <code>/Applications/Hadron.app</code> and the CLI shim.
+                  </p>
+                </div>
+                <button id="copyBuildBtn" class="copy-btn mono" type="button">Copy</button>
+              </div>
+
+              <pre class="code-block mono"><code id="buildSnippet"><span class="code-dim"># Clone &amp; build Hadron.app (Rust &ge; 1.80, Node &ge; 20)</span>
+<span class="code-accent">git clone</span> https://github.com/razeenwasif/Hadron.git
+cd Hadron
+<span class="code-accent">bash</span> scripts/install-macos.sh</code></pre>
+
+              <div class="release-meta mono">
+                <span>Requires Xcode CLT</span>
+                <span>&middot;</span>
+                <span>LTO release build</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <div class="brand">
+          <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.75" />
+            <circle cx="8.5" cy="10.2" r="2.1" fill="currentColor" />
+            <circle cx="15.5" cy="10.2" r="2.1" fill="#7a89ff" />
+            <circle cx="12" cy="15.8" r="2.1" fill="#4bc3f7" />
+          </svg>
+          <span>Hadron Browser</span>
+        </div>
+
+        <div class="footer-links mono">
+          <a href="https://github.com/razeenwasif/Hadron/releases/latest" target="_blank" rel="noopener">Download</a>
+          <a href="https://github.com/razeenwasif/Hadron/releases" target="_blank" rel="noopener">Releases</a>
+          <a href="https://github.com/razeenwasif/Hadron" target="_blank" rel="noopener">Repository</a>
+          <span>MPL-2.0 Core</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./main.js"></script>
+  </body>
+</html>
