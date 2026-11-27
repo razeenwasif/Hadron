@@ -15,7 +15,7 @@
     "@paper-design/shaders": "0.0.82",
     "@picovoice/porcupine-web": "^4.0.0",
     "@tauri-apps/api": "^2.5.0",
-    "katex": "^0.16.47",
+    "katex": "^0.18.2",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^4.10.38",
     "solid-js": "^1.9.5"
